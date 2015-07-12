@@ -1,0 +1,17 @@
+{
+  "name": "",
+  "version": "1.0.0",
+  "description": "",
+  "author": "",
+  "license": "",
+
+  "devDependencies": {
+    "gulp":              "*",
+    "gulp-connect":      "*",
+    "gulp-load-plugins": "*",
+    "gulp-plumber":      "*",
+    "gulp-rename":       "*",
+    "gulp-uglify":       "*",
+    "node-notifier":     "*"
+  }
+}
