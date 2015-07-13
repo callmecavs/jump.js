@@ -5,6 +5,7 @@ function Jumper(defaults) {
 
   this.duration = defaults.duration || 1000;      // ms
   this.offset = defaults.offset || 0;             // px
+  this.callback = defaults.callback || null;      // function
 
   this.easing = defaults.easing || function(timeCurrent, jumpStart, jumpChange, jumpDuration) {
     // Robert Penner's easeInQuad - http://robertpenner.com/easing/
@@ -21,6 +22,7 @@ Jumper.prototype.jump = function(target, overrides) {
   // resolve configuration for this jump
   this.jumpDuration = overrides.duration || this.duration;
   this.jumpOffset = overrides.offset || this.offset;
+  this.jumpCallback = overrides.callback || this.callback;
 
   // resolve jump distance
   this.jumpDistance = this.jumpOffset;
@@ -59,6 +61,11 @@ Jumper.prototype._loop = function(timeCurrent) {
     requestAnimationFrame(this._loop.bind(this));
   }
   else {
+    // fire the callback
+    if(typeof this.callback === 'function') {
+      this.callback();
+    }
+
     // prepare for the next jump
     this.timeStart = false;
   }
