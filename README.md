@@ -38,6 +38,5 @@ jumper.jump(document.querySelector('.element'), duration, offset);
 - [ ] Add `callback` option
 - [ ] Add option to scroll at `px/s` instead of a fixed duration
 - [ ] Add `duration` and `offset` instance defaults
-
 - [ ] Change easing to easeInOutQuad? Easing option?
 - [ ] Improve code commenting
