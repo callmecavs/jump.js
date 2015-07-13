@@ -6,8 +6,15 @@ function Jumper() {
 
 Jumper.prototype.jump = function(target, duration) {
   this.targetStart = window.pageYOffset;
-  this.targetChange = target - this.targetStart;     // pixels, add element target support
   this.duration = duration;
+
+  // to an element, or to a px value?
+  if(target.nodeType === 1) {
+    this.targetChange = target.getBoundingClientRect().top + this.targetStart;
+  }
+  else {
+    this.targetChange = target - this.targetStart;
+  }
 
   requestAnimationFrame(this._loop.bind(this));
 }
