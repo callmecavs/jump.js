@@ -1,48 +1,65 @@
 'use strict';
 
-function Jumper() {
+function Jumper(defaults) {
+  defaults = defaults || {};
 
+  this.duration = defaults.duration || 1000;      // ms
+  this.offset = defaults.offset || 0;             // px
+
+  this.easing = defaults.easing || function(timeCurrent, jumpStart, jumpChange, jumpDuration) {
+    // Robert Penner's easeInQuad - http://robertpenner.com/easing/
+    return jumpChange * (timeCurrent /= jumpDuration) * timeCurrent + jumpStart;
+  }
 }
 
-Jumper.prototype.jump = function(target, duration, offset) {
-  this.targetStart = window.pageYOffset;
-  this.duration = duration;
+Jumper.prototype.jump = function(target, overrides) {
+  overrides = overrides || {};
 
-  // to an element, or to a px value?
+  // cache current scroll position
+  this.jumpStart = window.pageYOffset;
+
+  // resolve configuration for this jump
+  this.jumpDuration = overrides.duration || this.duration;
+  this.jumpOffset = overrides.offset || this.offset;
+
+  // resolve jump distance
+  this.jumpDistance = this.jumpOffset;
+
   if(target.nodeType === 1) {
-    this.targetChange = target.getBoundingClientRect().top + this.targetStart + offset;
+    // if element, determine element offset from current scroll position
+    this.jumpDistance += Math.round(target.getBoundingClientRect().top);
   }
   else {
-    this.targetChange = target - this.targetStart + offset;
+    // if pixel value, scroll from current location
+    this.jumpDistance += target;
   }
 
+  // start scroll loop
   requestAnimationFrame(this._loop.bind(this));
 }
 
-Jumper.prototype._loop = function(time) {
+Jumper.prototype._loop = function(timeCurrent) {
+  // if necessary, cache start time
   if(!this.timeStart) {
-    this.timeStart = time;
+    this.timeStart = timeCurrent;
   }
 
-  this.timeElapsed = time - this.timeStart;
-  this.targetNew = this._ease(this.timeElapsed, this.targetStart, this.targetChange, this.duration);
+  // determine ellapsed time
+  this.timeElapsed = timeCurrent - this.timeStart;
 
-  window.scrollTo(0, this.targetNew);
+  // determine next step in the current jump
+  this.jumpNext = this.easing(this.timeElapsed, this.jumpStart, this.jumpDistance, this.jumpDuration);
 
-  if(this.timeElapsed < this.duration) {
+  // scroll to next step
+  window.scrollTo(0, this.jumpNext);
+
+  // determine how to proceed
+  if(this.timeElapsed < this.jumpDuration) {
+    // continue animation
     requestAnimationFrame(this._loop.bind(this));
   }
   else {
-    this._reset();
+    // prepare for the next jump
+    this.timeStart = false;
   }
-}
-
-Jumper.prototype._ease = function(timeCurrent, targetStart, targetChange, duration) {
-  // Robert Penner's easeInQuad - http://robertpenner.com/easing/
-  return targetChange * (timeCurrent /= duration) * timeCurrent + targetStart;
-}
-
-Jumper.prototype._reset = function() {
-  delete this.targetChange;
-  delete this.timeStart;
 }
