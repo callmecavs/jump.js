@@ -62,8 +62,8 @@ Jumper.prototype._loop = function(timeCurrent) {
   }
   else {
     // fire the callback
-    if(typeof this.callback === 'function') {
-      this.callback();
+    if(typeof this.jumpCallback === 'function') {
+      this.jumpCallback();
     }
 
     // prepare for the next jump
