@@ -4,16 +4,16 @@ function Jumper() {
 
 }
 
-Jumper.prototype.jump = function(target, duration) {
+Jumper.prototype.jump = function(target, duration, offset) {
   this.targetStart = window.pageYOffset;
   this.duration = duration;
 
   // to an element, or to a px value?
   if(target.nodeType === 1) {
-    this.targetChange = target.getBoundingClientRect().top + this.targetStart;
+    this.targetChange = target.getBoundingClientRect().top + this.targetStart + offset;
   }
   else {
-    this.targetChange = target - this.targetStart;
+    this.targetChange = target - this.targetStart + offset;
   }
 
   requestAnimationFrame(this._loop.bind(this));
