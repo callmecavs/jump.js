@@ -7,10 +7,10 @@ function Jumper(defaults) {
   this.offset = defaults.offset || 0;             // px
   this.callback = defaults.callback || null;      // function
 
-  this.easing = defaults.easing || function(timeCurrent, jumpStart, jumpChange, jumpDuration) {
+  this.easing = defaults.easing || function(t, b, c, d) {
     // Robert Penner's easeInQuad - http://robertpenner.com/easing/
-    return jumpChange * (timeCurrent /= jumpDuration) * timeCurrent + jumpStart;
-  }
+    return c * (t /= d) * t + b;
+  };
 }
 
 Jumper.prototype.jump = function(target, overrides) {
