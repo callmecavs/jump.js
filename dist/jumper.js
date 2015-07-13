@@ -25,9 +25,17 @@ Jumper.prototype._loop = function(time) {
   if(this.timeElapsed < this.duration) {
     requestAnimationFrame(this._loop.bind(this));
   }
+  else {
+    this._reset();
+  }
 }
 
 Jumper.prototype._ease = function(timeCurrent, targetStart, targetChange, duration) {
   // Robert Penner's easeInQuad - http://robertpenner.com/easing/
   return targetChange * (timeCurrent /= duration) * timeCurrent + targetStart;
+}
+
+Jumper.prototype._reset = function() {
+  delete this.targetChange;
+  delete this.timeStart;
 }
