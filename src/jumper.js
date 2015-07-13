@@ -16,7 +16,7 @@ function Jumper(defaults) {
 Jumper.prototype.jump = function(target, overrides) {
   overrides = overrides || {};
 
-  // cache current scroll position
+  // cache starting position
   this.jumpStart = window.pageYOffset;
 
   // resolve configuration for this jump
@@ -61,12 +61,20 @@ Jumper.prototype._loop = function(timeCurrent) {
     requestAnimationFrame(this._loop.bind(this));
   }
   else {
-    // fire the callback
-    if(typeof this.jumpCallback === 'function') {
-      this.jumpCallback();
-    }
-
-    // prepare for the next jump
-    this.timeStart = false;
+    // finish animation
+    this._end();
   }
+}
+
+Jumper.prototype._end = function() {
+  // compensate for rAF time and rounding inaccuracies
+  window.scrollTo(0, this.jumpStart + this.jumpDistance);
+
+  // fire the callback
+  if(typeof this.jumpCallback === 'function') {
+    this.jumpCallback();
+  }
+
+  // prepare for the next jump
+  this.timeStart = false;
 }
