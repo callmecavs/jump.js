@@ -26,15 +26,13 @@ Jumper.prototype.jump = function(target, overrides) {
   this.jumpEasing = overrides.easing || this.easing;
 
   // resolve jump distance
-  this.jumpDistance = this.jumpOffset;
-
   if(target.nodeType === 1) {
     // if element, determine element offset from current scroll position
-    this.jumpDistance += Math.round(target.getBoundingClientRect().top);
+    this.jumpDistance = this.jumpOffset + Math.round(target.getBoundingClientRect().top);
   }
   else {
     // if pixel value, scroll from current location
-    this.jumpDistance += target;
+    this.jumpDistance = target;
   }
 
   // start scroll loop
