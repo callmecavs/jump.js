@@ -23,6 +23,7 @@ Jumper.prototype.jump = function(target, overrides) {
   this.jumpDuration = overrides.duration || this.duration;
   this.jumpOffset = overrides.offset || this.offset;
   this.jumpCallback = overrides.callback || this.callback;
+  this.jumpEasing = overrides.easing || this.easing;
 
   // resolve jump distance
   this.jumpDistance = this.jumpOffset;
@@ -50,7 +51,7 @@ Jumper.prototype._loop = function(timeCurrent) {
   this.timeElapsed = timeCurrent - this.timeStart;
 
   // determine next step in the current jump
-  this.jumpNext = this.easing(this.timeElapsed, this.jumpStart, this.jumpDistance, this.jumpDuration);
+  this.jumpNext = this.jumpEasing(this.timeElapsed, this.jumpStart, this.jumpDistance, this.jumpDuration);
 
   // scroll to next step
   window.scrollTo(0, this.jumpNext);
