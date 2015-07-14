@@ -2,6 +2,8 @@
 
 A small, modern, dependency-free smooth scrolling library.
 
+> You could cut ties with all the li[brari]es that you've been living in...
+
 ## Usage
 
 1. [Create an Instance](#create-an-instance)
@@ -10,7 +12,7 @@ A small, modern, dependency-free smooth scrolling library.
 
 ### Create an Instance
 
-Create an instance, setting your `jump` defaults. Don't forget to read about the [options]()!
+Create an instance, setting your `jump` defaults. Don't forget to read about the [options](#options)!
 
 ```javascript
 // default options shown below
@@ -62,7 +64,7 @@ jumper.jump(target, {
 
 ### Options
 
-All options can be set when creating an instance, and overridden when calling `jump`.
+All options can be set when creating an instance, and [overridden](#override-defaults) when calling `jump`.
 
 * [duration](#duration)
 * [offset](#offset)
@@ -107,7 +109,7 @@ var jumper = new Jumper({
 
 #### easing
 
-Customize the easing of the `jump`.
+Customize the easing of `jump`. Made with [Robert Penner's easing functions](https://github.com/danro/jquery-easing/blob/master/jquery.easing.js) in mind.
 
 The easing function must accept 4 parameters, in this order:
 
@@ -124,13 +126,15 @@ var jumper = new Jumper({
 });
 ```
 
-This library was made with [Robert Penner's easing functions](https://github.com/danro/jquery-easing/blob/master/jquery.easing.js) in mind.
-
 ## Browser Support
 
 Jumper natively supports **IE10+**.
 
 For legacy support, consider including [Paul Irish's polyfill](https://gist.github.com/paulirish/1579671) for [requestAnimationFrame](https://developer.mozilla.org/en-US/docs/Web/API/window/requestAnimationFrame).
+
+## License
+
+MIT. © 2015 Michael Cavalea
 
 ## Roadmap
 
