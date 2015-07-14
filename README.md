@@ -4,9 +4,9 @@ A small, modern, dependency-free smooth scrolling library.
 
 ## Usage
 
-1. [Create an Instance](https://github.com/callmecavs/jumper.js#create-an-instance)
-2. [`jump` Method](https://github.com/callmecavs/jumper.js#jump-method)
-3. [Options](https://github.com/callmecavs/jumper.js#options)
+1. [Create an Instance](#create-an-instance)
+2. [`jump` Method](#jump-method)
+3. [Options](#options)
 
 ### Create an Instance
 
@@ -29,11 +29,11 @@ var jumper = new Jumper({
 
 To scroll the page, use the `jump` method in the following ways:
 
-* [Jump to an Element](https://github.com/callmecavs/jumper.js#jump-to-an-element)
-* [Jump from Current Position](https://github.com/callmecavs/jumper.js#jump-from-current-position)
-* [Override Defaults](https://github.com/callmecavs/jumper.js#override-defaults)
+* [Jump to an Element](#jump-to-an-element)
+* [Jump from Current Position](#jump-from-current-position)
+* [Override Defaults](#override-defaults)
 
-##### Jump to an Element
+#### Jump to an Element
 
 Pass an element node.
 
@@ -41,7 +41,7 @@ Pass an element node.
 jumper.jump(document.querySelector('.demo-element'));
 ```
 
-##### Jump from Current Position
+#### Jump from Current Position
 
 Pass a number of pixels, positive or negative.
 
@@ -50,7 +50,7 @@ jumper.jump(window.innerHeight);      // down one screen height
 jumper.jump(-100);                    // up 100px
 ```
 
-##### Override Defaults
+#### Override Defaults
 
 Pass an `overrides` object after your `jump` target.
 
@@ -64,12 +64,12 @@ jumper.jump(target, {
 
 All options can be set when creating an instance, and overridden when calling `jump`.
 
-* [duration]()
-* [offset]()
-* [callback]()
-* [easing]()
+* [duration](#duration)
+* [offset](#offset)
+* [callback](#callback)
+* [easing](#easing)
 
-##### duration
+#### duration
 
 How long the `jump` takes, in milliseconds.
 
@@ -79,7 +79,7 @@ var jumper = new Jumper({
 });
 ```
 
-##### offset
+#### offset
 
 Offset a `jump`, _only if to an element_, in pixels.
 
@@ -91,7 +91,7 @@ var jumper = new Jumper({
 });
 ```
 
-##### callback
+#### callback
 
 Fired after the `jump` has been completed.
 
@@ -105,7 +105,7 @@ var jumper = new Jumper({
 });
 ```
 
-##### easing
+#### easing
 
 Customize the easing of the `jump`.
 
