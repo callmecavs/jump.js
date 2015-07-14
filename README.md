@@ -6,6 +6,8 @@ A small, modern, dependency-free smooth scrolling library.
 
 ## Usage
 
+Follow these steps:
+
 1. [Create an Instance](#create-an-instance)
 2. [`jump` Method](#jump-method)
 3. [Options](#options)
@@ -56,7 +58,7 @@ jumper.jump(-100);                    // up 100px
 
 Pass an `overrides` object after your `jump` target.
 
-```
+```javascript
 jumper.jump(target, {
   // options can be overridden here
 });
@@ -75,7 +77,7 @@ All options can be set when creating an instance, and [overridden](#override-def
 
 How long the `jump` takes, in milliseconds.
 
-```
+```javascript
 var jumper = new Jumper({
   duration: 1000
 });
@@ -87,7 +89,7 @@ Offset a `jump`, _only if to an element_, in pixels.
 
 Useful for accomodating components fixed to the top/bottom of the screen.
 
-```
+```javascript
 var jumper = new Jumper({
   offset: 100
 });
@@ -97,7 +99,7 @@ var jumper = new Jumper({
 
 Fired after the `jump` has been completed.
 
-```
+```javascript
 // `this` refers to your Jumper instance inside the function
 
 var jumper = new Jumper({
