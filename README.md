@@ -4,41 +4,118 @@ A small, modern, dependency-free smooth scrolling library.
 
 ## Usage
 
-Create an instance. When doing so, set your defaults.
+1. [Create an Instance]()
+2. [`jump` Method]()
+3. [Options]()
 
-Note that these can be overridden on a per-jump basis.
+### Create an Instance
+
+Create an instance, setting your `jump` defaults. Don't forget to read about the [options]()!
 
 ```javascript
-// defaults shown below
+// default options shown below
 
 var jumper = new Jumper({
   duration: 1000,                     // ms
   offset: 0,                          // px
   callback: null,                     // function
-  easing: function(t, b, c, d) {      // Robert Penner's easeInQuad - http://robertpenner.com/easing/
+  easing: function(t, b, c, d) {      // Robert Penner's easeInQuad
     return c * (t /= d) * t + b;
   }
 });
 ```
 
-Start jumping! Use the `jump` method.
+### `jump` Method
+
+To scroll the page, use the `jump` method in the following ways:
+
+###### Jump to an Element
+
+Pass an element node.
 
 ```javascript
-// scroll from the current position
-
-jumper.jump(100);     // down 100px
-jumper.jump(-100);    // up 100px
-
-// scroll to an element
-
 jumper.jump(document.querySelector('.demo-element'));
+```
 
-// override your defaults
+###### Jump from Current Position
 
-jumper.jump(100, {
-  ...
+Pass a number of pixels, positive or negative.
+
+```javascript
+jumper.jump(window.innerHeight);      // down one screen height
+jumper.jump(-100);                    // up 100px
+```
+
+###### Override Defaults
+
+Pass an `overrides` object after your `jump` target.
+
+```
+jumper.jump(target, {
+  // options can be overridden here
 });
 ```
+
+### Options
+
+All options can be set when creating an instance, and overridden when calling `jump`.
+
+###### duration
+
+How long the `jump` takes, in milliseconds.
+
+```
+var jumper = new Jumper({
+  duration: 1000
+});
+```
+
+###### offset
+
+Offset a `jump`, _only if to an element_, in pixels.
+
+Useful for accomodating components fixed to the top/bottom of the screen.
+
+```
+var jumper = new Jumper({
+  offset: 100
+});
+```
+
+###### callback
+
+Fired after the `jump` has been completed.
+
+```
+// `this` refers to your Jumper instance inside the function
+
+var jumper = new Jumper({
+  callback: function() {
+    console.log('Jump completed!');
+  }
+});
+```
+
+###### easing
+
+Customize the easing of the `jump`.
+
+The easing function must accept 4 parameters, in this order:
+
+1. (t) Current time
+2. (b) Beginning scroll position
+3. (c) Change in scroll position
+4. (d) Duration
+
+```javascript
+var jumper = new Jumper({
+  easing: function(t, b, c, d) {
+    return c * (t /= d) * t + b;
+  }
+});
+```
+
+This library was made with [Robert Penner's easing functions](https://github.com/danro/jquery-easing/blob/master/jquery.easing.js) in mind.
 
 ## Browser Support
 
@@ -48,12 +125,7 @@ For legacy support, consider including [Paul Irish's polyfill](https://gist.gith
 
 ## Roadmap
 
-- [ ] Update docs
-- [x] Add `callback` option
-- [x] Add `duration` and `offset` defaults and overrides
-- [x] Add `easing` option
 - [ ] Add option to scroll at `px/s` instead of a fixed duration
-- [x] Improve code commenting
 - [ ] Add header to `dist` files
 
-[![Fuck It, Ship It](http://forthebadge.com/images/badges/fuck-it-ship-it.svg)](http://forthebadge.com) [![Fo Sho](http://forthebadge.com/images/badges/fo-sho.svg)](http://forthebadge.com)
+[![Built With Love](http://forthebadge.com/images/badges/built-with-love.svg)](http://forthebadge.com)
