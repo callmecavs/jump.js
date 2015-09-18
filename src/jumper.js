@@ -22,7 +22,7 @@ export default class Jumper {
       ? this.jumpOffset + Math.round(target.getBoundingClientRect().top)
       : target
 
-    requestAnimationFrame(() => this._loop())
+    requestAnimationFrame((time) => this._loop(time))
   }
 
   _loop(currentTime) {
@@ -36,7 +36,7 @@ export default class Jumper {
     window.scrollTo(0, this.jumpNext)
 
     this.timeElapsed < this.jumpDuration
-      ? requestAnimationFrame(() => this._loop())
+      ? requestAnimationFrame((time) => this._loop(time))
       : this._end()
   }
 

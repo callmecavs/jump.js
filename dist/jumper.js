@@ -55,8 +55,8 @@
 
         this.jumpDistance = target.nodeType === 1 ? this.jumpOffset + Math.round(target.getBoundingClientRect().top) : target;
 
-        requestAnimationFrame(function () {
-          return _this._loop();
+        requestAnimationFrame(function (time) {
+          return _this._loop(time);
         });
       }
     }, {
@@ -73,8 +73,8 @@
 
         window.scrollTo(0, this.jumpNext);
 
-        this.timeElapsed < this.jumpDuration ? requestAnimationFrame(function () {
-          return _this2._loop();
+        this.timeElapsed < this.jumpDuration ? requestAnimationFrame(function (time) {
+          return _this2._loop(time);
         }) : this._end();
       }
     }, {
