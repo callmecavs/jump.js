@@ -121,6 +121,8 @@ The easing function must accept 4 parameters, in this order:
 4. (d) Duration
 
 ```javascript
+// disregard the x parameter
+
 var jumper = new Jumper({
   easing: function(t, b, c, d) {
     return c * (t /= d) * t + b;
