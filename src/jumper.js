@@ -1,79 +1,49 @@
-'use strict';
+export default class Jumper {
+  constructor(defaults = {}) {
+    this.duration = defaults.duration || 1000
+    this.offset = defaults.offset || 0
+    this.callback = defaults.callback || undefined
 
-function Jumper(defaults) {
-  defaults = defaults || {};
-
-  this.duration = defaults.duration || 1000;      // ms
-  this.offset = defaults.offset || 0;             // px
-  this.callback = defaults.callback || null;      // function
-
-  this.easing = defaults.easing || function(t, b, c, d) {
-    // Robert Penner's easeInQuad - http://robertpenner.com/easing/
-    return c * (t /= d) * t + b;
-  };
-}
-
-Jumper.prototype.jump = function(target, overrides) {
-  overrides = overrides || {};
-
-  // cache starting position
-  this.jumpStart = window.pageYOffset;
-
-  // resolve configuration for this jump
-  this.jumpDuration = overrides.duration || this.duration;
-  this.jumpOffset = overrides.offset || this.offset;
-  this.jumpCallback = overrides.callback || this.callback;
-  this.jumpEasing = overrides.easing || this.easing;
-
-  // resolve jump distance
-  if(target.nodeType === 1) {
-    // if element, determine element offset from current scroll position
-    this.jumpDistance = this.jumpOffset + Math.round(target.getBoundingClientRect().top);
-  }
-  else {
-    // if pixel value, scroll from current location
-    this.jumpDistance = target;
+    this.easing = defaults.easing || function(t, b, c, d) {
+      // Robert Penner's easeInQuad - http://robertpenner.com/easing/
+      return c * (t /= d) * t + b
+    }
   }
 
-  // start scroll loop
-  requestAnimationFrame(this._loop.bind(this));
-}
+  jump(target, overrides = {}) {
+    this.jumpStart = window.pageYOffset
 
-Jumper.prototype._loop = function(timeCurrent) {
-  // if necessary, cache start time
-  if(!this.timeStart) {
-    this.timeStart = timeCurrent;
+    this.jumpDuration = overrides.duration || this.duration
+    this.jumpOffset = overrides.offset || this.offset
+    this.jumpCallback = overrides.callback || this.callback
+    this.jumpEasing = overrides.easing || this.easing
+
+    this.jumpDistance = target.nodeType === 1
+      ? this.jumpOffset + Math.round(target.getBoundingClientRect().top)
+      : target
+
+    requestAnimationFrame(() => this._loop())
   }
 
-  // determine ellapsed time
-  this.timeElapsed = timeCurrent - this.timeStart;
+  _loop(currentTime) {
+    if(!this.timeStart) {
+      this.timeStart = currentTime
+    }
 
-  // determine next step in the current jump
-  this.jumpNext = this.jumpEasing(this.timeElapsed, this.jumpStart, this.jumpDistance, this.jumpDuration);
+    this.timeElapsed = currentTime - this.timeStart
+    this.jumpNext = this.jumpEasing(this.timeElapsed, this.jumpStart, this.jumpDistance, this.jumpDuration)
 
-  // scroll to next step
-  window.scrollTo(0, this.jumpNext);
+    window.scrollTo(0, this.jumpNext)
 
-  // determine how to proceed
-  if(this.timeElapsed < this.jumpDuration) {
-    // continue animation
-    requestAnimationFrame(this._loop.bind(this));
-  }
-  else {
-    // finish animation
-    this._end();
-  }
-}
-
-Jumper.prototype._end = function() {
-  // compensate for rAF time and rounding inaccuracies
-  window.scrollTo(0, this.jumpStart + this.jumpDistance);
-
-  // fire the callback
-  if(typeof this.jumpCallback === 'function') {
-    this.jumpCallback();
+    this.timeElapsed < this.jumpDuration
+      ? requestAnimationFrame(() => this._loop())
+      : this._end()
   }
 
-  // prepare for the next jump
-  this.timeStart = false;
+  _end() {
+    window.scrollTo(0, this.jumpStart + this.jumpDistance)
+
+    typeof this.jumpCallback === 'function' && this.jumpCallback.call()
+    this.timeStart = false
+  }
 }

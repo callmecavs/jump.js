@@ -6,92 +6,89 @@
 
 (function (global, factory) {
   if (typeof define === 'function' && define.amd) {
-    define('Jumper', ['exports'], factory);
-  } else if (typeof exports !== 'undefined') {
-    factory(exports);
+    define('Jumper', ['exports', 'module'], factory);
+  } else if (typeof exports !== 'undefined' && typeof module !== 'undefined') {
+    factory(exports, module);
   } else {
     var mod = {
       exports: {}
     };
-    factory(mod.exports);
+    factory(mod.exports, mod);
     global.Jumper = mod.exports;
   }
-})(this, function (exports) {
+})(this, function (exports, module) {
   'use strict';
 
-  function Jumper(defaults) {
-    defaults = defaults || {};
+  var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-    this.duration = defaults.duration || 1000; // ms
-    this.offset = defaults.offset || 0; // px
-    this.callback = defaults.callback || null; // function
+  function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
-    this.easing = defaults.easing || function (t, b, c, d) {
-      // Robert Penner's easeInQuad - http://robertpenner.com/easing/
-      return c * (t /= d) * t + b;
-    };
-  }
+  var Jumper = (function () {
+    function Jumper() {
+      var defaults = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 
-  Jumper.prototype.jump = function (target, overrides) {
-    overrides = overrides || {};
+      _classCallCheck(this, Jumper);
 
-    // cache starting position
-    this.jumpStart = window.pageYOffset;
+      this.duration = defaults.duration || 1000;
+      this.offset = defaults.offset || 0;
+      this.callback = defaults.callback || undefined;
 
-    // resolve configuration for this jump
-    this.jumpDuration = overrides.duration || this.duration;
-    this.jumpOffset = overrides.offset || this.offset;
-    this.jumpCallback = overrides.callback || this.callback;
-    this.jumpEasing = overrides.easing || this.easing;
-
-    // resolve jump distance
-    if (target.nodeType === 1) {
-      // if element, determine element offset from current scroll position
-      this.jumpDistance = this.jumpOffset + Math.round(target.getBoundingClientRect().top);
-    } else {
-      // if pixel value, scroll from current location
-      this.jumpDistance = target;
+      this.easing = defaults.easing || function (t, b, c, d) {
+        // Robert Penner's easeInQuad - http://robertpenner.com/easing/
+        return c * (t /= d) * t + b;
+      };
     }
 
-    // start scroll loop
-    requestAnimationFrame(this._loop.bind(this));
-  };
+    _createClass(Jumper, [{
+      key: 'jump',
+      value: function jump(target) {
+        var _this = this;
 
-  Jumper.prototype._loop = function (timeCurrent) {
-    // if necessary, cache start time
-    if (!this.timeStart) {
-      this.timeStart = timeCurrent;
-    }
+        var overrides = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
 
-    // determine ellapsed time
-    this.timeElapsed = timeCurrent - this.timeStart;
+        this.jumpStart = window.pageYOffset;
 
-    // determine next step in the current jump
-    this.jumpNext = this.jumpEasing(this.timeElapsed, this.jumpStart, this.jumpDistance, this.jumpDuration);
+        this.jumpDuration = overrides.duration || this.duration;
+        this.jumpOffset = overrides.offset || this.offset;
+        this.jumpCallback = overrides.callback || this.callback;
+        this.jumpEasing = overrides.easing || this.easing;
 
-    // scroll to next step
-    window.scrollTo(0, this.jumpNext);
+        this.jumpDistance = target.nodeType === 1 ? this.jumpOffset + Math.round(target.getBoundingClientRect().top) : target;
 
-    // determine how to proceed
-    if (this.timeElapsed < this.jumpDuration) {
-      // continue animation
-      requestAnimationFrame(this._loop.bind(this));
-    } else {
-      // finish animation
-      this._end();
-    }
-  };
+        requestAnimationFrame(function () {
+          return _this._loop();
+        });
+      }
+    }, {
+      key: '_loop',
+      value: function _loop(currentTime) {
+        var _this2 = this;
 
-  Jumper.prototype._end = function () {
-    // compensate for rAF time and rounding inaccuracies
-    window.scrollTo(0, this.jumpStart + this.jumpDistance);
+        if (!this.timeStart) {
+          this.timeStart = currentTime;
+        }
 
-    // fire the callback
-    if (typeof this.jumpCallback === 'function') {
-      this.jumpCallback();
-    }
+        this.timeElapsed = currentTime - this.timeStart;
+        this.jumpNext = this.jumpEasing(this.timeElapsed, this.jumpStart, this.jumpDistance, this.jumpDuration);
 
-    // prepare for the next jump
-    this.timeStart = false;
-  };
+        window.scrollTo(0, this.jumpNext);
+
+        this.timeElapsed < this.jumpDuration ? requestAnimationFrame(function () {
+          return _this2._loop();
+        }) : this._end();
+      }
+    }, {
+      key: '_end',
+      value: function _end() {
+        window.scrollTo(0, this.jumpStart + this.jumpDistance);
+
+        typeof this.jumpCallback === 'function' && this.jumpCallback.call();
+        this.timeStart = false;
+      }
+    }]);
+
+    return Jumper;
+  })();
+
+  module.exports = Jumper;
 });
