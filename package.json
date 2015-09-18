@@ -1,14 +1,31 @@
 {
-  "name": "",
-  "version": "1.0.0",
-  "description": "",
-  "author": "",
-  "license": "",
+  "name":        "jumper.js",
+  "version":     "1.0.0",
+  "description": "A small, modern, dependency-free smooth scrolling library.",
+  "homepage":    "https://github.com/callmecavs/jumper.js",
+  "main":        "dist/jumper.js",
+
+  "author":  "Michael Cavalea",
+  "license": "MIT",
+
+  "repository": {
+    "type": "git",
+    "url":  "https://github.com/callmecavs/jumper.js.git"
+  },
+  "bugs": {
+    "url": "https://github.com/callmecavs/jumper.js/issues"
+  },
+
+  "keywords": [
+    "scroll"
+  ],
 
   "devDependencies": {
+    "babel":             "*",
     "gulp":              "*",
+    "gulp-babel":        "*",
     "gulp-connect":      "*",
-    "gulp-load-plugins": "*",
+    "gulp-header":       "*",
     "gulp-plumber":      "*",
     "gulp-rename":       "*",
     "gulp-uglify":       "*",
