@@ -141,6 +141,6 @@ MIT. © 2015 Michael Cavalea
 ## Roadmap
 
 - [ ] Add option to scroll at `px/s` instead of a fixed duration
-- [ ] Add header to `dist` files
+- [x] Add header to `dist` files
 
 [![Built With Love](http://forthebadge.com/images/badges/built-with-love.svg)](http://forthebadge.com)
