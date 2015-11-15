@@ -1,12 +1,12 @@
 /*!
- * Jumper.js 1.0.0 - A small, modern, dependency-free smooth scrolling library.
- * Copyright (c) 2015 Michael Cavalea - https://github.com/callmecavs/jumper.js
+ * Jump.js 1.0.0 - A small, modern, dependency-free smooth scrolling library.
+ * Copyright (c) 2015 Michael Cavalea - https://github.com/callmecavs/jump.js
  * License: MIT
  */
 
 (function (global, factory) {
   if (typeof define === 'function' && define.amd) {
-    define('Jumper', ['exports', 'module'], factory);
+    define('Jump', ['exports', 'module'], factory);
   } else if (typeof exports !== 'undefined' && typeof module !== 'undefined') {
     factory(exports, module);
   } else {
@@ -14,7 +14,7 @@
       exports: {}
     };
     factory(mod.exports, mod);
-    global.Jumper = mod.exports;
+    global.Jump = mod.exports;
   }
 })(this, function (exports, module) {
   'use strict';
@@ -23,23 +23,26 @@
 
   function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
-  var Jumper = (function () {
-    function Jumper() {
+  var Jump = (function () {
+    function Jump() {
       var defaults = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 
-      _classCallCheck(this, Jumper);
+      _classCallCheck(this, Jump);
 
       this.duration = defaults.duration || 1000;
       this.offset = defaults.offset || 0;
       this.callback = defaults.callback || undefined;
 
       this.easing = defaults.easing || function (t, b, c, d) {
-        // Robert Penner's easeInQuad - http://robertpenner.com/easing/
-        return c * (t /= d) * t + b;
+        // Robert Penner's easeInOutQuad - http://robertpenner.com/easing/
+        t /= d / 2;
+        if (t < 1) return c / 2 * t * t + b;
+        t--;
+        return -c / 2 * (t * (t - 2) - 1) + b;
       };
     }
 
-    _createClass(Jumper, [{
+    _createClass(Jump, [{
       key: 'jump',
       value: function jump(target) {
         var _this = this;
@@ -87,8 +90,8 @@
       }
     }]);
 
-    return Jumper;
+    return Jump;
   })();
 
-  module.exports = Jumper;
+  module.exports = Jump;
 });

@@ -1,8 +1,6 @@
-# Jumper.js
+# Jump.js
 
 A small, modern, dependency-free smooth scrolling library.
-
-> You could cut ties with all the li[brari]es that you've been living in...
 
 ## Usage
 
@@ -16,17 +14,17 @@ Follow these steps:
 
 Create an instance, setting your `jump` defaults. Don't forget to read about the [options](#options)!
 
-```javascript
+```es6
 // default options shown below
 
-var jumper = new Jumper({
+const jump = new Jump({
   duration: 1000,                     // ms
   offset: 0,                          // px
   callback: null,                     // function
   easing: function(t, b, c, d) {      // Robert Penner's easeInQuad
-    return c * (t /= d) * t + b;
+    return c * (t /= d) * t + b
   }
-});
+})
 ```
 
 ### `jump` Method
@@ -41,27 +39,27 @@ To scroll the page, use the `jump` method in the following ways:
 
 Pass an element node.
 
-```javascript
-jumper.jump(document.querySelector('.demo-element'));
+```es6
+jump.jump(document.querySelector('.demo-element'))
 ```
 
 #### Jump from Current Position
 
 Pass a number of pixels, positive or negative.
 
-```javascript
-jumper.jump(window.innerHeight);      // down one screen height
-jumper.jump(-100);                    // up 100px
+```es6
+jump.jump(window.innerHeight)      // down one screen height
+jump.jump(-100)                    // up 100px
 ```
 
 #### Override Defaults
 
 Pass an `overrides` object after your `jump` target.
 
-```javascript
-jumper.jump(target, {
+```es6
+jump.jump(target, {
   // options can be overridden here
-});
+})
 ```
 
 ### Options
@@ -77,10 +75,10 @@ All options can be set when creating an instance, and [overridden](#override-def
 
 How long the `jump` takes, in milliseconds.
 
-```javascript
-var jumper = new Jumper({
+```es6
+const jump = new Jump({
   duration: 1000
-});
+})
 ```
 
 #### offset
@@ -89,24 +87,24 @@ Offset a `jump`, _only if to an element_, in pixels.
 
 Useful for accomodating components fixed to the top/bottom of the screen.
 
-```javascript
-var jumper = new Jumper({
+```es6
+const jump = new Jump({
   offset: 100
-});
+})
 ```
 
 #### callback
 
 Fired after the `jump` has been completed.
 
-```javascript
-// `this` refers to your Jumper instance inside the function
+```es6
+// `this` refers to your Jump instance inside the function
 
-var jumper = new Jumper({
+const jump = new Jump({
   callback: function() {
-    console.log('Jump completed!');
+    console.log('Jump completed!')
   }
-});
+})
 ```
 
 #### easing
@@ -120,19 +118,19 @@ The easing function must accept 4 parameters, in this order:
 3. (c) Change in scroll position
 4. (d) Duration
 
-```javascript
+```es6
 // disregard the x parameter
 
-var jumper = new Jumper({
+const jump = new Jump({
   easing: function(t, b, c, d) {
-    return c * (t /= d) * t + b;
+    return c * (t /= d) * t + b
   }
-});
+})
 ```
 
 ## Browser Support
 
-Jumper natively supports **IE10+**.
+Jump natively supports **IE10+**.
 
 For legacy support, consider including [Paul Irish's polyfill](https://gist.github.com/paulirish/1579671) for [requestAnimationFrame](https://developer.mozilla.org/en-US/docs/Web/API/window/requestAnimationFrame).
 

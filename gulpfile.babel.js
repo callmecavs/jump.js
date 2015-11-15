@@ -16,8 +16,8 @@ const onError = (error) => {
 
 const attribution = [
   '/*!',
-  ' * Jumper.js <%= pkg.version %> - <%= pkg.description %>',
-  ' * Copyright (c) 2015 <%= pkg.author %> - https://github.com/callmecavs/jumper.js',
+  ' * Jump.js <%= pkg.version %> - <%= pkg.description %>',
+  ' * Copyright (c) 2015 <%= pkg.author %> - https://github.com/callmecavs/jump.js',
   ' * License: <%= pkg.license %>',
   ' */',
   '',
@@ -25,13 +25,13 @@ const attribution = [
 ].join('\n')
 
 gulp.task('js', () => {
-  return gulp.src('src/jumper.js')
+  return gulp.src('src/jump.js')
     .pipe(plumber({ errorHandler: onError }))
-    .pipe(babel({ moduleId: 'Jumper', modules: 'umd' }))
+    .pipe(babel({ moduleId: 'Jump', modules: 'umd' }))
     .pipe(header(attribution, { pkg: packageJSON }))
     .pipe(gulp.dest('dist'))
     .pipe(uglify({ preserveComments: 'some' }))
-    .pipe(rename('jumper.min.js'))
+    .pipe(rename('jump.min.js'))
     .pipe(gulp.dest('dist'))
 })
 
@@ -42,5 +42,5 @@ gulp.task('server', () => {
   })
 })
 
-gulp.watch('src/jumper.js', ['js'])
+gulp.watch('src/jump.js', ['js'])
 gulp.task('default', ['js', 'server'])

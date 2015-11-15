@@ -1,12 +1,15 @@
-export default class Jumper {
+export default class Jump {
   constructor(defaults = {}) {
     this.duration = defaults.duration || 1000
     this.offset = defaults.offset || 0
     this.callback = defaults.callback || undefined
 
     this.easing = defaults.easing || function(t, b, c, d) {
-      // Robert Penner's easeInQuad - http://robertpenner.com/easing/
-      return c * (t /= d) * t + b
+      // Robert Penner's easeInOutQuad - http://robertpenner.com/easing/
+      t /= d / 2
+      if (t < 1) return c / 2 * t * t + b
+      t--
+      return -c / 2 * (t * (t - 2) - 1) + b
     }
   }
 
