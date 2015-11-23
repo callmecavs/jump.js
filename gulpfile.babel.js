@@ -4,6 +4,7 @@ import babelify from 'babelify'
 import browserify from 'browserify'
 import gulp from 'gulp'
 import connect from 'gulp-connect'
+import header from 'gulp-header'
 import sourcemaps from 'gulp-sourcemaps'
 import uglify from 'gulp-uglify'
 import assign from 'lodash.assign'
@@ -24,11 +25,9 @@ const onError = (error) => {
 const attribution = [
   '/*!',
   ' * Jump.js <%= pkg.version %> - <%= pkg.description %>',
-  ' * Copyright (c) 2015 <%= pkg.author %> - https://github.com/callmecavs/jump.js',
+  ' * Copyright (c) ' + new Date().getFullYear() + ' <%= pkg.author %> - <%= pkg.homepage %>',
   ' * License: <%= pkg.license %>',
-  ' */',
-  '',
-  ''
+  ' */'
 ].join('\n')
 
 // JS
@@ -57,7 +56,8 @@ const build = () => {
     .pipe(source('jump.min.js'))
     .pipe(buffer())
     .pipe(sourcemaps.init({ loadMaps: true }))
-    .pipe(uglify())
+    .pipe(header(attribution, { pkg: packageJSON }))
+    .pipe(uglify({ preserveComments: 'some' }))
     .pipe(sourcemaps.write('./maps', { addComment: false }))
     .pipe(gulp.dest('dist'))
     .pipe(connect.reload())
