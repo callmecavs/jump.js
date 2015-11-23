@@ -36,10 +36,7 @@ const attribution = [
 const browserifyArgs = {
   debug: true,
   entries: 'src/jump.js',
-  standalone: 'Jump',
-  transform: [
-     ['babelify', { presets: ["es2015"] } ]
-  ]
+  standalone: 'Jump'
 }
 
 const watchifyArgs = assign(watchify.args, browserifyArgs)
@@ -50,6 +47,10 @@ const build = () => {
   console.time('Bundling finished')
 
   return bundler
+    .transform(babelify.configure({
+      presets: ['es2015'],
+      plugins: ['add-module-exports']
+    }))
     .bundle()
     .on('error', onError)
     .on('end', () => console.timeEnd('Bundling finished'))
