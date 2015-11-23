@@ -1,6 +1,6 @@
 {
   "name":        "jump.js",
-  "version":     "1.0.0",
+  "version":     "0.0.1",
   "description": "A small, modern, dependency-free smooth scrolling library.",
   "homepage":    "https://github.com/callmecavs/jump.js",
   "main":        "dist/jump.js",
@@ -21,14 +21,15 @@
   ],
 
   "devDependencies": {
-    "babel":             "*",
-    "gulp":              "*",
-    "gulp-babel":        "*",
-    "gulp-connect":      "*",
-    "gulp-header":       "*",
-    "gulp-plumber":      "*",
-    "gulp-rename":       "*",
-    "gulp-uglify":       "*",
-    "node-notifier":     "*"
+    "babel":               "*",
+    "babel-preset-es2015": "*",
+    "gulp":                "*",
+    "gulp-babel":          "*",
+    "gulp-connect":        "*",
+    "gulp-header":         "*",
+    "gulp-plumber":        "*",
+    "gulp-rename":         "*",
+    "gulp-uglify":         "*",
+    "node-notifier":       "*"
   }
 }

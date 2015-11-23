@@ -27,7 +27,7 @@ const attribution = [
 gulp.task('js', () => {
   return gulp.src('src/jump.js')
     .pipe(plumber({ errorHandler: onError }))
-    .pipe(babel({ moduleId: 'Jump', modules: 'umd' }))
+    .pipe(babel())
     .pipe(header(attribution, { pkg: packageJSON }))
     .pipe(gulp.dest('dist'))
     .pipe(uglify({ preserveComments: 'some' }))
