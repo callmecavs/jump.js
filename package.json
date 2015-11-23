@@ -21,15 +21,19 @@
   ],
 
   "devDependencies": {
-    "babel":               "*",
-    "babel-preset-es2015": "*",
-    "gulp":                "*",
-    "gulp-babel":          "*",
-    "gulp-connect":        "*",
-    "gulp-header":         "*",
-    "gulp-plumber":        "*",
-    "gulp-rename":         "*",
-    "gulp-uglify":         "*",
-    "node-notifier":       "*"
+    "babel":                           "*",
+    "babel-preset-es2015":             "*",
+    "babel-plugin-add-module-exports": "*",
+    "babelify":                        "*",
+    "browserify":                      "*",
+    "gulp":                            "*",
+    "gulp-connect":                    "*",
+    "gulp-sourcemaps":                 "*",
+    "gulp-uglify":                     "*",
+    "lodash.assign":                   "*",
+    "node-notifier":                   "*",
+    "vinyl-buffer":                    "*",
+    "vinyl-source-stream":             "*",
+    "watchify":                        "*"
   }
 }

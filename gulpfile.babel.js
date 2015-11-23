@@ -9,10 +9,14 @@ import rename from 'gulp-rename'
 import uglify from 'gulp-uglify'
 import notifier from 'node-notifier'
 
+// ERROR HANDLER
+
 const onError = (error) => {
   notifier.notify({ 'title': 'Error', 'message': 'Compilation failed.' })
   console.log(error)
 }
+
+// HEADER
 
 const attribution = [
   '/*!',
@@ -24,16 +28,41 @@ const attribution = [
   ''
 ].join('\n')
 
-gulp.task('js', () => {
-  return gulp.src('src/jump.js')
-    .pipe(plumber({ errorHandler: onError }))
-    .pipe(babel())
-    .pipe(header(attribution, { pkg: packageJSON }))
+// JS
+
+const browserifyArgs = {
+  debug: true,
+  entries: 'src/jump.js',
+  standalone: 'Jump',
+  transform: [
+     ['babelify', { presets: ["es2015"] } ]
+  ]
+}
+
+const watchifyArgs = assign(watchify.args, browserifyArgs)
+const bundler = watchify(browserify(watchifyArgs))
+
+const build = () => {
+  console.log('Bundling started...')
+  console.time('Bundling finished')
+
+  return bundler
+    .bundle()
+    .on('error', onError)
+    .on('end', () => console.timeEnd('Bundling finished'))
+    .pipe(source('jump.min.js'))
+    .pipe(buffer())
+    .pipe(sourcemaps.init({ loadMaps: true }))
+    .pipe(uglify())
+    .pipe(sourcemaps.write('./maps', { addComment: false }))
     .pipe(gulp.dest('dist'))
-    .pipe(uglify({ preserveComments: 'some' }))
-    .pipe(rename('jump.min.js'))
-    .pipe(gulp.dest('dist'))
-})
+    .pipe(connect.reload())
+}
+
+bundler.on('update', build)
+gulp.task('js', build)
+
+// SERVER
 
 gulp.task('server', () => {
   return connect.server({
@@ -41,6 +70,8 @@ gulp.task('server', () => {
     port: 3000
   })
 })
+
+// WATCH
 
 gulp.watch('src/jump.js', ['js'])
 gulp.task('default', ['js', 'server'])
