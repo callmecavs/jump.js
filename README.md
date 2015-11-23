@@ -4,143 +4,131 @@ A small, modern, dependency-free smooth scrolling library.
 
 ## Usage
 
-Follow these steps:
+Jump was developed with a modern JavaScript workflow in mind. To use it, it's recommended you have a build system in place that can transpile ES6, and bundle modules. For a minimal boilerplate that fulfills those requirements, check out [outset](https://github.com/callmecavs/outset).
 
-1. [Create an Instance](#create-an-instance)
-2. [`jump` Method](#jump-method)
-3. [Options](#options)
+Follow these steps to get started:
 
-### Create an Instance
+* [Install](#install)
+* [Instance](#instance)
+* [Jump](#jump)
 
-Create an instance, setting your `jump` defaults. Don't forget to read about the [options](#options)!
+### Install
+
+Using NPM, install Jump.js, and add it to your package.json dependencies.
+
+```bash
+$ npm install jump.js --save
+```
+
+### Instance
+
+Simply import `Jump`, then instantialize it. No options are passed to the constructor:
 
 ```es6
-// default options shown below
+import Jump from 'jump.js'
 
-const jump = new Jump({
-  duration: 1000,                     // ms
-  offset: 0,                          // px
-  callback: null,                     // function
-  easing: function(t, b, c, d) {      // Robert Penner's easeInQuad
-    return c * (t /= d) * t + b
-  }
+const Jump = new Jump()
+```
+
+It's recommended that you assign your Jump instance to a variable. One instance can make infinite jumps.
+
+### Jump
+
+Two parameters are required to make a jump:
+
+* A [target](#target)
+* An [options](#options) object
+
+#### Target
+
+To jump to an element, pass a CSS selector as a string.
+
+```es6
+Jump.jump('.selector', {
+  // options...
 })
 ```
 
-### `jump` Method
-
-To scroll the page, use the `jump` method in the following ways:
-
-* [Jump to an Element](#jump-to-an-element)
-* [Jump from Current Position](#jump-from-current-position)
-* [Override Defaults](#override-defaults)
-
-#### Jump to an Element
-
-Pass an element node.
+To scroll from the current position, pass a number of pixels, positive or negative.
 
 ```es6
-jump.jump(document.querySelector('.demo-element'))
-```
+// down one viewport height
+Jump.jump(window.innerHeight, {
+  // options...
+})
 
-#### Jump from Current Position
-
-Pass a number of pixels, positive or negative.
-
-```es6
-jump.jump(window.innerHeight)      // down one screen height
-jump.jump(-100)                    // up 100px
-```
-
-#### Override Defaults
-
-Pass an `overrides` object after your `jump` target.
-
-```es6
-jump.jump(target, {
-  // options can be overridden here
+// up 100px
+Jump.jump(-100, {
+  // options...
 })
 ```
 
-### Options
+#### Options
 
-All options can be set when creating an instance, and [overridden](#override-defaults) when calling `jump`.
-
-* [duration](#duration)
-* [offset](#offset)
-* [callback](#callback)
-* [easing](#easing)
-
-#### duration
-
-How long the `jump` takes, in milliseconds.
+Defaults are shown below:
 
 ```es6
-const jump = new Jump({
+Jump.jump(..., {
+  duration: /* required, no default */,
+  offset: 0,
+  callback: undefined
+})
+```
+
+##### duration
+
+How long the `jump()` takes, in milliseconds.
+
+```es6
+Jump.jump('.selector', {
   duration: 1000
 })
 ```
 
-#### offset
+##### offset
 
-Offset a `jump`, _only if to an element_, in pixels.
+Offset a `jump()`, _only if to an element_, in pixels.
 
-Useful for accomodating components fixed to the top/bottom of the screen.
+Useful for accomodating elements fixed to the top/bottom of the screen.
 
 ```es6
-const jump = new Jump({
+Jump.jump('.selector', {
   offset: 100
 })
 ```
 
-#### callback
+##### callback
 
-Fired after the `jump` has been completed.
+Fired after the `jump()` has been completed.
 
 ```es6
-// `this` refers to your Jump instance inside the function
-
-const jump = new Jump({
-  callback: function() {
+Jump.jump('.selector', {
+  callback: () => {
     console.log('Jump completed!')
-  }
-})
-```
-
-#### easing
-
-Customize the easing of `jump`. Made with [Robert Penner's easing functions](https://github.com/danro/jquery-easing/blob/master/jquery.easing.js) in mind.
-
-The easing function must accept 4 parameters, in this order:
-
-1. (t) Current time
-2. (b) Beginning scroll position
-3. (c) Change in scroll position
-4. (d) Duration
-
-```es6
-// disregard the x parameter
-
-const jump = new Jump({
-  easing: function(t, b, c, d) {
-    return c * (t /= d) * t + b
   }
 })
 ```
 
 ## Browser Support
 
-Jump natively supports **IE10+**.
+Jump depends on the following browser APIs:
 
-For legacy support, consider including [Paul Irish's polyfill](https://gist.github.com/paulirish/1579671) for [requestAnimationFrame](https://developer.mozilla.org/en-US/docs/Web/API/window/requestAnimationFrame).
+* [requestAnimationFrame](https://developer.mozilla.org/en-US/docs/Web/API/window/requestAnimationFrame)
+
+Consequently, it supports the following natively:
+
+* Chrome 24+
+* Firefox 23+
+* Safari 6.1+
+* Opera 15+
+* IE 10+
+* iOS Safari 7.1+
+* Android Browser 4.4+
+
+To add support for older browsers, consider including polyfills/shims for the APIs listed above. There are no plans to include any in the library, in the interest of file size.
 
 ## License
 
 MIT. © 2015 Michael Cavalea
-
-## Roadmap
-
-- [ ] Add option to scroll at `px/s` instead of a fixed duration
-- [x] Add header to `dist` files
 
 [![Built With Love](http://forthebadge.com/images/badges/built-with-love.svg)](http://forthebadge.com)
