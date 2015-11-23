@@ -22,11 +22,13 @@ $ npm install jump.js --save
 
 ### Instance
 
-Simply import `Jump`, then instantialize it. No options are passed to the constructor:
+Simply import Jump, then instantialize it. No options are passed to the constructor:
 
 ```es6
+// import Jump
 import Jump from 'jump.js'
 
+// create an instance
 const Jump = new Jump()
 ```
 
@@ -45,7 +47,7 @@ To jump to an element, pass a CSS selector as a string.
 
 ```es6
 Jump.jump('.selector', {
-  // options...
+  // ...
 })
 ```
 
@@ -54,26 +56,30 @@ To scroll from the current position, pass a number of pixels, positive or negati
 ```es6
 // down one viewport height
 Jump.jump(window.innerHeight, {
-  // options...
+  // ...
 })
 
 // up 100px
 Jump.jump(-100, {
-  // options...
+  // ...
 })
 ```
 
 #### Options
 
+Note that **duration is required** for every `jump()`.
+
 Defaults are shown below:
 
 ```es6
-Jump.jump(..., {
-  duration: /* required, no default */,
+Jump.jump('.selector', {
+  duration: /* REQUIRED, no default */,
   offset: 0,
   callback: undefined
 })
 ```
+
+Explanation of each option follows:
 
 ##### duration
 
