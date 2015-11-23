@@ -1,13 +1,16 @@
 import packageJSON from './package.json'
 
+import babelify from 'babelify'
+import browserify from 'browserify'
 import gulp from 'gulp'
-import babel from 'gulp-babel'
 import connect from 'gulp-connect'
-import header from 'gulp-header'
-import plumber from 'gulp-plumber'
-import rename from 'gulp-rename'
+import sourcemaps from 'gulp-sourcemaps'
 import uglify from 'gulp-uglify'
+import assign from 'lodash.assign'
 import notifier from 'node-notifier'
+import buffer from 'vinyl-buffer'
+import source from 'vinyl-source-stream'
+import watchify from 'watchify'
 
 // ERROR HANDLER
 
