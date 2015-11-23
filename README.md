@@ -2,6 +2,8 @@
 
 A small, modern, dependency-free smooth scrolling library.
 
+[![Jump.js on NPM](https://img.shields.io/npm/v/jump.js.svg)](https://www.npmjs.com/package/jump.js)
+
 ## Usage
 
 Jump was developed with a modern JavaScript workflow in mind. To use it, it's recommended you have a build system in place that can transpile ES6, and bundle modules. For a minimal boilerplate that fulfills those requirements, check out [outset](https://github.com/callmecavs/outset).
