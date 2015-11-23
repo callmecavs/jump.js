@@ -1,18 +1,18 @@
 export default class Jump {
-  jump(target, overrides = {}) {
+  jump(target, options = {}) {
     this.start = window.pageYOffset
 
     this.options = {
-      duration: overrides.duration,
-      offset: overrides.offset || 0,
-      callback: overrides.callback || undefined
+      duration: options.duration,
+      offset: options.offset || 0,
+      callback: options.callback || undefined
     }
 
     this.distance = typeof target === 'string'
       ? this.options.offset + document.querySelector(target).getBoundingClientRect().top
       : target
 
-    requestAnimationFrame((time) => this._loop(time))
+    requestAnimationFrame(time => this._loop(time))
   }
 
   _loop(time) {
@@ -26,7 +26,7 @@ export default class Jump {
     window.scrollTo(0, this.next)
 
     this.timeElapsed < this.options.duration
-      ? requestAnimationFrame((time) => this._loop(time))
+      ? requestAnimationFrame(time => this._loop(time))
       : this._end()
   }
 
