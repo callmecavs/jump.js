@@ -1,10 +1,4 @@
-const easeInOutQuad = (t, b, c, d) => {
-  // Robert Penner's easeInOutQuad - http://robertpenner.com/easing/
-  t /= d / 2
-  if(t < 1) return c / 2 * t * t + b
-  t--
-  return -c / 2 * (t * (t - 2) - 1) + b
-}
+import easeInOutQuad from './easing'
 
 export default class Jump {
   jump(target, options = {}) {

@@ -126,12 +126,12 @@ Jump.jump('.selector', {
 
 ##### easing
 
-Easing function to be used for the transition.
+Easing function used to transition the `jump()`.
 
 ```es6
 Jump.jump('.selector', {
   easing: (t, b, c, d) => {
-    return c * ( t /= d) * t + b
+    return c * (t /= d) * t + b
   }
 })
 ```
