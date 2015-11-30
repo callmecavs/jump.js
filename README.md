@@ -24,7 +24,7 @@ Using NPM, install Jump.js, and add it to your package.json dependencies.
 $ npm install jump.js --save
 ```
 
-### Instance
+### Use
 
 Simply import Jump, then instantialize it. No options are passed to the constructor.
 
