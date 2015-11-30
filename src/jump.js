@@ -1,3 +1,11 @@
+const easeInOutQuad = (t, b, c, d) => {
+  // Robert Penner's easeInOutQuad - http://robertpenner.com/easing/
+  t /= d / 2
+  if(t < 1) return c / 2 * t * t + b
+  t--
+  return -c / 2 * (t * (t - 2) - 1) + b
+}
+
 export default class Jump {
   jump(target, options = {}) {
     this.start = window.pageYOffset
@@ -5,7 +13,8 @@ export default class Jump {
     this.options = {
       duration: options.duration,
       offset: options.offset || 0,
-      callback: options.callback || undefined
+      callback: options.callback || undefined,
+      easing: options.easing || easeInOutQuad
     }
 
     this.distance = typeof target === 'string'
@@ -21,7 +30,7 @@ export default class Jump {
     }
 
     this.timeElapsed = time - this.timeStart
-    this.next = this._easing(this.timeElapsed, this.start, this.distance, this.options.duration)
+    this.next = this.options.easing(this.timeElapsed, this.start, this.distance, this.options.duration)
 
     window.scrollTo(0, this.next)
 
@@ -35,13 +44,5 @@ export default class Jump {
 
     typeof this.options.callback === 'function' && this.options.callback.call()
     this.timeStart = false
-  }
-
-  _easing(t, b, c, d) {
-    // Robert Penner's easeInOutQuad - http://robertpenner.com/easing/
-    t /= d / 2
-    if(t < 1) return c / 2 * t * t + b
-    t--
-    return -c / 2 * (t * (t - 2) - 1) + b
   }
 }
