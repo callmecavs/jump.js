@@ -13,7 +13,7 @@ Jump was developed with a modern JavaScript workflow in mind. To use it, it's re
 Follow these steps to get started:
 
 * [Install](#install)
-* [Instance](#instance)
+* [Instantiate](#instantiate)
 * [Jump](#jump)
 
 ### Install
@@ -26,7 +26,7 @@ $ npm install jump.js --save
 
 ### Instantiate
 
-Simply import Jump, then instantialize it. No options are passed to the constructor.
+Simply import Jump, then instantiate it. No options are passed to the constructor.
 
 ```es6
 // import Jump
