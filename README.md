@@ -4,7 +4,7 @@
 
 A small, modern, dependency-free smooth scrolling library.
 
-* [Demo](http://callmecavs.github.io/jump.js/)
+* [Demo Page](http://callmecavs.github.io/jump.js/)
 
 ## Usage
 
