@@ -79,7 +79,14 @@ Defaults are shown below, explanation of each option follows.
 Jump.jump('.selector', {
   duration: /* REQUIRED, no default */,
   offset: 0,
-  callback: undefined
+  callback: undefined,
+  easing: (t, b, c, d) => {
+    // Robert Penner's easeInOutQuad - http://robertpenner.com/easing/
+    t /= d / 2
+    if(t < 1) return c / 2 * t * t + b
+    t--
+    return -c / 2 * (t * (t - 2) - 1) + b
+  }
 })
 ```
 
@@ -113,6 +120,18 @@ Fired after the `jump()` has been completed.
 Jump.jump('.selector', {
   callback: () => {
     console.log('Jump completed!')
+  }
+})
+```
+
+##### easing
+
+Easing function to be used for the transition.
+
+```es6
+Jump.jump('.selector', {
+  easing: (t, b, c, d) => {
+    return c * ( t /= d) * t + b
   }
 })
 ```
