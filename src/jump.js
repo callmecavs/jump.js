@@ -7,7 +7,7 @@ export default class Jump {
     this.options = {
       duration: options.duration,
       offset: options.offset || 0,
-      callback: options.callback || undefined,
+      callback: options.callback,
       easing: options.easing || easeInOutQuad
     }
 
