@@ -15,6 +15,10 @@ export default class Jump {
       ? this.options.offset + document.querySelector(target).getBoundingClientRect().top
       : target
 
+    this.duration = typeof this.options.duration === 'function'
+      ? parseInt(this.options.duration.call(null, this.distance), 10)
+      : this.options.duration
+
     requestAnimationFrame(time => this._loop(time))
   }
 
@@ -24,11 +28,11 @@ export default class Jump {
     }
 
     this.timeElapsed = time - this.timeStart
-    this.next = this.options.easing(this.timeElapsed, this.start, this.distance, this.options.duration)
+    this.next = this.options.easing(this.timeElapsed, this.start, this.distance, this.duration)
 
     window.scrollTo(0, this.next)
 
-    this.timeElapsed < this.options.duration
+    this.timeElapsed < this.duration
       ? requestAnimationFrame(time => this._loop(time))
       : this._end()
   }

@@ -100,6 +100,14 @@ Jump.jump('.selector', {
 })
 ```
 
+Or a function taking a `distance` argument (in px) and returning the duration (in milliseconds).
+
+```es6
+Jump.jump('.selector', {
+  duration: (distance) => Math.abs(distance)
+})
+```
+
 ##### offset
 
 Offset a `jump()`, _only if to an element_, in pixels.
