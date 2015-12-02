@@ -100,7 +100,7 @@ Jump.jump('.selector', {
 })
 ```
 
-Or a function taking a `distance` argument (in px) and returning the duration (in milliseconds).
+Or, a function accepting `distance` (in `px`) as an argument, and returning the duration (in milliseconds) as a number.
 
 ```es6
 Jump.jump('.selector', {
