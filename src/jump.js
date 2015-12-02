@@ -16,7 +16,7 @@ export default class Jump {
       : target
 
     this.duration = typeof this.options.duration === 'function'
-      ? parseInt(this.options.duration.call(null, this.distance), 10)
+      ? this.options.duration(this.distance)
       : this.options.duration
 
     requestAnimationFrame(time => this._loop(time))
@@ -40,7 +40,7 @@ export default class Jump {
   _end() {
     window.scrollTo(0, this.start + this.distance)
 
-    typeof this.options.callback === 'function' && this.options.callback.call()
+    typeof this.options.callback === 'function' && this.options.callback()
     this.timeStart = false
   }
 }
