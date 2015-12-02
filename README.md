@@ -80,6 +80,7 @@ Jump.jump('.selector', {
   duration: /* REQUIRED, no default */,
   offset: 0,
   callback: undefined,
+  scrollCancelJump: true,
   easing: (t, b, c, d) => {
     // Robert Penner's easeInOutQuad - http://robertpenner.com/easing/
     t /= d / 2
@@ -117,6 +118,16 @@ Useful for accomodating elements fixed to the top/bottom of the screen.
 ```es6
 Jump.jump('.selector', {
   offset: 100
+})
+```
+
+##### scrollCancelJump
+
+Manual scroll will cancel jump.
+
+```es6
+Jump.jump('.selector', {
+  scrollCancelJump: true
 })
 ```
 

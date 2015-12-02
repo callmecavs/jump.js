@@ -8,7 +8,8 @@ export default class Jump {
       duration: options.duration,
       offset: options.offset || 0,
       callback: options.callback,
-      easing: options.easing || easeInOutQuad
+      easing: options.easing || easeInOutQuad,
+      scrollCancelJump: options.scrollCancelJump
     }
 
     this.distance = typeof target === 'string'
@@ -30,17 +31,30 @@ export default class Jump {
     this.timeElapsed = time - this.timeStart
     this.next = this.options.easing(this.timeElapsed, this.start, this.distance, this.duration)
 
+    if (!!this.options.scrollCancelJump &&
+        !!this.lastScrollPosition &&
+          this.lastScrollPosition != window.scrollY) {
+      this._end()
+      return;
+    }
+
     window.scrollTo(0, this.next)
+
+    this.lastScrollPosition = window.scrollY
 
     this.timeElapsed < this.duration
       ? requestAnimationFrame(time => this._loop(time))
-      : this._end()
+      : this._lastStep()
+  }
+
+  _lastStep() {
+    window.scrollTo(0, this.start + this.distance)
+    this._end()
   }
 
   _end() {
-    window.scrollTo(0, this.start + this.distance)
-
     typeof this.options.callback === 'function' && this.options.callback()
+    this.lastScrollPosition = false
     this.timeStart = false
   }
 }
