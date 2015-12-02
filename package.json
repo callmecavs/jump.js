@@ -21,7 +21,7 @@
   ],
 
   "devDependencies": {
-    "babel":                           "*",
+    "babel-core":                      "*",
     "babel-preset-es2015":             "*",
     "babel-plugin-add-module-exports": "*",
     "babelify":                        "*",
