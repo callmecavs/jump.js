@@ -1,6 +1,6 @@
 {
   "name":        "jump.js",
-  "version":     "0.2.1",
+  "version":     "0.3.0",
   "description": "A small, modern, dependency-free smooth scrolling library.",
   "homepage":    "https://github.com/callmecavs/jump.js",
   "main":        "dist/jump.min.js",
