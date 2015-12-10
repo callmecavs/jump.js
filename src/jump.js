@@ -2,7 +2,6 @@ import easeInOutQuad from './easing'
 
 export default class Jump {
   jump(target, options = {}) {
-    this.start = window.pageYOffset
 
     this.options = {
       duration: options.duration,
@@ -19,6 +18,10 @@ export default class Jump {
     this.duration = typeof this.options.duration === 'function'
       ? this.options.duration(this.distance)
       : this.options.duration
+
+    !!this.options.container
+      ?  this.start = this.options.container.getBoundingClientRect().top
+      :  this.start = window.pageYOffset
 
     requestAnimationFrame(time => this._loop(time))
   }
