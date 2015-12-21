@@ -86,7 +86,8 @@ Jump.jump('.selector', {
     if(t < 1) return c / 2 * t * t + b
     t--
     return -c / 2 * (t * (t - 2) - 1) + b
-  }
+  },
+  container: '.selector'
 })
 ```
 
@@ -141,6 +142,16 @@ Jump.jump('.selector', {
   easing: (t, b, c, d) => {
     return c * (t /= d) * t + b
   }
+})
+```
+
+##### container
+
+Container when you want to `jump()` inside an element.
+
+```es6
+Jump.jump('.selector', {
+  container: '.selector'
 })
 ```
 
