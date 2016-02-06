@@ -47,9 +47,13 @@ Two parameters are required to make a jump:
 
 #### Target
 
-To jump to an element, pass a CSS selector as a string.
+To jump to an element, pass an element or a CSS selector string.
 
 ```es6
+Jump.jump(element, {
+  // options...
+})
+
 Jump.jump('.selector', {
   // options...
 })
