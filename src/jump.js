@@ -17,7 +17,7 @@ export default class Jump {
 
     this.distance = typeof target === 'number'
       ? target
-      : this.options.offset + target.getBoundingClientRect().top;
+      : this.options.offset + this.target.getBoundingClientRect().top;
 
     this.duration = typeof this.options.duration === 'function'
       ? this.options.duration(this.distance)
