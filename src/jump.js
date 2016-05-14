@@ -51,17 +51,17 @@ export default defaults = ({
     switch(typeof target) {
       // scroll from current position
       case 'number':
-
+        stop = start + target
       break
 
       // scroll to element (node)
       case 'object':
-
+        stop = target.getBoundingClientRect().top
       break
 
       // scroll to element (selector)
       case 'string':
-
+        stop = document.querySelector(target).getBoundingClientRect().top
       break
     }
   }
