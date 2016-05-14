@@ -101,3 +101,9 @@ const jumper = ({
     jump
   }
 }
+
+// export singleton
+
+const singleton = jumper()
+
+export default singleton
