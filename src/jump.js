@@ -19,6 +19,7 @@ const jumper = () => {
   let callback      // fire when done scrolling
 
   function loop(timeCurrent) {
+    // store time started scrolling when starting
     if(!timeStart) {
       timeStart = timeCurrent
     }
