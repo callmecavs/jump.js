@@ -12,8 +12,8 @@ export default defaults = ({
   let start         // position where scroll starts
   let stop          // position where scroll stops
 
-  let offset        // adjustment from the stop position
-  let easing        // equation dictating how to scroll from start to stop
+  let adjust        // adjustment from the stop position
+  let timing        // equation dictating how to scroll from start to stop
 
   let duration      // time the scroll takes
   let distance      // distance, in px, the scroll covers
@@ -39,13 +39,13 @@ export default defaults = ({
       : options.duration(distance)
 
     // resolve offset
-    offset = options.offset || defaults.offset
+    adjust = options.offset || defaults.offset
 
     // resolve callback
     callback = options.callback
 
     // resolve easing
-    easing = options.easing || defaults.easing
+    timing = options.easing || defaults.easing
 
     // resolve target
     switch(typeof target) {
