@@ -23,6 +23,8 @@ const jumper = ({
   let timeStart     // time the scrolling started
   let timeElapsed   // time spent scrolling so far
 
+  let next          // stores the next scroll position within the loop
+
   function loop(timeCurrent) {
     if(!timeStart) {
       timeStart = timeCurrent
@@ -32,7 +34,7 @@ const jumper = ({
     timeElapsed = timeCurrent - timeStart
 
     // calculate next scroll position
-    const next = timing(timeElapsed, start, distance, duration)
+    next = timing(timeElapsed, start, distance, duration)
 
     // scroll to it
     window.scrollTo(0, next)
