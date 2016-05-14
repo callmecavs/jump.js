@@ -1,19 +1,12 @@
 import easeInOutQuad from './easing'
 
-const jumper = ({
-
-  // defaults
-  offset = 0,
-  easing = easeInOutQuad
-
-} = {}) => {
-
+const jumper = () => {
   // globals
   let start         // where scroll starts (px)
   let stop          // where scroll stops (px)
 
-  let adjust        // adjustment from the stop position (px)
-  let timing        // easing function
+  let offset        // adjustment from the stop position (px)
+  let easing        // easing function
 
   let duration      // scroll duration
   let distance      // distance of scroll (px)
@@ -34,7 +27,7 @@ const jumper = ({
     timeElapsed = timeCurrent - timeStart
 
     // calculate next scroll position
-    next = timing(timeElapsed, start, distance, duration)
+    next = easing(timeElapsed, start, distance, duration)
 
     // scroll to it
     window.scrollTo(0, next)
@@ -69,13 +62,13 @@ const jumper = ({
       : options.duration(distance)
 
     // resolve offset
-    adjust = options.offset || offset
+    offset = options.offset || 0
 
     // resolve callback
     callback = options.callback
 
     // resolve easing
-    timing = options.easing || easing
+    easing = options.easing || easeInOutQuad
 
     // resolve target
     switch(typeof target) {
