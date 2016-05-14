@@ -93,6 +93,9 @@ const jumper = ({
       break
     }
 
+    // resolve distance
+    distance = stop - start
+
     // start the loop
     requestAnimationFrame(loop)
   }
