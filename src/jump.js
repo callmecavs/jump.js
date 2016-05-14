@@ -2,21 +2,24 @@ import easeInOutQuad from './easing'
 
 const jumper = () => {
   // globals
+  let element       // element to scroll to (node)
+
   let start         // where scroll starts (px)
   let stop          // where scroll stops (px)
 
   let offset        // adjustment from the stop position (px)
-  let easing        // easing function
+  let easing        // easing function (function)
+  let a11y          // accessibility support flag
 
-  let duration      // scroll duration
+  let duration      // scroll duration (ms)
   let distance      // distance of scroll (px)
 
-  let timeStart     // time scroll started
-  let timeElapsed   // time scrolling thus far
+  let timeStart     // time scroll started (ms)
+  let timeElapsed   // time scrolling thus far (ms)
 
   let next          // next scroll position (px)
 
-  let callback      // fire when done scrolling
+  let callback      // fire when done scrolling (function)
 
   function loop(timeCurrent) {
     // store time started scrolling when starting
