@@ -20,8 +20,27 @@ export default ({
 
   let callback      // function to run when scroll is finished
 
-  function loop() {
+  let timeStart     // time the scrolling started
+  let timeElapsed   // time spent scrolling so far
 
+  function loop(timeCurrent) {
+    if(!timeStart) {
+      timeStart = timeCurrent
+    }
+
+    // determine time spent scrolling so far
+    timeElapsed = timeCurrent - timeStart
+
+    // calculate next scroll position
+    const next = timing(timeElapsed, start, distance, duration)
+
+    // scroll to it
+    window.scrollTo(0, next)
+
+    // continue looping or end
+    timeElapsed < duration
+      ? requestAnimationFrame(loop)
+      : end()
   }
 
   function end() {
@@ -64,6 +83,9 @@ export default ({
         stop = document.querySelector(target).getBoundingClientRect().top
       break
     }
+
+    // start the loop
+    requestAnimationFrame(loop)
   }
 
   return {
