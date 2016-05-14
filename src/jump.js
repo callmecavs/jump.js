@@ -27,8 +27,11 @@ export default defaults = ({
     // cache starting position
     start = window.scrollY || window.pageYOffset
 
-    // cache duration, the only required option
-    duration = options.duration
+    // resolve duration, the only required option
+    // if its not a number, assume its a function
+    duration = typeof options.duration === 'number'
+      ? options.duration
+      : options.duration(distance)
 
     // resolve target
     switch(typeof target) {
