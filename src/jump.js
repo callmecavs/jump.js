@@ -1,12 +1,12 @@
 import easeInOutQuad from './easing'
 
-export default defaults = ({
+export default ({
 
   // defaults
   offset = 0,
   easing = easeInOutQuad
 
-}) => {
+} = {}) => {
 
   // globals
   let start         // position where scroll starts
@@ -39,13 +39,13 @@ export default defaults = ({
       : options.duration(distance)
 
     // resolve offset
-    adjust = options.offset || defaults.offset
+    adjust = options.offset || offset
 
     // resolve callback
     callback = options.callback
 
     // resolve easing
-    timing = options.easing || defaults.easing
+    timing = options.easing || easing
 
     // resolve target
     switch(typeof target) {
