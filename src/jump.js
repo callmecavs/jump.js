@@ -9,21 +9,21 @@ const jumper = ({
 } = {}) => {
 
   // globals
-  let start         // position where scroll starts
-  let stop          // position where scroll stops
+  let start         // where scroll starts (px)
+  let stop          // where scroll stops (px)
 
-  let adjust        // adjustment from the stop position
-  let timing        // equation dictating how to scroll from start to stop
+  let adjust        // adjustment from the stop position (px)
+  let timing        // easing function
 
-  let duration      // time the scroll takes
-  let distance      // distance, in px, the scroll covers
+  let duration      // scroll duration
+  let distance      // distance of scroll (px)
 
-  let callback      // function to run when scroll is finished
+  let timeStart     // time scroll started
+  let timeElapsed   // time scrolling thus far
 
-  let timeStart     // time the scrolling started
-  let timeElapsed   // time spent scrolling so far
+  let next          // next scroll position (px)
 
-  let next          // stores the next scroll position within the loop
+  let callback      // fire when done scrolling
 
   function loop(timeCurrent) {
     if(!timeStart) {
@@ -102,13 +102,11 @@ const jumper = ({
     requestAnimationFrame(loop)
   }
 
-  return {
-    jump
-  }
+  return jump
 }
 
 // export singleton
 
-const singleton = jumper().jump
+const singleton = jumper()
 
 export default singleton
