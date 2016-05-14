@@ -1,28 +1,31 @@
 import easeInOutQuad from './easing'
 
 const jumper = () => {
-  // globals
-  let element       // element to scroll to (node)
+  // private
 
-  let start         // where scroll starts (px)
-  let stop          // where scroll stops (px)
+  let element         // element to scroll to                   (node)
 
-  let offset        // adjustment from the stop position (px)
-  let easing        // easing function (function)
-  let a11y          // accessibility support flag
+  let start           // where scroll starts                    (px)
+  let stop            // where scroll stops                     (px)
 
-  let duration      // scroll duration (ms)
-  let distance      // distance of scroll (px)
+  let offset          // adjustment from the stop position      (px)
+  let easing          // easing function                        (function)
+  let a11y            // accessibility support flag             (boolean)
 
-  let timeStart     // time scroll started (ms)
-  let timeElapsed   // time scrolling thus far (ms)
+  let duration        // scroll duration                        (ms)
+  let distance        // distance of scroll                     (px)
 
-  let next          // next scroll position (px)
+  let timeStart       // time scroll started                    (ms)
+  let timeElapsed     // time scrolling thus far                (ms)
 
-  let callback      // fire when done scrolling (function)
+  let next            // next scroll position                   (px)
+
+  let callback        // fire when done scrolling               (function)
+
+  // rAF loop helper
 
   function loop(timeCurrent) {
-    // store time started scrolling when starting
+    // store time scroll started, if not started already
     if(!timeStart) {
       timeStart = timeCurrent
     }
@@ -36,19 +39,25 @@ const jumper = () => {
     // scroll to it
     window.scrollTo(0, next)
 
-    // continue looping or end
+    // check progress
     timeElapsed < duration
-      ? requestAnimationFrame(loop)
-      : end()
+      ? requestAnimationFrame(loop)       // continue looping
+      : done()                            // scrolling is done
   }
 
-  function end() {
+  // scroll finished helper
+
+  function done() {
     // account for rounding inaccuracies
     window.scrollTo(0, start + distance)
 
-    // if scrolling to an element, and accessibility is enabled, add tabindex to element
+    // if scrolling to an element, and accessibility is enabled
     if(element && a11y) {
+      // add tabindex
       element.setAttribute('tabindex', '-1')
+
+      // focus the element
+      element.focus()
     }
 
     // if it exists, fire the callback
@@ -56,39 +65,22 @@ const jumper = () => {
       callback()
     }
 
-    // reset for next jump
-    timeStart = undefined
+    // reset time for next jump
+    timeStart = false
   }
+
+  // API
 
   function jump(target, options = {}) {
     // cache starting position
     start = window.scrollY || window.pageYOffset
 
-    // resolve duration, the only required option
-    // if its not a number, assume its a function
-    duration = typeof options.duration === 'number'
-      ? options.duration
-      : options.duration(distance)
-
-    // resolve offset
-    offset = options.offset || 0
-
-    // resolve callback
-    callback = options.callback
-
-    // resolve easing
-    easing = options.easing || easeInOutQuad
-
-    // resolve accessibility
-    a11y = options.a11y || false
-
     // resolve target
     switch(typeof target) {
       // scroll from current position
       case 'number':
-        // no element to scroll to, make sure accessibility is off
-        element = undefined
-        a11y    = false
+        element = undefined           // no element to scroll to
+        a11y    = false               // make sure accessibility is off
         stop    = start + target
       break
 
@@ -105,13 +97,26 @@ const jumper = () => {
       break
     }
 
-    // resolve distance
+    // resolve scroll distance
     distance = stop - start
+
+    // resolve duration, the only required option
+    // if its not a number, assume its a function
+    duration = typeof options.duration === 'number'
+      ? options.duration
+      : options.duration(distance)
+
+    // resolve options
+    offset   = options.offset || 0
+    callback = options.callback
+    easing   = options.easing || easeInOutQuad
+    a11y     = options.a11y || false
 
     // start the loop
     requestAnimationFrame(loop)
   }
 
+  // expose only the jump method
   return jump
 }
 
