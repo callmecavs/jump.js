@@ -10,7 +10,7 @@ export default defaults = ({
 
   // globals
   let start         // position where scroll starts
-  let end           // position where scroll ends
+  let stop          // position where scroll stops
 
   let duration      // time the scroll takes
   let distance      // distance, in px, the scroll covers
