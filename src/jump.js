@@ -9,12 +9,17 @@ export default defaults = ({
 }) => {
 
   // globals
-  let start
-  let duration
+  let start         // position where scroll starts
+  let end           // position where scroll ends
 
-  let to
+  let duration      // time the scroll takes
+  let distance      // distance, in px, the scroll covers
 
   function loop() {
+
+  }
+
+  function end() {
 
   }
 
@@ -22,21 +27,26 @@ export default defaults = ({
     // cache starting position
     start = window.scrollY || window.pageYOffset
 
-    // cache duration
-    // the only required option
+    // cache duration, the only required option
     duration = options.duration
 
     // resolve target
-    // if not an element, assume its a selector
-    to = target.nodeType
-      ? target
-      : document.querySelector(target)
+    switch(typeof target) {
+      // scroll from current position
+      case 'number':
 
+      break
 
-  }
+      // scroll to element (node)
+      case 'object':
 
-  function end() {
+      break
 
+      // scroll to element (selector)
+      case 'string':
+
+      break
+    }
   }
 
   return {
