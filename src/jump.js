@@ -12,6 +12,8 @@ export default defaults = ({
   let start
   let duration
 
+  let to
+
   function loop() {
 
   }
@@ -26,7 +28,7 @@ export default defaults = ({
 
     // resolve target
     // if not an element, assume its a selector
-    const to = target.nodeType
+    to = target.nodeType
       ? target
       : document.querySelector(target)
 
