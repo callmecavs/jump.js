@@ -43,6 +43,11 @@ const jumper = () => {
     // account for rounding inaccuracies
     window.scrollTo(0, start + distance)
 
+    // if scrolling to an element, and accessibility is enabled, add tabindex to element
+    if(element && a11y) {
+      element.setAttribute('tabindex', '-1')
+    }
+
     // if it exists, fire the callback
     if(typeof callback === 'function') {
       callback()
@@ -71,21 +76,29 @@ const jumper = () => {
     // resolve easing
     easing = options.easing || easeInOutQuad
 
+    // resolve accessibility
+    a11y = options.a11y || false
+
     // resolve target
     switch(typeof target) {
       // scroll from current position
       case 'number':
-        stop = start + target
+        // no element to scroll to, make sure accessibility is off
+        element = undefined
+        a11y    = false
+        stop    = start + target
       break
 
       // scroll to element (node)
       case 'object':
-        stop = target.getBoundingClientRect().top
+        element = target
+        stop    = element.getBoundingClientRect().top
       break
 
       // scroll to element (selector)
       case 'string':
-        stop = document.querySelector(target).getBoundingClientRect().top
+        element = document.querySelector(target)
+        stop    = element.getBoundingClientRect().top
       break
     }
 
