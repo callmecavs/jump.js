@@ -33,7 +33,7 @@ Simply import Jump, then instantiate it. No options are passed to the constructo
 import Jump from 'jump.js'
 
 // create an instance
-const Jump = new Jump()
+const jump = new Jump()
 ```
 
 It's recommended that you assign your Jump instance to a variable. One instance can make infinite jumps.
