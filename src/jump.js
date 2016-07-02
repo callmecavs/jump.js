@@ -22,6 +22,12 @@ const jumper = () => {
 
   let callback        // fire when done scrolling               (function)
 
+  // scroll position helper
+
+  function location() {
+    return window.scrollY || window.pageYOffset
+  }
+
   // rAF loop helper
 
   function loop(timeCurrent) {
@@ -73,7 +79,7 @@ const jumper = () => {
 
   function jump(target, options = {}) {
     // cache starting position
-    start = window.scrollY || window.pageYOffset
+    start = location()
 
     // resolve target
     switch(typeof target) {
@@ -85,15 +91,17 @@ const jumper = () => {
       break
 
       // scroll to element (node)
+      // bounding rect is relative to the viewport
       case 'object':
         element = target
-        stop    = element.getBoundingClientRect().top
+        stop    = element.getBoundingClientRect().top + location()
       break
 
       // scroll to element (selector)
+      // bounding rect is relative to the viewport
       case 'string':
         element = document.querySelector(target)
-        stop    = element.getBoundingClientRect().top
+        stop    = element.getBoundingClientRect().top + location()
       break
     }
 
