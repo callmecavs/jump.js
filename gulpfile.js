@@ -26,7 +26,7 @@ const onError = function(error) {
 
 // clean
 
-gulp.task('clean', () => del('dist'))
+gulp.task('clean', () => del('dist/**/*.js', 'dist/**/*.map'))
 
 // attribution
 
@@ -115,13 +115,5 @@ gulp.task('watch', () => {
 
 // build and default tasks
 
-gulp.task('build', ['clean'], () => {
-  // create dist directories
-  fs.mkdirSync('dist')
-  fs.mkdirSync('dist/maps')
-
-  // run the tasks
-  gulp.start('js')
-})
-
+gulp.task('build', ['clean', 'js'])
 gulp.task('default', ['build', 'server', 'watch'])
