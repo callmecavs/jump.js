@@ -108,11 +108,23 @@ const jumper = () => {
     // resolve scroll distance
     distance = stop - start
 
-    // resolve duration, the only required option
-    // if its not a number, assume its a function
-    duration = typeof options.duration === 'number'
-      ? options.duration
-      : options.duration(distance)
+    // resolve duration
+    switch(typeof options.duration) {
+      // number in ms
+      case 'number':
+        duration = options.duration
+      break
+
+      // function that can utilize the distance of the scroll
+      case 'function':
+        duration = options.duration(distance)
+      break
+
+      // default to 1000ms
+      default:
+        duration = 1000
+      break
+    }
 
     // resolve options
     offset   = options.offset || 0
