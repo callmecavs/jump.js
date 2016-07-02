@@ -48,7 +48,7 @@ const jumper = () => {
   // scroll finished helper
 
   function done() {
-    // account for rounding inaccuracies
+    // account for rAF time rounding inaccuracies
     window.scrollTo(0, start + distance)
 
     // if scrolling to an element, and accessibility is enabled
