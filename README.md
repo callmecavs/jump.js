@@ -18,7 +18,7 @@ Follow these steps to get started:
 
 ### Install
 
-Using NPM, install Jump.js, and add it to your package.json dependencies.
+Using NPM, install Jump.js, and save it to your `package.json` dependencies.
 
 ```bash
 $ npm install jump.js --save
@@ -26,7 +26,7 @@ $ npm install jump.js --save
 
 ### Import
 
-Import Jump, naming it what you prefer.
+Import Jump, naming it according to your preference.
 
 ```es6
 // import Jump
@@ -35,20 +35,20 @@ import jump from 'jump.js'
 
 ### Call
 
-Jump exports a singleton. There's no need to create an instance.
-
-Simply call it, passing in your [target](#target).
+Jump exports a singleton, so there's no need to create an instance. Just call it, passing in a [target](#target).
 
 ```es6
 // call Jump
-jump('.selector')
+jump('.target')
 ```
 
-The singleton can make an infinite number of jumps.
+Note that the singleton can make an infinite number of jumps.
 
 ## Options
 
-All options have sensible defaults, shown below. Explanation of each option follows.
+All options, except [target](#target), are optional, and have sensible defaults.
+
+Default options are shown below. Explanation of each option follows.
 
 ```es6
 jump('.selector', {
