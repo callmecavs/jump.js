@@ -106,7 +106,7 @@ const jumper = () => {
     }
 
     // resolve scroll distance
-    distance = stop - start
+    distance = stop - start + offset
 
     // resolve duration
     switch(typeof options.duration) {
