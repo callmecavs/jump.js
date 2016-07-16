@@ -1,7 +1,8 @@
 import easeInOutQuad from './easing.js'
 
 const jumper = () => {
-  // private cache
+  // private variable cache
+  // no variables are created during a jump, preventing memory leaks
 
   let element         // element to scroll to                   (node)
 
