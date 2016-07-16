@@ -177,6 +177,8 @@ jump('.target', {
 })
 ```
 
+Note that this option is disabled by default because it has _visual implications_ in many browsers. Focusing an element triggers the `:focus` CSS state selector, and is often accompanied by an `outline`.
+
 ## Browser Support
 
 Jump depends on the following browser APIs:
