@@ -1,7 +1,7 @@
 import easeInOutQuad from './easing.js'
 
 const jumper = () => {
-  // private
+  // private cache
 
   let element         // element to scroll to                   (node)
 
@@ -12,15 +12,15 @@ const jumper = () => {
   let easing          // easing function                        (function)
   let a11y            // accessibility support flag             (boolean)
 
-  let duration        // scroll duration                        (ms)
   let distance        // distance of scroll                     (px)
+  let duration        // scroll duration                        (ms)
 
   let timeStart       // time scroll started                    (ms)
-  let timeElapsed     // time scrolling thus far                (ms)
+  let timeElapsed     // time spent scrolling thus far          (ms)
 
   let next            // next scroll position                   (px)
 
-  let callback        // fire when done scrolling               (function)
+  let callback        // to call when done scrolling            (function)
 
   // scroll position helper
 
@@ -47,7 +47,7 @@ const jumper = () => {
 
     // check progress
     timeElapsed < duration
-      ? requestAnimationFrame(loop)       // continue looping
+      ? requestAnimationFrame(loop)       // continue scroll loop
       : done()                            // scrolling is done
   }
 
@@ -59,7 +59,7 @@ const jumper = () => {
 
     // if scrolling to an element, and accessibility is enabled
     if(element && a11y) {
-      // add tabindex
+      // add tabindex indicating programmatic focus
       element.setAttribute('tabindex', '-1')
 
       // focus the element
@@ -122,7 +122,7 @@ const jumper = () => {
         duration = options.duration
       break
 
-      // function that can utilize the distance of the scroll
+      // function passed the distance of the scroll
       case 'function':
         duration = options.duration(distance)
       break
