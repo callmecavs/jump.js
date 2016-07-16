@@ -34,6 +34,7 @@ const attribution =
  * Copyright (c) ${ new Date().getFullYear() } ${ json.author } - ${ json.homepage }
  * License: ${ json.license }
  */
+
 `
 
 // js
