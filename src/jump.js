@@ -29,6 +29,12 @@ const jumper = () => {
     return window.scrollY || window.pageYOffset
   }
 
+  // element offset helper
+
+  function top(element) {
+    return element.getBoundingClientRect().top + start
+  }
+
   // rAF loop helper
 
   function loop(timeCurrent) {
@@ -102,14 +108,14 @@ const jumper = () => {
       // bounding rect is relative to the viewport
       case 'object':
         element = target
-        stop    = element.getBoundingClientRect().top + location()
+        stop    = top(element)
       break
 
       // scroll to element (selector)
       // bounding rect is relative to the viewport
       case 'string':
         element = document.querySelector(target)
-        stop    = element.getBoundingClientRect().top + location()
+        stop    = top(element)
       break
     }
 
