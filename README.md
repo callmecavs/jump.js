@@ -12,9 +12,9 @@ Jump was developed with a modern JavaScript workflow in mind. To use it, it's re
 
 Follow these steps to get started:
 
-* [Install](#install)
-* [Import](#import)
-* [Call](#call)
+1. [Install](#install)
+2. [Import](#import)
+3. [Call](#call)
 
 ### Install
 
