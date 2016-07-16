@@ -113,5 +113,5 @@ gulp.task('watch', () => {
 
 // build and default tasks
 
-gulp.task('build', ['clean', 'js'])
+gulp.task('build', ['clean'], () => gulp.start('js'))
 gulp.task('default', ['build', 'server', 'watch'])
