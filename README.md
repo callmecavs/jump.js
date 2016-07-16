@@ -13,93 +13,63 @@ Jump was developed with a modern JavaScript workflow in mind. To use it, it's re
 Follow these steps to get started:
 
 * [Install](#install)
-* [Instantiate](#instantiate)
-* [Jump](#jump)
+* [Import](#import)
+* [Call](#call)
 
 ### Install
 
-Using NPM, install Jump.js, and add it to your package.json dependencies.
+Using NPM, install Jump.js, and save it to your `package.json` dependencies.
 
 ```bash
 $ npm install jump.js --save
 ```
 
-### Instantiate
+### Import
 
-Simply import Jump, then instantiate it. No options are passed to the constructor.
+Import Jump, naming it according to your preference.
 
 ```es6
 // import Jump
-import Jump from 'jump.js'
-
-// create an instance
-const jump = new Jump()
+import jump from 'jump.js'
 ```
 
-It's recommended that you assign your Jump instance to a variable. One instance can make infinite jumps.
+### Call
 
-### Jump
-
-Two parameters are required to make a jump:
-
-* A [target](#target)
-* An [options](#options) object
-
-#### Target
-
-To jump to an element, pass an element or a CSS selector string.
+Jump exports a singleton, so there's no need to create an instance. Just call it, passing in a [target](#target).
 
 ```es6
-Jump.jump(element, {
-  // options...
-})
-
-Jump.jump('.selector', {
-  // options...
-})
+// call Jump
+jump('.target')
 ```
 
-To scroll from the current position, pass a number of pixels, positive or negative.
+Note that the singleton can make an infinite number of jumps.
+
+## Options
+
+All options, except [target](#target), are optional, and have sensible defaults.
+
+Default options are shown below. Explanation of each option follows.
 
 ```es6
-// down one viewport height
-Jump.jump(window.innerHeight, {
-  // options...
-})
-
-// up 100px
-Jump.jump(-100, {
-  // options...
-})
-```
-
-#### Options
-
-Note that **duration is required** for every `jump()`.
-
-Defaults are shown below, explanation of each option follows.
-
-```es6
-Jump.jump('.selector', {
-  duration: /* REQUIRED, no default */,
+jump('.target', {
+  duration: 1000,
   offset: 0,
   callback: undefined,
-  easing: (t, b, c, d) => {
-    // Robert Penner's easeInOutQuad - http://robertpenner.com/easing/
-    t /= d / 2
-    if(t < 1) return c / 2 * t * t + b
-    t--
-    return -c / 2 * (t * (t - 2) - 1) + b
-  }
+  easing: [easeInOutQuad](https://github.com/callmecavs/jump.js/blob/master/src/easing.js),
+  a11y: false
 })
 ```
 
-##### duration
+### target
+
+
+
+### duration
 
 How long the `jump()` takes, in milliseconds.
 
 ```es6
-Jump.jump('.selector', {
+jump('.target', {
   duration: 1000
 })
 ```
@@ -107,44 +77,40 @@ Jump.jump('.selector', {
 Or, a function accepting `distance` (in `px`) as an argument, and returning the duration (in milliseconds) as a number.
 
 ```es6
-Jump.jump('.selector', {
-  duration: (distance) => Math.abs(distance)
+jump('.target', {
+  duration: distance => Math.abs(distance)
 })
 ```
 
-##### offset
+### offset
 
 Offset a `jump()`, _only if to an element_, in pixels.
 
-Useful for accomodating elements fixed to the top/bottom of the screen.
+Useful for accommodating elements fixed to the top/bottom of the screen.
 
 ```es6
-Jump.jump('.selector', {
+jump('.target', {
   offset: 100
 })
 ```
 
-##### callback
+### callback
 
 Fired after the `jump()` has been completed.
 
 ```es6
-Jump.jump('.selector', {
-  callback: () => {
-    console.log('Jump completed!')
-  }
+jump('.target', {
+  callback: () => console.log('Jump completed!')
 })
 ```
 
-##### easing
+### easing
 
 Easing function used to transition the `jump()`.
 
 ```es6
-Jump.jump('.selector', {
-  easing: (t, b, c, d) => {
-    return c * (t /= d) * t + b
-  }
+jump('.target', {
+  easing: [easeInOutQuad](https://github.com/callmecavs/jump.js/blob/master/src/easing.js)
 })
 ```
 

@@ -1,50 +1,143 @@
-import easeInOutQuad from './easing'
+import easeInOutQuad from './easing.js'
 
-export default class Jump {
-  jump(target, options = {}) {
-    this.start = window.pageYOffset
+const jumper = () => {
+  // private cache
 
-    this.options = {
-      duration: options.duration,
-      offset: options.offset || 0,
-      callback: options.callback,
-      easing: options.easing || easeInOutQuad
+  let element         // element to scroll to                   (node)
+
+  let start           // where scroll starts                    (px)
+  let stop            // where scroll stops                     (px)
+
+  let offset          // adjustment from the stop position      (px)
+  let easing          // easing function                        (function)
+  let a11y            // accessibility support flag             (boolean)
+
+  let distance        // distance of scroll                     (px)
+  let duration        // scroll duration                        (ms)
+
+  let timeStart       // time scroll started                    (ms)
+  let timeElapsed     // time spent scrolling thus far          (ms)
+
+  let next            // next scroll position                   (px)
+
+  let callback        // to call when done scrolling            (function)
+
+  // scroll position helper
+
+  function location() {
+    return window.scrollY || window.pageYOffset
+  }
+
+  // rAF loop helper
+
+  function loop(timeCurrent) {
+    // store time scroll started, if not started already
+    if(!timeStart) {
+      timeStart = timeCurrent
     }
 
-    this.target = typeof target === 'string'
-      ? document.querySelector(target)
-      : target;
+    // determine time spent scrolling so far
+    timeElapsed = timeCurrent - timeStart
 
-    this.distance = typeof target === 'number'
-      ? target
-      : this.options.offset + target.getBoundingClientRect().top;
+    // calculate next scroll position
+    next = easing(timeElapsed, start, distance, duration)
 
-    this.duration = typeof this.options.duration === 'function'
-      ? this.options.duration(this.distance)
-      : this.options.duration
+    // scroll to it
+    window.scrollTo(0, next)
 
-    requestAnimationFrame(time => this._loop(time))
+    // check progress
+    timeElapsed < duration
+      ? requestAnimationFrame(loop)       // continue scroll loop
+      : done()                            // scrolling is done
   }
 
-  _loop(time) {
-    if(!this.timeStart) {
-      this.timeStart = time
+  // scroll finished helper
+
+  function done() {
+    // account for rAF time rounding inaccuracies
+    window.scrollTo(0, start + distance)
+
+    // if scrolling to an element, and accessibility is enabled
+    if(element && a11y) {
+      // add tabindex indicating programmatic focus
+      element.setAttribute('tabindex', '-1')
+
+      // focus the element
+      element.focus()
     }
 
-    this.timeElapsed = time - this.timeStart
-    this.next = this.options.easing(this.timeElapsed, this.start, this.distance, this.duration)
+    // if it exists, fire the callback
+    if(typeof callback === 'function') {
+      callback()
+    }
 
-    window.scrollTo(0, this.next)
-
-    this.timeElapsed < this.duration
-      ? requestAnimationFrame(time => this._loop(time))
-      : this._end()
+    // reset time for next jump
+    timeStart = false
   }
 
-  _end() {
-    window.scrollTo(0, this.start + this.distance)
+  // API
 
-    typeof this.options.callback === 'function' && this.options.callback()
-    this.timeStart = false
+  function jump(target, options = {}) {
+    // resolve options, or use defaults
+    duration = options.duration || 1000
+    offset   = options.offset   || 0
+    callback = options.callback                       // "undefined" is a suitable default, and won't be called
+    easing   = options.easing   || easeInOutQuad
+    a11y     = options.a11y     || false
+
+    // cache starting position
+    start = location()
+
+    // resolve target
+    switch(typeof target) {
+      // scroll from current position
+      case 'number':
+        element = undefined           // no element to scroll to
+        a11y    = false               // make sure accessibility is off
+        stop    = start + target
+      break
+
+      // scroll to element (node)
+      // bounding rect is relative to the viewport
+      case 'object':
+        element = target
+        stop    = element.getBoundingClientRect().top + location()
+      break
+
+      // scroll to element (selector)
+      // bounding rect is relative to the viewport
+      case 'string':
+        element = document.querySelector(target)
+        stop    = element.getBoundingClientRect().top + location()
+      break
+    }
+
+    // resolve scroll distance, accounting for offset
+    distance = stop - start + offset
+
+    // resolve duration
+    switch(typeof options.duration) {
+      // number in ms
+      case 'number':
+        duration = options.duration
+      break
+
+      // function passed the distance of the scroll
+      case 'function':
+        duration = options.duration(distance)
+      break
+    }
+
+    // start the loop
+    requestAnimationFrame(loop)
   }
+
+  // expose only the jump method
+  return jump
 }
+
+// export singleton
+
+const singleton = jumper()
+
+export default singleton
