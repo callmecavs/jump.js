@@ -1,4 +1,4 @@
-import easeInOutQuad from './easing'
+import easeInOutQuad from './easing.js'
 
 const jumper = () => {
   // private
