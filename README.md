@@ -57,7 +57,7 @@ jump('.target', {
   duration: 1000,
   offset: 0,
   callback: undefined,
-  easing: [easeInOutQuad](https://github.com/callmecavs/jump.js/blob/master/src/easing.js),
+  easing: easeInOutQuad,
   a11y: false
 })
 ```
@@ -146,13 +146,21 @@ Easing function used to transition the `jump()`.
 
 ```es6
 jump('.target', {
-  easing: [easeInOutQuad](https://github.com/callmecavs/jump.js/blob/master/src/easing.js)
+  easing: easeInOutQuad
 })
 ```
 
+See [easing.js](https://github.com/callmecavs/jump.js/blob/master/src/easing.js) for the definition of the default easing function, originally written by Robert Penner.
+
 ### a11y
 
+If enabled, _and scrolling to an element_, add a [`tabindex`](https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/tabindex) and [`focus`](https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/focus) the element.
 
+```es6
+jump('.target', {
+  a11y: true
+})
+```
 
 ## Browser Support
 
