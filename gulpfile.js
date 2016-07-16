@@ -8,8 +8,6 @@ const gulp     = require('gulp')
 const notifier = require('node-notifier')
 const rollup   = require('rollup')
 const babel    = require('rollup-plugin-babel')
-const commonjs = require('rollup-plugin-commonjs')
-const resolve  = require('rollup-plugin-node-resolve')
 const uglify   = require('rollup-plugin-uglify')
 
 // error handler
@@ -44,7 +42,6 @@ const read = {
   entry: 'src/jump.js',
   sourceMap: true,
   plugins: [
-    resolve({ jsnext: true }),
     babel(),
     uglify()
   ]
