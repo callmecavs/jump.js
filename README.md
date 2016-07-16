@@ -1,6 +1,6 @@
 # Jump.js
 
-[![Jump.js on NPM](https://img.shields.io/npm/v/jump.js.svg)](https://www.npmjs.com/package/jump.js)
+[![Jump.js on NPM](https://img.shields.io/npm/v/jump.js.svg?style=flat-square)](https://www.npmjs.com/package/jump.js)
 
 A small, modern, dependency-free smooth scrolling library.
 
@@ -171,7 +171,7 @@ See [easing.js](https://github.com/callmecavs/jump.js/blob/master/src/easing.js)
 
 ### a11y
 
-If enabled, _and scrolling to an element_, add a [`tabindex`](https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/tabindex) to and [`focus`](https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/focus) the element.
+If enabled, _and scrolling to an element_, add a [`tabindex`](https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/tabindex) to, and [`focus`](https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/focus), the element.
 
 ```es6
 jump('.target', {
