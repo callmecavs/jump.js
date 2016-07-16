@@ -80,10 +80,10 @@ const jumper = () => {
   function jump(target, options = {}) {
     // resolve options, or use defaults
     duration = options.duration || 1000
-    offset   = options.offset || 0
-    callback = options.callback
-    easing   = options.easing || easeInOutQuad
-    a11y     = options.a11y || false
+    offset   = options.offset   || 0
+    callback = options.callback                       // "undefined" is a suitable default, and won't be called
+    easing   = options.easing   || easeInOutQuad
+    a11y     = options.a11y     || false
 
     // cache starting position
     start = location()
@@ -125,11 +125,6 @@ const jumper = () => {
       // function passed the distance of the scroll
       case 'function':
         duration = options.duration(distance)
-      break
-
-      // default to 1000ms
-      default:
-        duration = 1000
       break
     }
 
