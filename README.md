@@ -15,6 +15,7 @@ Follow these steps to get started:
 1. [Install](#install)
 2. [Import](#import)
 3. [Call](#call)
+4. [Review Options](#options)
 
 ### Install
 
@@ -48,11 +49,11 @@ Note that the singleton can make an infinite number of jumps.
 
 ## Options
 
-All options, _except [target](#target)_, are optional, and have sensible defaults.
-
-Default options are shown below.
+All options, **except [target](#target)**, are optional, and have sensible defaults. Default options are shown below.
 
 ```es6
+// default options
+
 jump('.target', {
   duration: 1000,
   offset: 0,
@@ -73,7 +74,7 @@ Explanation of each option follows:
 
 ### target
 
-Scroll from the current position by passing a number of pixels.
+Scroll _from the current position_ by passing a number of pixels.
 
 ```es6
 // scroll down 100px
@@ -85,7 +86,7 @@ jump(100)
 jump(-100)
 ```
 
-Scroll to an element by passing a node or a selector.
+Or, scroll _to an element_ by passing a node or a selector.
 
 ```es6
 // passing a node
@@ -102,7 +103,7 @@ jump('#target')
 
 ### duration
 
-How long the `jump()` takes, in milliseconds.
+Pass the time the `jump()` takes, in milliseconds.
 
 ```es6
 jump('.target', {
@@ -110,7 +111,7 @@ jump('.target', {
 })
 ```
 
-Or, a function accepting `distance` (in `px`) as an argument, and returning the duration (in milliseconds) as a number.
+Or, pass a function accepting `distance` (in `px`) as an argument, that returns the duration of the `jump()`, in milliseconds.
 
 ```es6
 jump('.target', {
@@ -120,23 +121,39 @@ jump('.target', {
 
 ### offset
 
-Offset a `jump()`, _only if to an element_, in pixels.
-
-Useful for accommodating elements fixed to the top/bottom of the screen.
+Offset a `jump()`, _only if to an element_, by a number of pixels.
 
 ```es6
+// stop 10px before the top of the element
+
 jump('.target', {
-  offset: 100
+  offset: -10
+})
+
+// stop 10px after the top of the element
+
+jump('.target', {
+  offset: 10
 })
 ```
 
+Note that this option is useful for accommodating elements `position: fixed` to the top/bottom of the screen.
+
 ### callback
 
-A function called after the `jump()` has been completed.
+Pass a function to be called after the `jump()` has been completed.
 
 ```es6
+// in both regular and arrow functions, 'this' === 'window'
+
 jump('.target', {
   callback: () => console.log('Jump completed!')
+})
+
+jump('.target', {
+  callback: function() {
+    console.log('Jump completed!')
+  }
 })
 ```
 
@@ -150,11 +167,11 @@ jump('.target', {
 })
 ```
 
-See [easing.js](https://github.com/callmecavs/jump.js/blob/master/src/easing.js) for the definition of the default easing function, originally written by Robert Penner.
+See [easing.js](https://github.com/callmecavs/jump.js/blob/master/src/easing.js) for the definition of `easeInOutQuad`, the default easing function. Credit for this function goes to Robert Penner.
 
 ### a11y
 
-If enabled, _and scrolling to an element_, add a [`tabindex`](https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/tabindex) and [`focus`](https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/focus) the element.
+If enabled, _and scrolling to an element_, add a [`tabindex`](https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/tabindex) to and [`focus`](https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/focus) the element.
 
 ```es6
 jump('.target', {
