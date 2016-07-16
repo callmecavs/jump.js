@@ -18,7 +18,7 @@ Follow these steps to get started:
 
 ### Install
 
-Using NPM, install Jump.js, and save it to your `package.json` dependencies.
+Using NPM, install Jump, and save it to your `package.json` dependencies.
 
 ```bash
 $ npm install jump.js --save
@@ -36,7 +36,7 @@ import jump from 'jump.js'
 
 ### Call
 
-Jump exports a singleton, so there's no need to create an instance. Just call it, passing in a [target](#target).
+Jump exports a _singleton_, so there's no need to create an instance. Just call it, passing in a [target](#target).
 
 ```es6
 // call Jump
@@ -73,7 +73,32 @@ Explanation of each option follows:
 
 ### target
 
+Scroll from the current position by passing a number of pixels.
 
+```es6
+// scroll down 100px
+
+jump(100)
+
+// scroll up 100px
+
+jump(-100)
+```
+
+Scroll to an element by passing a node or a selector.
+
+```es6
+// passing a node
+
+const node = document.querySelector('#target')
+
+jump(node)
+
+// passing a selector
+// the element is resolved using document.querySelector
+
+jump('#target')
+```
 
 ### duration
 
