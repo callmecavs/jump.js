@@ -78,6 +78,13 @@ const jumper = () => {
   // API
 
   function jump(target, options = {}) {
+    // resolve options, or use defaults
+    duration = options.duration || 1000
+    offset   = options.offset || 0
+    callback = options.callback
+    easing   = options.easing || easeInOutQuad
+    a11y     = options.a11y || false
+
     // cache starting position
     start = location()
 
@@ -125,12 +132,6 @@ const jumper = () => {
         duration = 1000
       break
     }
-
-    // resolve options
-    offset   = options.offset || 0
-    callback = options.callback
-    easing   = options.easing || easeInOutQuad
-    a11y     = options.a11y || false
 
     // start the loop
     requestAnimationFrame(loop)
