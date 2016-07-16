@@ -30,6 +30,7 @@ Import Jump, naming it according to your preference.
 
 ```es6
 // import Jump
+
 import jump from 'jump.js'
 ```
 
@@ -39,6 +40,7 @@ Jump exports a singleton, so there's no need to create an instance. Just call it
 
 ```es6
 // call Jump
+
 jump('.target')
 ```
 
@@ -46,9 +48,9 @@ Note that the singleton can make an infinite number of jumps.
 
 ## Options
 
-All options, except [target](#target), are optional, and have sensible defaults.
+All options, _except [target](#target)_, are optional, and have sensible defaults.
 
-Default options are shown below. Explanation of each option follows.
+Default options are shown below.
 
 ```es6
 jump('.target', {
@@ -59,6 +61,15 @@ jump('.target', {
   a11y: false
 })
 ```
+
+Explanation of each option follows:
+
+* [target](#target)
+* [duration](#duration)
+* [offset](#offset)
+* [callback](#callback)
+* [easing](#easing)
+* [a11y](#a11y)
 
 ### target
 
@@ -96,7 +107,7 @@ jump('.target', {
 
 ### callback
 
-Fired after the `jump()` has been completed.
+A function called after the `jump()` has been completed.
 
 ```es6
 jump('.target', {
@@ -113,6 +124,10 @@ jump('.target', {
   easing: [easeInOutQuad](https://github.com/callmecavs/jump.js/blob/master/src/easing.js)
 })
 ```
+
+### a11y
+
+
 
 ## Browser Support
 
