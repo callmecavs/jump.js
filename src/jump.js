@@ -9,6 +9,7 @@ const jumper = () => {
   let start           // where scroll starts                    (px)
   let stop            // where scroll stops                     (px)
 
+  let axis            // which axis the scroll is on            (string)
   let offset          // adjustment from the stop position      (px)
   let easing          // easing function                        (function)
   let a11y            // accessibility support flag             (boolean)
@@ -25,14 +26,18 @@ const jumper = () => {
 
   // scroll position helper
 
-  function location() {
-    return window.scrollY || window.pageYOffset
+  function location(axis) {
+    return (axis === 'y'
+      ? window.scrollY || window.pageYOffset
+      : window.scrollX || window.pageXOffset)
   }
 
   // element offset helper
 
-  function top(element) {
-    return element.getBoundingClientRect().top + start
+  function elementOffset(element, axis) {
+    return (axis === 'y'
+      ? element.getBoundingClientRect().top + start
+      : element.getBoundingClientRect().left + start)
   }
 
   // rAF loop helper
@@ -48,9 +53,13 @@ const jumper = () => {
 
     // calculate next scroll position
     next = easing(timeElapsed, start, distance, duration)
-
+    
     // scroll to it
-    window.scrollTo(0, next)
+    if (axis === 'y') {
+      window.scrollTo(0, next)
+    } else {
+      window.scrollTo(next, 0)
+    }
 
     // check progress
     timeElapsed < duration
@@ -62,7 +71,11 @@ const jumper = () => {
 
   function done() {
     // account for rAF time rounding inaccuracies
-    window.scrollTo(0, start + distance)
+    if (axis === 'y') {
+      window.scrollTo(0, start + distance)
+    } else {
+      window.scrollTo(start + distance, 0)
+    }
 
     // if scrolling to an element, and accessibility is enabled
     if(element && a11y) {
@@ -86,6 +99,7 @@ const jumper = () => {
 
   function jump(target, options = {}) {
     // resolve options, or use defaults
+    axis     = options.axis     || 'y'
     duration = options.duration || 1000
     offset   = options.offset   || 0
     callback = options.callback                       // "undefined" is a suitable default, and won't be called
@@ -93,7 +107,7 @@ const jumper = () => {
     a11y     = options.a11y     || false
 
     // cache starting position
-    start = location()
+    start = location(axis)
 
     // resolve target
     switch(typeof target) {
@@ -108,14 +122,14 @@ const jumper = () => {
       // bounding rect is relative to the viewport
       case 'object':
         element = target
-        stop    = top(element)
+        stop    = elementOffset(element, axis)
       break
 
       // scroll to element (selector)
       // bounding rect is relative to the viewport
       case 'string':
         element = document.querySelector(target)
-        stop    = top(element)
+        stop    = elementOffset(element, axis)
       break
     }
 
