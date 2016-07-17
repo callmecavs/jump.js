@@ -53,10 +53,7 @@ const jumper = () => {
 
     // calculate next scroll position
     next = easing(timeElapsed, start, distance, duration)
-    console.log(axis);
-    console.log(next);
-    console.log(start);
-    console.log(distance);
+    
     // scroll to it
     if (axis === 'y') {
       window.scrollTo(0, next)
