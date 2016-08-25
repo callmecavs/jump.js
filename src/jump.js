@@ -23,6 +23,8 @@ const jumper = () => {
 
   let callback        // to call when done scrolling            (function)
 
+  let requestID       // requestAnimationFrame id               (number)
+
   // scroll position helper
 
   function location() {
@@ -53,9 +55,13 @@ const jumper = () => {
     window.scrollTo(0, next)
 
     // check progress
-    timeElapsed < duration
-      ? requestAnimationFrame(loop)       // continue scroll loop
-      : done()                            // scrolling is done
+    if (timeElapsed < duration) {
+      // continue scroll loop
+      requestID = requestAnimationFrame(loop)
+    } else {
+      // scrolling is done
+      done();
+    }
   }
 
   // scroll finished helper
@@ -80,6 +86,12 @@ const jumper = () => {
 
     // reset time for next jump
     timeStart = false
+  }
+
+  // cancels the requestAnimationFrame
+
+  function cancel() {
+    cancelAnimationFrame(requestID);
   }
 
   // API
@@ -136,7 +148,9 @@ const jumper = () => {
     }
 
     // start the loop
-    requestAnimationFrame(loop)
+    requestID = requestAnimationFrame(loop)
+
+    return cancel
   }
 
   // expose only the jump method
