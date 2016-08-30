@@ -91,6 +91,8 @@ const jumper = () => {
   // cancels the requestAnimationFrame
 
   function cancel() {
+    timeStart = false;
+
     cancelAnimationFrame(requestID);
   }
 
