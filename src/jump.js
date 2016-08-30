@@ -154,7 +154,10 @@ const jumper = () => {
   }
 
   // expose only the jump method
-  return jump
+  return {
+    jump,
+    cancel,
+  };
 }
 
 // export singleton
