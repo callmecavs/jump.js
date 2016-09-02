@@ -96,6 +96,12 @@ const jumper = () => {
     cancelAnimationFrame(requestID);
   }
 
+  // indicates whether jumper is executing
+
+  function isJumping() {
+    return !!timeStart;
+  }
+
   // API
 
   function jump(target, options = {}) {
@@ -159,6 +165,7 @@ const jumper = () => {
   return {
     jump,
     cancel,
+    isJumping,
   };
 }
 
