@@ -30,5 +30,8 @@
     "rollup":                     "*",
     "rollup-plugin-babel":        "*",
     "rollup-plugin-uglify":       "*"
+  },
+  "babel": {
+    "presets": ["es2015-rollup"]
   }
 }
