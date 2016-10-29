@@ -9,6 +9,7 @@ const notifier = require('node-notifier')
 const rollup   = require('rollup')
 const babel    = require('rollup-plugin-babel')
 const uglify   = require('rollup-plugin-uglify')
+const mkdirp   = require('mkdirp');
 
 // error handler
 
@@ -24,7 +25,7 @@ const onError = function(error) {
 
 // clean
 
-gulp.task('clean', () => del('dist/**/*.js', 'dist/**/*.map'))
+gulp.task('clean', () => del('dist'));
 
 // attribution
 
@@ -62,15 +63,22 @@ gulp.task('js', () => {
       // generate the bundle
       const files = bundle.generate(write)
 
+      // sourcemap path
+      const mapDir = 'dist/maps/';
+
       // cache path to JS dist file
       const dist = 'dist/jump.min.js'
+
+      // Create directories
+      mkdirp.sync(mapDir);
 
       // write the attribution
       fs.writeFileSync(dist, attribution)
 
       // write the JS and sourcemap
       fs.appendFileSync(dist, files.code)
-      fs.writeFileSync('dist/maps/jump.js.map', files.map.toString())
+      fs.writeFileSync(mapDir + 'jump.js.map', files.map.toString())
+
     })
 })
 
