@@ -21,8 +21,11 @@
     "scroll"
   ],
 
+  "dependencies": {
+    "babel-preset-es2015-rollup": "*"
+  },
+
   "devDependencies": {
-    "babel-preset-es2015-rollup": "*",
     "browser-sync":               "*",
     "del":                        "*",
     "gulp":                       "*",
@@ -30,5 +33,8 @@
     "rollup":                     "*",
     "rollup-plugin-babel":        "*",
     "rollup-plugin-uglify":       "*"
+  },
+  "babel": {
+    "presets": ["es2015-rollup"]
   }
 }
