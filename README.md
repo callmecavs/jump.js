@@ -56,6 +56,7 @@ jump('.target', {
   duration: 1000,
   offset: 0,
   callback: undefined,
+  container: window,
   easing: easeInOutQuad,
   a11y: false
 })
@@ -67,6 +68,7 @@ Explanation of each option follows:
 * [duration](#duration)
 * [offset](#offset)
 * [callback](#callback)
+* [container](#container)
 * [easing](#easing)
 * [a11y](#a11y)
 
@@ -149,6 +151,17 @@ Pass a function that will be called after the `jump()` has been completed.
 
 jump('.target', {
   callback: () => console.log('Jump completed!')
+})
+```
+
+### container
+
+Pass a custom container element instead of scrolling `window`. The option
+`container` can be a CSS selector or a node.
+
+```es6
+jump('.target', {
+  container: '#myScrollableContainer'
 })
 ```
 
