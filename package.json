@@ -1,34 +1,47 @@
 {
   "name":        "jump.js",
-  "version":     "1.0.1",
-  "description": "A small, modern, dependency-free smooth scrolling library.",
-  "homepage":    "https://github.com/callmecavs/jump.js",
-  "main":        "dist/jump.min.js",
-  "jsnext:main": "src/jump.js",
+  "description": "A modern smooth scrolling library.",
 
-  "author":  "Michael Cavalea",
+  "main":        "dist/jump.js",
+  "module":      "dist/jump.module.js",
+  "jsnext:main": "dist/jump.module.js",
+
+  "version": "1.0.2",
   "license": "MIT",
 
-  "repository": {
-    "type": "git",
-    "url":  "https://github.com/callmecavs/jump.js.git"
+  "repository": "callmecavs/jump.js",
+
+  "author": {
+    "name":  "Michael Cavalea",
+    "email": "callmecavs@gmail.com",
+    "url":   "http://callmecavs.com/"
   },
-  "bugs": {
-    "url": "https://github.com/callmecavs/jump.js/issues"
+
+  "scripts": {
+    "prebuild":   "eslint src",
+    "build":      "rollup -c",
+    "dev":        "rollup -c -w -m inline",
+    "prepublish": "npm run build",
+    "server":     "python -m SimpleHTTPServer 3000"
   },
 
   "keywords": [
+    "smooth",
     "scroll"
   ],
 
   "devDependencies": {
-    "babel-preset-es2015-rollup": "*",
-    "browser-sync":               "*",
-    "del":                        "*",
-    "gulp":                       "*",
-    "node-notifier":              "*",
-    "rollup":                     "*",
-    "rollup-plugin-babel":        "*",
-    "rollup-plugin-uglify":       "*"
+    "babel-eslint": "^7.1.1",
+    "babel-plugin-external-helpers": "^6.18.0",
+    "babel-preset-es2015-rollup": "^3.0.0",
+    "babel-preset-stage-0": "^6.16.0",
+    "eslint": "^3.13.0",
+    "eslint-config-standard": "^6.2.1",
+    "eslint-plugin-promise": "^3.4.0",
+    "eslint-plugin-standard": "^2.0.1",
+    "rollup": "^0.41.1",
+    "rollup-plugin-babel": "^2.7.1",
+    "rollup-plugin-node-resolve": "^2.0.0",
+    "rollup-watch": "^3.2.2"
   }
 }
