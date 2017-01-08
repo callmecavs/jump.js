@@ -2,7 +2,7 @@
 
 [![Jump.js on NPM](https://img.shields.io/npm/v/jump.js.svg?style=flat-square)](https://www.npmjs.com/package/jump.js)
 
-A small, modern, dependency-free smooth scrolling library.
+A modern smooth scrolling library.
 
 * [Demo Page](http://callmecavs.github.io/jump.js/) (Click the arrows!)
 
