@@ -25,21 +25,21 @@ const jumper = () => {
 
   // scroll position helper
 
-  function location() {
+  function location () {
     return window.scrollY || window.pageYOffset
   }
 
   // element offset helper
 
-  function top(element) {
+  function top (element) {
     return element.getBoundingClientRect().top + start
   }
 
   // rAF loop helper
 
-  function loop(timeCurrent) {
+  function loop (timeCurrent) {
     // store time scroll started, if not started already
-    if(!timeStart) {
+    if (!timeStart) {
       timeStart = timeCurrent
     }
 
@@ -54,18 +54,18 @@ const jumper = () => {
 
     // check progress
     timeElapsed < duration
-      ? requestAnimationFrame(loop)       // continue scroll loop
-      : done()                            // scrolling is done
+      ? window.requestAnimationFrame(loop)       // continue scroll loop
+      : done()                                   // scrolling is done
   }
 
   // scroll finished helper
 
-  function done() {
+  function done () {
     // account for rAF time rounding inaccuracies
     window.scrollTo(0, start + distance)
 
     // if scrolling to an element, and accessibility is enabled
-    if(element && a11y) {
+    if (element && a11y) {
       // add tabindex indicating programmatic focus
       element.setAttribute('tabindex', '-1')
 
@@ -74,7 +74,7 @@ const jumper = () => {
     }
 
     // if it exists, fire the callback
-    if(typeof callback === 'function') {
+    if (typeof callback === 'function') {
       callback()
     }
 
@@ -84,25 +84,25 @@ const jumper = () => {
 
   // API
 
-  function jump(target, options = {}) {
+  function jump (target, options = {}) {
     // resolve options, or use defaults
     duration = options.duration || 1000
-    offset   = options.offset   || 0
+    offset = options.offset || 0
     callback = options.callback                       // "undefined" is a suitable default, and won't be called
-    easing   = options.easing   || easeInOutQuad
-    a11y     = options.a11y     || false
+    easing = options.easing || easeInOutQuad
+    a11y = options.a11y || false
 
     // cache starting position
     start = location()
 
     // resolve target
-    switch(typeof target) {
+    switch (typeof target) {
       // scroll from current position
       case 'number':
         element = undefined           // no element to scroll to
-        a11y    = false               // make sure accessibility is off
-        stop    = start + target
-      break
+        a11y = false                  // make sure accessibility is off
+        stop = start + target
+        break
 
       // scroll to element (node)
       // bounding rect is relative to the viewport
@@ -110,8 +110,8 @@ const jumper = () => {
         element = target
         // return if element does not exist
         if (!element) return
-        stop    = top(element)
-      break
+        stop = top(element)
+        break
 
       // scroll to element (selector)
       // bounding rect is relative to the viewport
@@ -119,28 +119,28 @@ const jumper = () => {
         element = document.querySelector(target)
         // return if element does not exist
         if (!element) return
-        stop    = top(element)
-      break
+        stop = top(element)
+        break
     }
 
     // resolve scroll distance, accounting for offset
     distance = stop - start + offset
 
     // resolve duration
-    switch(typeof options.duration) {
+    switch (typeof options.duration) {
       // number in ms
       case 'number':
         duration = options.duration
-      break
+        break
 
       // function passed the distance of the scroll
       case 'function':
         duration = options.duration(distance)
-      break
+        break
     }
 
     // start the loop
-    requestAnimationFrame(loop)
+    window.requestAnimationFrame(loop)
   }
 
   // expose only the jump method
