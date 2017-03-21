@@ -1,6 +1,6 @@
 # Jump.js
 
-[![Jump.js on NPM](https://img.shields.io/npm/v/jump.js.svg?style=flat-square)](https://www.npmjs.com/package/jump.js) [![Jump.js Downloads on NPM](https://img.shields.io/npm/dm/jump.js.svg?style=flat-square)](npmjs.com/package/jump.js) [![Standard JavaScript Style](https://img.shields.io/badge/code_style-standard-brightgreen.svg?style=flat-square)](http://standardjs.com/)
+[![Jump.js on NPM](https://img.shields.io/npm/v/jump.js.svg?style=flat-square)](https://www.npmjs.com/package/jump.js) [![Jump.js Downloads on NPM](https://img.shields.io/npm/dm/jump.js.svg?style=flat-square)](https://www.npmjs.com/package/jump.js) [![Standard JavaScript Style](https://img.shields.io/badge/code_style-standard-brightgreen.svg?style=flat-square)](http://standardjs.com/)
 
 A modern smooth scrolling library.
 
@@ -199,6 +199,6 @@ To add support for older browsers, consider including polyfills/shims for the AP
 
 ## License
 
-[MIT](https://opensource.org/licenses/MIT). © 2016 Michael Cavalea
+[MIT](https://opensource.org/licenses/MIT). © 2017 Michael Cavalea
 
 [![Built With Love](http://forthebadge.com/images/badges/built-with-love.svg)](http://forthebadge.com)
