@@ -1,6 +1,6 @@
 # Jump.js
 
-[![Jump.js on NPM](https://img.shields.io/npm/v/jump.js.svg?style=flat-square)](https://www.npmjs.com/package/jump.js)
+[![Jump.js on NPM](https://img.shields.io/npm/v/jump.js.svg?style=flat-square)](https://www.npmjs.com/package/jump.js) [![Jump.js Downloads on NPM](https://img.shields.io/npm/dm/jump.js.svg?style=flat-square)](npmjs.com/package/jump.js) [![Standard JavaScript Style](https://img.shields.io/badge/code_style-standard-brightgreen.svg?style=flat-square)](http://standardjs.com/)
 
 A modern smooth scrolling library.
 
