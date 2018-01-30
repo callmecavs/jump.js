@@ -108,6 +108,8 @@ const jumper = () => {
       // bounding rect is relative to the viewport
       case 'object':
         element = target
+        // return if element does not exist
+        if (!element) return
         stop = top(element)
         break
 
@@ -115,6 +117,8 @@ const jumper = () => {
       // bounding rect is relative to the viewport
       case 'string':
         element = document.querySelector(target)
+        // return if element does not exist
+        if (!element) return
         stop = top(element)
         break
     }
