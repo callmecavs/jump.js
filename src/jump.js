@@ -8,6 +8,7 @@ const jumper = () => {
 
   let start           // where scroll starts                    (px)
   let stop            // where scroll stops                     (px)
+  let scrolling       // scrolling state                        (boolean)
 
   let offset          // adjustment from the stop position      (px)
   let easing          // easing function                        (function)
@@ -61,6 +62,8 @@ const jumper = () => {
   // scroll finished helper
 
   function done () {
+    scrolling = false
+
     // account for rAF time rounding inaccuracies
     window.scrollTo(0, start + distance)
 
@@ -85,6 +88,11 @@ const jumper = () => {
   // API
 
   function jump (target, options = {}) {
+    if (scrolling) {
+      return
+    }
+    scrolling = true
+
     // resolve options, or use defaults
     duration = options.duration || 1000
     offset = options.offset || 0
