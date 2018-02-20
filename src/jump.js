@@ -63,23 +63,24 @@ const jumper = () => {
   function done () {
     // account for rAF time rounding inaccuracies
     window.scrollTo(0, start + distance)
+    window.requestAnimationFrame(() => {
+      // if scrolling to an element, and accessibility is enabled
+      if (element && a11y) {
+        // add tabindex indicating programmatic focus
+        element.setAttribute('tabindex', '-1')
 
-    // if scrolling to an element, and accessibility is enabled
-    if (element && a11y) {
-      // add tabindex indicating programmatic focus
-      element.setAttribute('tabindex', '-1')
+        // focus the element
+        element.focus()
+      }
 
-      // focus the element
-      element.focus()
-    }
+      // if it exists, fire the callback
+      if (typeof callback === 'function') {
+        callback()
+      }
 
-    // if it exists, fire the callback
-    if (typeof callback === 'function') {
-      callback()
-    }
-
-    // reset time for next jump
-    timeStart = false
+      // reset time for next jump
+      timeStart = false
+    })
   }
 
   // API
