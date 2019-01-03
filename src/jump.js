@@ -70,7 +70,7 @@ const jumper = () => {
       element.setAttribute('tabindex', '-1')
 
       // focus the element
-      element.focus()
+      element.focus({ preventScroll: true })
     }
 
     // if it exists, fire the callback
