@@ -32,7 +32,15 @@ const jumper = () => {
   // element offset helper
 
   function top (element) {
-    return element.getBoundingClientRect().top + start
+    // get max scroll value
+    const windowHeight = (window.innerHeight || document.documentElement.clientHeight);
+    const documentHeight = document.body.clientHeight;
+    const max = documentHeight - windowHeight - offset;
+
+    // get element scroll top
+    const top = element.getBoundingClientRect().top + start;
+    
+    return Math.min(element.getBoundingClientRect().top + start, max);
   }
 
   // rAF loop helper
