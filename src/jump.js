@@ -23,10 +23,12 @@ const jumper = () => {
 
   let callback        // to call when done scrolling            (function)
 
+  let container       // relative container to scroll instead of window (node)
+
   // scroll position helper
 
   function location () {
-    return window.scrollY || window.pageYOffset
+    return container ? container.scrollTop : window.scrollY || window.pageYOffset
   }
 
   // element offset helper
@@ -50,7 +52,11 @@ const jumper = () => {
     next = easing(timeElapsed, start, distance, duration)
 
     // scroll to it
-    window.scrollTo(0, next)
+    if (container) {
+      container.scrollTop = next
+    } else {
+      window.scrollTo(0, next)
+    }
 
     // check progress
     timeElapsed < duration
@@ -62,7 +68,11 @@ const jumper = () => {
 
   function done () {
     // account for rAF time rounding inaccuracies
-    window.scrollTo(0, start + distance)
+    if (container) {
+      container.scrollTop = start + distance
+    } else {
+      window.scrollTo(0, start + distance)
+    }
 
     // if scrolling to an element, and accessibility is enabled
     if (element && a11y) {
@@ -91,6 +101,7 @@ const jumper = () => {
     callback = options.callback                       // "undefined" is a suitable default, and won't be called
     easing = options.easing || easeInOutQuad
     a11y = options.a11y || false
+    container = options.container
 
     // cache starting position
     start = location()

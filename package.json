@@ -1,35 +1,28 @@
 {
-  "name":        "jump.js",
+  "name": "@hulilabs/jump.js",
   "description": "A modern smooth scrolling library.",
-
-  "main":        "dist/jump.js",
-  "module":      "dist/jump.module.js",
+  "main": "dist/jump.js",
+  "module": "dist/jump.module.js",
   "jsnext:main": "dist/jump.module.js",
-
-  "version": "1.0.2",
+  "version": "1.2.0",
   "license": "MIT",
-
   "repository": "callmecavs/jump.js",
-
   "author": {
-    "name":  "Michael Cavalea",
+    "name": "Michael Cavalea",
     "email": "callmecavs@gmail.com",
-    "url":   "http://callmecavs.com/"
+    "url": "http://callmecavs.com/"
   },
-
   "scripts": {
-    "prebuild":   "eslint src",
-    "build":      "rollup -c",
-    "dev":        "rollup -c -w -m inline",
+    "prebuild": "eslint src",
+    "build": "rollup -c",
+    "dev": "rollup -c -w -m inline",
     "prepublish": "npm run build",
-    "server":     "python -m SimpleHTTPServer 3000"
+    "server": "python -m SimpleHTTPServer 3000"
   },
-
   "keywords": [
     "smooth",
     "scroll"
   ],
-
   "devDependencies": {
     "babel-eslint": "^7.1.1",
     "babel-plugin-external-helpers": "^6.18.0",
