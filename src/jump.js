@@ -22,6 +22,7 @@ const jumper = () => {
   let next            // next scroll position                   (px)
 
   let callback        // to call when done scrolling            (function)
+  let step            // to call when finish an step            (function)
 
   // scroll position helper
 
@@ -45,6 +46,11 @@ const jumper = () => {
 
     // determine time spent scrolling so far
     timeElapsed = timeCurrent - timeStart
+
+    if (step) {
+      stop = start + step()
+      distance = stop - start + offset
+    }
 
     // calculate next scroll position
     next = easing(timeElapsed, start, distance, duration)
@@ -91,6 +97,7 @@ const jumper = () => {
     callback = options.callback                       // "undefined" is a suitable default, and won't be called
     easing = options.easing || easeInOutQuad
     a11y = options.a11y || false
+    step = options.step || null
 
     // cache starting position
     start = location()
