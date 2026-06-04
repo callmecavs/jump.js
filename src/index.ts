@@ -158,7 +158,7 @@ const jumper = (
       if (typeof callback !== "function") throw new Error(`Failed to execute "callback" (not a function).`)
 
       // ensure `callback` executes after the above .scrollTo call
-      window.requestAnimationFrame(callback)
+      window.requestAnimationFrame(() => callback())
     }
   }
 
