@@ -108,7 +108,7 @@ const jumper = (
   let startTime: number
 
   const loop = (currentTime: number) => {
-    if (!startTime) {
+    if (startTime === undefined) {
       startTime = currentTime
     }
 
