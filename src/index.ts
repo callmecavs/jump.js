@@ -74,6 +74,12 @@ const resolveDuration = (distance: JumpDistance, duration: JumpDuration) => {
   throw new Error(`Failed to resolve "duration".`)
 }
 
+const resolveInactive = (axis: JumpAxis, root: JumpRoot) => {
+  if (axis === "x") return calculateStart("y", root)
+  if (axis === "y") return calculateStart("x", root)
+  throw new Error(`Failed to resolve inactive "axis".`)
+}
+
 const resolveTargetNode = (target: Element | string) => {
   if (target instanceof Element) return target
 
@@ -106,6 +112,7 @@ const jumper = (
 
   const start = calculateStart(axis, root)
   const end = calculateEnd(axis, offset, root, start, target)
+  const inactive = resolveInactive(axis, root)
 
   const distance = end - start
   const duration = resolveDuration(distance, rawDuration)
@@ -123,7 +130,7 @@ const jumper = (
 
     const next = easing(elapsedTime, start, distance, duration)
 
-    root.scrollTo(axis === "x" ? next : 0, axis === "y" ? next : 0)
+    root.scrollTo(axis === "x" ? next : inactive, axis === "y" ? next : inactive)
 
     if (elapsedTime < duration) {
       rafId = window.requestAnimationFrame(loop)
@@ -135,7 +142,7 @@ const jumper = (
 
   const done = () => {
     // rounding inaccuracies
-    root.scrollTo(axis === "x" ? end : 0, axis === "y" ? end : 0)
+    root.scrollTo(axis === "x" ? end : inactive, axis === "y" ? end : inactive)
 
     // FIX: need to handle a11y here, but need to think about
     // how to get the resolved `target` node here first
