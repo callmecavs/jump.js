@@ -27,8 +27,14 @@ export type JumpOptions = {
   root?: JumpRoot
 }
 
-const calculateEnd = (axis: JumpAxis, root: JumpRoot, startingLocation: number, target: JumpTarget) => {
-  if (typeof target === "number") return startingLocation + target
+const calculateEnd = (
+  axis: JumpAxis,
+  offset: JumpOffset,
+  root: JumpRoot,
+  startingLocation: number,
+  target: JumpTarget,
+) => {
+  if (typeof target === "number") return startingLocation + target + offset
 
   if (target instanceof Element || typeof target === "string") {
     const targetNode = resolveTargetNode(target)
@@ -37,11 +43,11 @@ const calculateEnd = (axis: JumpAxis, root: JumpRoot, startingLocation: number, 
     if (root instanceof Element) {
       const rootBounds = root.getBoundingClientRect()
 
-      if (axis === "x") return startingLocation + targetNodeBounds.left - rootBounds.left - root.clientLeft
-      if (axis === "y") return startingLocation + targetNodeBounds.top - rootBounds.top - root.clientTop
+      if (axis === "x") return startingLocation + targetNodeBounds.left - rootBounds.left - root.clientLeft + offset
+      if (axis === "y") return startingLocation + targetNodeBounds.top - rootBounds.top - root.clientTop + offset
     } else {
-      if (axis === "x") return startingLocation + targetNodeBounds.left
-      if (axis === "y") return startingLocation + targetNodeBounds.top
+      if (axis === "x") return startingLocation + targetNodeBounds.left + offset
+      if (axis === "y") return startingLocation + targetNodeBounds.top + offset
     }
   }
 
@@ -99,9 +105,9 @@ const jumper = (
   const a11y = resolveAccessibility(rawA11y, target)
 
   const start = calculateStart(axis, root)
-  const end = calculateEnd(axis, root, start, target)
+  const end = calculateEnd(axis, offset, root, start, target)
 
-  const distance = end - start + offset
+  const distance = end - start
   const duration = resolveDuration(distance, rawDuration)
 
   let rafId: number
