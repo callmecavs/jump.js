@@ -8,6 +8,7 @@ const easeInOutQuad: JumpEasing = (t, b, c, d) => {
 }
 
 export type JumpTarget = Element | number | string
+export type JumpTargetNode = Element | undefined
 
 export type JumpA11y = boolean
 export type JumpAxis = "x" | "y"
@@ -33,11 +34,11 @@ const calculateEnd = (
   root: JumpRoot,
   startingLocation: number,
   target: JumpTarget,
+  targetNode: JumpTargetNode,
 ) => {
   if (typeof target === "number") return startingLocation + target + offset
 
-  if (target instanceof Element || typeof target === "string") {
-    const targetNode = resolveTargetNode(target)
+  if (targetNode) {
     const targetNodeBounds = targetNode.getBoundingClientRect()
 
     if (root instanceof Element) {
@@ -80,7 +81,8 @@ const resolveInactive = (axis: JumpAxis, root: JumpRoot) => {
   throw new Error(`Failed to resolve inactive "axis".`)
 }
 
-const resolveTargetNode = (target: Element | string) => {
+const resolveTargetNode = (target: JumpTarget): JumpTargetNode => {
+  if (typeof target === "number") return undefined
   if (target instanceof Element) return target
 
   let node: Element | null
@@ -109,9 +111,10 @@ const jumper = (
   }: JumpOptions = {},
 ) => {
   const a11y = resolveAccessibility(rawA11y, target)
+  const targetNode = resolveTargetNode(target)
 
   const start = calculateStart(axis, root)
-  const end = calculateEnd(axis, offset, root, start, target)
+  const end = calculateEnd(axis, offset, root, start, target, targetNode)
   const inactive = resolveInactive(axis, root)
 
   const distance = end - start
