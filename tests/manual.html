@@ -2,14 +2,104 @@
 
 <html lang="en">
   <head>
-    <style></style>
+    <style>
+      .page {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+      }
+
+      .section {
+        min-height: 50dvh;
+        border: 2px solid black;
+      }
+
+      .section:nth-child(1) {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .buttons {
+        display: flex;
+        gap: 1rem;
+      }
+
+      .section:nth-child(2) {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+      }
+
+      .horiz {
+        overflow: auto;
+        display: flex;
+        gap: 1rem;
+        width: 100%;
+      }
+
+      .horiz-item {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 45dvw;
+        height: 45dvw;
+        flex-shrink: 0;
+        background-color: black;
+        color: white;
+      }
+    </style>
   </head>
 
   <body>
-    <script type="module">
-      import { singleton } from "../dist/index.mjs"
+    <div class="page">
+      <div class="section">
+        <div class="buttons">
+          <button id="b1" type="button">Down 200 (number)</button>
+          <button id="b2" type="button">To 2nd section (string)</button>
+          <button id="b3" type="button">To 3rd section (Element)</button>
+        </div>
+      </div>
 
-      console.log(singleton())
+      <div class="section">
+        <div class="horiz">
+          <div class="horiz-item">1</div>
+          <div class="horiz-item">2</div>
+          <div class="horiz-item">3</div>
+        </div>
+
+        <div class="buttons">
+          <button id="b4" type="button">To item 1</button>
+          <button id="b5" type="button">To item 2</button>
+          <button id="b6" type="button">To item 3</button>
+        </div>
+      </div>
+
+      <div class="section"></div>
+    </div>
+
+    <script type="module">
+      import jump from "../dist/index.mjs"
+
+      const b1 = document.getElementById("b1")
+      const b2 = document.getElementById("b2")
+      const b3 = document.getElementById("b3")
+      const s3 = document.querySelector(".section:nth-child(3)")
+
+      b1.addEventListener("click", () => jump(200, { a11y: true }))
+      b2.addEventListener("click", () => jump(".section:nth-child(2)", { a11y: true }))
+      b3.addEventListener("click", () => jump(s3, { a11y: true }))
+
+      const b4 = document.getElementById("b4")
+      const b5 = document.getElementById("b5")
+      const b6 = document.getElementById("b6")
+      const horiz = document.querySelector(".horiz")
+      const horizItems = Array.from(document.querySelectorAll(".horiz-item"))
+
+      b4.addEventListener("click", () => jump(horizItems[0], { axis: "x", root: horiz }))
+      b5.addEventListener("click", () => jump(horizItems[1], { axis: "x", root: horiz }))
+      b6.addEventListener("click", () => jump(horizItems[2], { axis: "x", root: horiz }))
     </script>
   </body>
 </html>
