@@ -140,8 +140,10 @@ const jumper = (
     // how to get the resolved `target` node here first
 
     if (callback) {
-      if (typeof callback !== "function") throw new Error(`Fail to call "callback" (not a function).`)
-      callback()
+      if (typeof callback !== "function") throw new Error(`Fail to execute "callback" (not a function).`)
+
+      // ensure `callback` executes after the above .scrollTo call
+      window.requestAnimationFrame(callback)
     }
   }
 
