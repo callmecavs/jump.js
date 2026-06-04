@@ -1,6 +1,6 @@
 import { expect, test } from "vitest"
-import { jump } from "../src"
+import { singleton } from "../src"
 
-test("jump", () => {
-  expect(jump()).toBe("Yarrr, world!")
+test("singleton", () => {
+  expect(singleton()).toBe("Yarrr, world!")
 })

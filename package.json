@@ -20,6 +20,7 @@
     "prepublishOnly": "pnpm run build",
     "release": "bumpp",
     "test": "vitest",
+    "test:manual": "python3 -m http.server 3000",
     "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
