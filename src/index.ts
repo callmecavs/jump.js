@@ -1,3 +1,12 @@
+export type JumpEasing = (elapsedTime: number, start: number, distance: number, duration: number) => number
+
+// Robert Penner's easeInOutQuad
+// https://github.com/danro/jquery-easing/blob/master/jquery.easing.js#L28-L31
+const easeInOutQuad: JumpEasing = (t, b, c, d) => {
+  if ((t /= d / 2) < 1) return (c / 2) * t * t + b
+  return (-c / 2) * (--t * (t - 2) - 1) + b
+}
+
 export type JumpTarget = Element | number | string
 
 export type JumpA11y = boolean
@@ -13,7 +22,7 @@ export type JumpOptions = {
   axis?: JumpAxis
   callback?: JumpCallback
   duration?: JumpDuration
-  // easing: () => void
+  easing?: JumpEasing
   offset?: JumpOffset
   root?: JumpRoot
 }
@@ -82,6 +91,7 @@ const jumper = (
     axis = "y",
     callback = undefined,
     duration: rawDuration = 1000,
+    easing = easeInOutQuad,
     offset = 0,
     root = window,
   }: JumpOptions = {},
@@ -94,108 +104,53 @@ const jumper = (
   const distance = end - start + offset
   const duration = resolveDuration(distance, rawDuration)
 
-  console.dir({ a11y, start, end, distance, duration })
+  let rafId: number
+  let startTime: number
 
-  return
+  const loop = (currentTime: number) => {
+    if (!startTime) {
+      startTime = currentTime
+    }
+
+    const elapsedTime = currentTime - startTime
+
+    const next = easing(elapsedTime, start, distance, duration)
+
+    root.scrollTo(axis === "x" ? next : 0, axis === "y" ? next : 0)
+
+    if (elapsedTime < duration) {
+      rafId = window.requestAnimationFrame(loop)
+      return
+    }
+
+    done()
+  }
+
+  const done = () => {
+    // rounding inaccuracies
+    root.scrollTo(axis === "x" ? end : 0, axis === "y" ? end : 0)
+
+    // FIX: need to handle a11y here, but need to think about
+    // how to get the resolved `target` node here first
+
+    if (callback) {
+      if (typeof callback !== "function") throw new Error(`Fail to call "callback" (not a function).`)
+      callback()
+    }
+  }
+
+  rafId = window.requestAnimationFrame(loop)
+
+  return () => window.cancelAnimationFrame(rafId)
 }
 
 export default jumper
 
-// // Robert Penner's easeInOutQuad
+// // if scrolling to an element, and accessibility is enabled
+// if (element && a11y) {
+//   // add tabindex indicating programmatic focus
+//   element.setAttribute("tabindex", "-1")
 
-// // find the rest of his easing functions here: http://robertpenner.com/easing/
-// // find them exported for ES6 consumption here: https://github.com/jaxgeller/ez.js
-
-// const easeInOutQuad = (t, b, c, d) => {
-//   t /= d / 2
-//   if (t < 1) return (c / 2) * t * t + b
-//   t--
-//   return (-c / 2) * (t * (t - 2) - 1) + b
+//   // focus the element
+//   element.focus()
 // }
-
-// const jumper = () => {
-//   // private variable cache
-//   // no variables are created during a jump, preventing memory leaks
-
-//   let element // element to scroll to                   (node)
-
-//   let start // where scroll starts                    (px)
-//   let stop // where scroll stops                     (px)
-
-//   let offset // adjustment from the stop position      (px)
-//   let easing // easing function                        (function)
-//   let a11y // accessibility support flag             (boolean)
-
-//   let distance // distance of scroll                     (px)
-//   let duration // scroll duration                        (ms)
-
-//   let timeStart // time scroll started                    (ms)
-//   let timeElapsed // time spent scrolling thus far          (ms)
-
-//   let next // next scroll position                   (px)
-
-//   let callback // to call when done scrolling            (function)
-
-//   // rAF loop helper
-
-//   function loop(timeCurrent) {
-//     // store time scroll started, if not started already
-//     if (!timeStart) {
-//       timeStart = timeCurrent
-//     }
-
-//     // determine time spent scrolling so far
-//     timeElapsed = timeCurrent - timeStart
-
-//     // calculate next scroll position
-//     next = easing(timeElapsed, start, distance, duration)
-
-//     // scroll to it
-//     window.scrollTo(0, next)
-
-//     // check progress
-//     timeElapsed < duration
-//       ? window.requestAnimationFrame(loop) // continue scroll loop
-//       : done() // scrolling is done
-//   }
-
-//   // scroll finished helper
-
-//   function done() {
-//     // account for rAF time rounding inaccuracies
-//     window.scrollTo(0, start + distance)
-
-//     // if scrolling to an element, and accessibility is enabled
-//     if (element && a11y) {
-//       // add tabindex indicating programmatic focus
-//       element.setAttribute("tabindex", "-1")
-
-//       // focus the element
-//       element.focus()
-//     }
-
-//     // if it exists, fire the callback
-//     if (typeof callback === "function") {
-//       callback()
-//     }
-
-//     // reset time for next jump
-//     timeStart = false
-//   }
-
-//   // API
-
-//   function jump(target, options = {}) {
-//     // start the loop
-//     window.requestAnimationFrame(loop)
-//   }
-
-//   // expose only the jump method
-//   return jump
-// }
-
-// // export singleton
-
-// const singleton = jumper()
-
-// export default singleton

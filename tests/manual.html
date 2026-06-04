@@ -122,9 +122,11 @@
       const b3 = document.getElementById("b3")
       const s3 = document.querySelector(".section:nth-child(3)")
 
-      b1.addEventListener("click", () => jump(200, { a11y: true }))
-      b2.addEventListener("click", () => jump(".section:nth-child(2)", { a11y: true }))
-      b3.addEventListener("click", () => jump(s3, { a11y: true }))
+      b1.addEventListener("click", () => jump(200, { a11y: true, callback: () => console.log("b1 done") }))
+      b2.addEventListener("click", () =>
+        jump(".section:nth-child(2)", { a11y: true, callback: () => console.log("b2 done") }),
+      )
+      b3.addEventListener("click", () => jump(s3, { a11y: true, callback: () => console.log("b3 done") }))
 
       const b4 = document.getElementById("b4")
       const b5 = document.getElementById("b5")
@@ -132,9 +134,15 @@
       const horiz = document.querySelector(".horiz")
       const horizItems = Array.from(document.querySelectorAll(".horiz-item"))
 
-      b4.addEventListener("click", () => jump(horizItems[0], { axis: "x", root: horiz }))
-      b5.addEventListener("click", () => jump(horizItems[1], { a11y: true, axis: "x", root: horiz }))
-      b6.addEventListener("click", () => jump(horizItems[2], { axis: "x", root: horiz }))
+      b4.addEventListener("click", () =>
+        jump(horizItems[0], { axis: "x", callback: () => console.log("b4 done"), root: horiz }),
+      )
+      b5.addEventListener("click", () =>
+        jump(horizItems[1], { a11y: true, axis: "x", callback: () => console.log("b5 done"), root: horiz }),
+      )
+      b6.addEventListener("click", () =>
+        jump(horizItems[2], { axis: "x", callback: () => console.log("b6 done"), root: horiz }),
+      )
 
       const b7 = document.getElementById("b7")
       const b8 = document.getElementById("b8")
@@ -142,13 +150,19 @@
       const vert = document.querySelector(".vert")
       const vertItems = Array.from(document.querySelectorAll(".vert-item"))
 
-      b7.addEventListener("click", () => jump(vertItems[0], { a11y: true, axis: "y", root: vert }))
-      b8.addEventListener("click", () => jump(vertItems[1], { axis: "y", root: vert }))
-      b9.addEventListener("click", () => jump(vertItems[2], { axis: "y", root: vert }))
+      b7.addEventListener("click", () =>
+        jump(vertItems[0], { a11y: true, axis: "y", callback: () => console.log("b7 done"), root: vert }),
+      )
+      b8.addEventListener("click", () =>
+        jump(vertItems[1], { axis: "y", callback: () => console.log("b8 done"), root: vert }),
+      )
+      b9.addEventListener("click", () =>
+        jump(vertItems[2], { axis: "y", callback: () => console.log("b9 done"), root: vert }),
+      )
 
       const b10 = document.getElementById("b10")
 
-      b10.addEventListener("click", () => jump(-350))
+      b10.addEventListener("click", () => jump(-350, { callback: () => console.log("b10 done") }))
     </script>
   </body>
 </html>
