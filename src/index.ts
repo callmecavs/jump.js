@@ -1,7 +1,3 @@
-const fn = () => {
+export const jump = () => {
   return "Yarrr, world!"
 }
-
-const singleton = fn()
-
-export default singleton

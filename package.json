@@ -16,10 +16,11 @@
   "scripts": {
     "build": "tsdown",
     "dev": "tsdown --watch",
-    "test": "vitest",
-    "typecheck": "tsc --noEmit",
+    "lint": "eslint --fix . && prettier --write .",
+    "prepublishOnly": "pnpm run build",
     "release": "bumpp",
-    "prepublishOnly": "pnpm run build"
+    "test": "vitest",
+    "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
