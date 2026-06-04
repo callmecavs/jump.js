@@ -111,6 +111,7 @@
       <div class="section">
         <div class="buttons">
           <button id="b10" type="button">Up 350 (number)</button>
+          <button id="b11" type="button">To 1st section, cancelled</button>
         </div>
       </div>
     </div>
@@ -162,8 +163,14 @@
       )
 
       const b10 = document.getElementById("b10")
+      const b11 = document.getElementById("b11")
+      const s1 = document.querySelector(".section:nth-child(1)")
 
       b10.addEventListener("click", () => jump(-350, { callback: () => console.log("b10 done") }))
+      b11.addEventListener("click", () => {
+        const cancel = jump(s1)
+        setTimeout(cancel, 250)
+      })
     </script>
   </body>
 </html>
