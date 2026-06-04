@@ -147,8 +147,12 @@ const jumper = (
     // rounding inaccuracies
     root.scrollTo(axis === "x" ? end : inactive, axis === "y" ? end : inactive)
 
-    // FIX: need to handle a11y here, but need to think about
-    // how to get the resolved `target` node here first
+    const isFocusable = targetNode instanceof HTMLElement || targetNode instanceof SVGElement
+
+    if (a11y && isFocusable) {
+      targetNode.setAttribute("tabindex", "-1")
+      targetNode.focus()
+    }
 
     if (callback) {
       if (typeof callback !== "function") throw new Error(`Fail to execute "callback" (not a function).`)
@@ -164,12 +168,3 @@ const jumper = (
 }
 
 export default jumper
-
-// // if scrolling to an element, and accessibility is enabled
-// if (element && a11y) {
-//   // add tabindex indicating programmatic focus
-//   element.setAttribute("tabindex", "-1")
-
-//   // focus the element
-//   element.focus()
-// }
