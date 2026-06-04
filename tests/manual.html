@@ -41,16 +41,17 @@
       .horiz,
       .vert {
         overflow: auto;
-        overscroll-behavior: contain;
         display: flex;
         gap: 1rem;
       }
 
       .horiz {
+        overscroll-behavior-x: contain;
         width: 100%;
       }
 
       .vert {
+        overscroll-behavior-y: contain;
         flex-direction: column;
         height: 100%;
       }
