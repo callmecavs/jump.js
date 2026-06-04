@@ -94,7 +94,7 @@ const jumper = (
   const distance = end - start + offset
   const duration = resolveDuration(distance, rawDuration)
 
-  console.log({ a11y, start, end, distance, duration })
+  console.dir({ a11y, start, end, distance, duration })
 
   return
 }
