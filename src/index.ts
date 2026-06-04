@@ -128,7 +128,7 @@ const jumper = (
       startTime = currentTime
     }
 
-    // make sure `elapsedTime` never exceeds `duration`
+    // prevent going "past the end" of a jump (`elapsedTime` should never exceed `duration`)
     const elapsedTime = Math.min(currentTime - startTime, duration)
 
     const next = easing(elapsedTime, start, distance, duration)
