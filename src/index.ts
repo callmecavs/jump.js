@@ -71,9 +71,8 @@ const resolveAccessibility = (a11y: JumpA11y, target: JumpTarget) => {
 }
 
 const resolveDuration = (distance: JumpDistance, duration: JumpDuration) => {
-  if (typeof duration === "number") return duration
   if (typeof duration === "function") return duration(distance)
-  throw new Error(`Failed to resolve "duration".`)
+  return duration
 }
 
 const resolveTargetNode = (target: JumpTarget): JumpTargetNode => {
@@ -95,9 +94,54 @@ const resolveTargetNode = (target: JumpTarget): JumpTargetNode => {
   return node
 }
 
-const jumper = (
-  target: JumpTarget,
-  {
+const validateOptions: (options: unknown) => asserts options is JumpOptions = options => {
+  if (options === undefined) return
+
+  if (typeof options !== "object" || Array.isArray(options) || options === null) {
+    throw new TypeError(`Expected "options" to be an object.`)
+  }
+
+  const { a11y, axis, callback, duration, easing, offset, root } = options as JumpOptions
+
+  if (a11y !== undefined && typeof a11y !== "boolean") {
+    throw new TypeError(`Expected "a11y" to be a boolean.`)
+  }
+
+  if (axis !== undefined && axis !== "x" && axis !== "y") {
+    throw new TypeError(`Expected "axis" to be "x" or "y".`)
+  }
+
+  if (callback !== undefined && typeof callback !== "function") {
+    throw new TypeError(`Expected "callback" to be a function.`)
+  }
+
+  if (duration !== undefined && typeof duration !== "number" && typeof duration !== "function") {
+    throw new TypeError(`Expected "duration" to be a number, or function.`)
+  }
+
+  if (easing !== undefined && typeof easing !== "function") {
+    throw new TypeError(`Expected "easing" to be a function.`)
+  }
+
+  if (offset !== undefined && typeof offset !== "number") {
+    throw new TypeError(`Expected "offset" to be a number.`)
+  }
+
+  if (root !== undefined && root !== window && !(root instanceof Element)) {
+    throw new TypeError(`Expected "root" to be the window, or an Element.`)
+  }
+}
+
+const validateTarget: (target: unknown) => asserts target is JumpTarget = target => {
+  if (target instanceof Element || typeof target === "number" || typeof target === "string") return
+  throw new TypeError(`Expected "target" to be an Element, number, or string.`)
+}
+
+const jumper = (target: JumpTarget, options: JumpOptions = {}) => {
+  validateTarget(target)
+  validateOptions(options)
+
+  const {
     a11y: rawA11y = false,
     axis = "y",
     callback = undefined,
@@ -105,8 +149,8 @@ const jumper = (
     easing = easeInOutQuad,
     offset = 0,
     root = window,
-  }: JumpOptions = {},
-) => {
+  } = options
+
   const a11y = resolveAccessibility(rawA11y, target)
   const targetNode = resolveTargetNode(target)
 
@@ -158,12 +202,8 @@ const jumper = (
       if (needTabIndex) targetNode.removeAttribute("tabindex")
     }
 
-    if (callback) {
-      if (typeof callback !== "function") throw new Error(`Failed to execute "callback" (not a function).`)
-
-      // ensure `callback` executes after the above .scrollTo call
-      window.requestAnimationFrame(() => callback())
-    }
+    // ensure `callback` executes after the above .scrollTo call
+    if (callback) window.requestAnimationFrame(() => callback())
   }
 
   rafId = window.requestAnimationFrame(loop)
