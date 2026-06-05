@@ -160,6 +160,28 @@ const jumper = (rawTarget: JumpTarget, options: JumpOptions = {}): JumpCancel =>
   let rafId: number
   let startTime: number
 
+  const complete = () => {
+    // ensure the final position is accurate / eliminate rounding inaccuracies
+    if (axis === "x") root.scrollTo({ left: end })
+    if (axis === "y") root.scrollTo({ top: end })
+
+    const isFocusable = target instanceof HTMLElement || target instanceof SVGElement
+
+    if (a11y && isFocusable) {
+      // add the `tabIndex` attribute temporarily, to ensure calling `focus` works, unless:
+      // 1. the node already has the `tabIndex` attribute
+      // 2. the node is in the tab order by default (example: <a>, <button>, etc)
+      const needTabIndex = !target.hasAttribute("tabindex") && target.tabIndex < 0
+
+      if (needTabIndex) target.setAttribute("tabindex", "-1")
+      target.focus({ preventScroll: true })
+      if (needTabIndex) target.removeAttribute("tabindex")
+    }
+
+    // ensure `callback` executes after the above `scrollTo` call
+    if (callback) window.requestAnimationFrame(() => callback())
+  }
+
   const loop = (currentTime: number) => {
     if (startTime === undefined) {
       startTime = currentTime
@@ -178,33 +200,17 @@ const jumper = (rawTarget: JumpTarget, options: JumpOptions = {}): JumpCancel =>
       return
     }
 
-    done()
+    complete()
   }
 
-  const done = () => {
-    // rounding inaccuracies
-    if (axis === "x") root.scrollTo({ left: end })
-    if (axis === "y") root.scrollTo({ top: end })
+  const isInstant = distance === 0 || duration === 0
 
-    const isFocusable = target instanceof HTMLElement || target instanceof SVGElement
-
-    if (a11y && isFocusable) {
-      // temporarily add the `tabIndex` attribute, to ensure calling `focus` works, unless:
-      // 1. the node already has the `tabIndex` attribute
-      // 2. the node is in the tab order by default (example: <a>, <button>, etc)
-      const needTabIndex = !target.hasAttribute("tabindex") && target.tabIndex < 0
-
-      if (needTabIndex) target.setAttribute("tabindex", "-1")
-      target.focus({ preventScroll: true })
-      if (needTabIndex) target.removeAttribute("tabindex")
-    }
-
-    // ensure `callback` executes after the above .scrollTo call
-    if (callback) window.requestAnimationFrame(() => callback())
+  if (isInstant) {
+    complete()
+    return () => {}
   }
 
   rafId = window.requestAnimationFrame(loop)
-
   return () => window.cancelAnimationFrame(rafId)
 }
 
