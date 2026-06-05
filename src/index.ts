@@ -85,10 +85,12 @@ const resolveTargetNode = (target: JumpTarget): JumpTargetNode => {
   try {
     node = document.querySelector(target)
   } catch (error) {
-    throw new Error(`Failed to resolve "target" (not a valid CSS selector).`, { cause: error })
+    throw new Error(`Failed to resolve "target": CSS selector is invalid.`, { cause: error })
   }
 
-  if (!node) throw new Error(`Failed to resolve "target" (didn't match anything).`)
+  if (node === null) {
+    throw new Error(`Failed to resolve "target": CSS selector didn't match.`)
+  }
 
   return node
 }
