@@ -10,27 +10,26 @@ const easeInOutQuad: JumpEasing = (t, b, c, d) => {
 export type JumpTarget = Element | number | string
 type JumpResolvedTarget = Element | number
 
-export type JumpA11y = boolean
 export type JumpAxis = "x" | "y"
 export type JumpCallback = () => void
-export type JumpDistance = number
-export type JumpDuration = number | ((distance: JumpDistance) => number) // ms
-export type JumpOffset = number
+export type JumpDuration = number | ((distance: number) => number) // ms
 export type JumpRoot = Window | Element
 
 export type JumpOptions = {
-  a11y?: JumpA11y
+  a11y?: boolean
   axis?: JumpAxis
   callback?: JumpCallback
   duration?: JumpDuration
   easing?: JumpEasing
-  offset?: JumpOffset
+  offset?: number
   root?: JumpRoot
 }
 
+export type JumpCancel = () => void
+
 const calculateEnd = (
   axis: JumpAxis,
-  offset: JumpOffset,
+  offset: number,
   root: JumpRoot,
   start: number,
   target: JumpResolvedTarget,
@@ -66,12 +65,12 @@ const calculateStart = (axis: JumpAxis, root: JumpRoot): number => {
   }
 }
 
-const resolveAccessibility = (a11y: JumpA11y, target: JumpResolvedTarget) => {
+const resolveAccessibility = (a11y: boolean, target: JumpResolvedTarget) => {
   if (typeof target === "number") return false
   return a11y
 }
 
-const resolveDuration = (distance: JumpDistance, duration: JumpDuration) => {
+const resolveDuration = (distance: number, duration: JumpDuration) => {
   if (typeof duration === "function") return duration(distance)
   return duration
 }
@@ -135,7 +134,7 @@ const validateTarget: (target: unknown) => asserts target is JumpTarget = target
   throw new TypeError(`Expected "target" to be an Element, number, or string.`)
 }
 
-const jumper = (rawTarget: JumpTarget, options: JumpOptions = {}) => {
+const jumper = (rawTarget: JumpTarget, options: JumpOptions = {}): JumpCancel => {
   validateTarget(rawTarget)
   validateOptions(options)
 
