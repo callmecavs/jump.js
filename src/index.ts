@@ -97,8 +97,6 @@ const resolveTargetNode = (target: JumpTarget): JumpTargetNode => {
 }
 
 const validateOptions: (options: unknown) => asserts options is JumpOptions = options => {
-  if (options === undefined) return
-
   if (typeof options !== "object" || Array.isArray(options) || options === null) {
     throw new TypeError(`Expected "options" to be an object.`)
   }
