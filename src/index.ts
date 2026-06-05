@@ -149,7 +149,7 @@ const jumper = (
 
     if (a11y && isFocusable) {
       targetNode.setAttribute("tabindex", "-1")
-      targetNode.focus()
+      targetNode.focus({ preventScroll: true })
     }
 
     if (callback) {
