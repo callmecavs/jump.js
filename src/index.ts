@@ -32,11 +32,11 @@ const calculateEnd = (
   axis: JumpAxis,
   offset: JumpOffset,
   root: JumpRoot,
-  startingLocation: number,
+  start: number,
   target: JumpTarget,
   targetNode: JumpTargetNode,
 ) => {
-  if (typeof target === "number") return startingLocation + target + offset
+  if (typeof target === "number") return start + target + offset
 
   if (targetNode) {
     const targetNodeBounds = targetNode.getBoundingClientRect()
@@ -44,11 +44,11 @@ const calculateEnd = (
     if (root instanceof Element) {
       const rootBounds = root.getBoundingClientRect()
 
-      if (axis === "x") return startingLocation + targetNodeBounds.left - rootBounds.left - root.clientLeft + offset
-      if (axis === "y") return startingLocation + targetNodeBounds.top - rootBounds.top - root.clientTop + offset
+      if (axis === "x") return start + targetNodeBounds.left - rootBounds.left - root.clientLeft + offset
+      if (axis === "y") return start + targetNodeBounds.top - rootBounds.top - root.clientTop + offset
     } else {
-      if (axis === "x") return startingLocation + targetNodeBounds.left + offset
-      if (axis === "y") return startingLocation + targetNodeBounds.top + offset
+      if (axis === "x") return start + targetNodeBounds.left + offset
+      if (axis === "y") return start + targetNodeBounds.top + offset
     }
   }
 
