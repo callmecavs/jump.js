@@ -36,7 +36,8 @@ const calculateEnd = (
   target: JumpTarget,
   targetNode: JumpTargetNode,
 ) => {
-  if (typeof target === "number") return start + target + offset
+  // ignore `offset` when `target` is a number
+  if (typeof target === "number") return start + target
 
   if (targetNode) {
     const targetNodeBounds = targetNode.getBoundingClientRect()
