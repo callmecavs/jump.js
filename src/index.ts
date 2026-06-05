@@ -148,8 +148,14 @@ const jumper = (
     const isFocusable = targetNode instanceof HTMLElement || targetNode instanceof SVGElement
 
     if (a11y && isFocusable) {
-      targetNode.setAttribute("tabindex", "-1")
+      // temporarily add the `tabIndex` attribute, to ensure calling `focus` works, unless:
+      // 1. the node already has the `tabIndex` attribute
+      // 2. the node is in the tab order by default (example: <a>, <button>, etc)
+      const needTabIndex = !targetNode.hasAttribute("tabindex") && targetNode.tabIndex < 0
+
+      if (needTabIndex) targetNode.setAttribute("tabindex", "-1")
       targetNode.focus({ preventScroll: true })
+      if (needTabIndex) targetNode.removeAttribute("tabindex")
     }
 
     if (callback) {
