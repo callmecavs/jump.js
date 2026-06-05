@@ -59,10 +59,12 @@ const calculateEnd = (
 const calculateStart = (axis: JumpAxis, root: JumpRoot): number => {
   const isElement = root instanceof Element
 
-  if (axis === "x") return isElement ? root.scrollLeft : root.scrollX
-  if (axis === "y") return isElement ? root.scrollTop : root.scrollY
-
-  throw new Error(`Failed to calculate starting location.`)
+  switch (axis) {
+    case "x":
+      return isElement ? root.scrollLeft : root.scrollX
+    case "y":
+      return isElement ? root.scrollTop : root.scrollY
+  }
 }
 
 const resolveAccessibility = (a11y: JumpA11y, target: JumpTarget) => {
