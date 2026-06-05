@@ -1,3 +1,15 @@
+const isElement = (value: unknown): value is Element => {
+  return typeof value === "object" && value !== null && (value as Node).nodeType === 1
+}
+
+const isFocusable = (value: unknown): value is HTMLElement | SVGElement => {
+  return isElement(value) && typeof (value as HTMLElement | SVGElement).focus === "function"
+}
+
+const isWindow = (value: unknown): value is Window => {
+  return typeof value === "object" && value !== null && (value as Window).window === value
+}
+
 export type JumpEasing = (elapsedTime: number, start: number, distance: number, duration: number) => number
 
 // Robert Penner's easeInOutQuad
@@ -41,7 +53,7 @@ const calculateEnd = (
 
   let result = start + offset
 
-  if (root instanceof Element) {
+  if (isElement(root)) {
     const rootBounds = root.getBoundingClientRect()
 
     if (axis === "x") result += targetBounds.left - rootBounds.left - root.clientLeft
@@ -55,13 +67,11 @@ const calculateEnd = (
 }
 
 const calculateStart = (axis: JumpAxis, root: JumpRoot): number => {
-  const isElement = root instanceof Element
-
   switch (axis) {
     case "x":
-      return isElement ? root.scrollLeft : root.scrollX
+      return isElement(root) ? root.scrollLeft : root.scrollX
     case "y":
-      return isElement ? root.scrollTop : root.scrollY
+      return isElement(root) ? root.scrollTop : root.scrollY
   }
 }
 
@@ -76,7 +86,7 @@ const resolveDuration = (distance: number, duration: JumpDuration) => {
 }
 
 const resolveTarget = (target: JumpTarget): JumpResolvedTarget => {
-  if (target instanceof Element || typeof target === "number") return target
+  if (isElement(target) || typeof target === "number") return target
 
   let node: Element | null
 
@@ -124,13 +134,13 @@ const validateOptions: (options: unknown) => asserts options is JumpOptions = op
     throw new TypeError(`Expected "offset" to be a number.`)
   }
 
-  if (root !== undefined && root !== window && !(root instanceof Element)) {
+  if (root !== undefined && !isWindow(root) && !isElement(root)) {
     throw new TypeError(`Expected "root" to be the window, or an Element.`)
   }
 }
 
 const validateTarget: (target: unknown) => asserts target is JumpTarget = target => {
-  if (target instanceof Element || typeof target === "number" || typeof target === "string") return
+  if (isElement(target) || typeof target === "number" || typeof target === "string") return
   throw new TypeError(`Expected "target" to be an Element, number, or string.`)
 }
 
@@ -165,9 +175,7 @@ const jumper = (rawTarget: JumpTarget, options: JumpOptions = {}): JumpCancel =>
     if (axis === "x") root.scrollTo({ left: end })
     if (axis === "y") root.scrollTo({ top: end })
 
-    const isFocusable = target instanceof HTMLElement || target instanceof SVGElement
-
-    if (a11y && isFocusable) {
+    if (a11y && isFocusable(target)) {
       // add the `tabIndex` attribute temporarily, to ensure calling `focus` works, unless:
       // 1. the node already has the `tabIndex` attribute
       // 2. the node is in the tab order by default (example: <a>, <button>, etc)
