@@ -8,7 +8,7 @@ const easeInOutQuad: JumpEasing = (t, b, c, d) => {
 }
 
 export type JumpTarget = Element | number | string
-export type JumpTargetNode = Element | undefined
+type JumpResolvedTarget = Element | number
 
 export type JumpA11y = boolean
 export type JumpAxis = "x" | "y"
@@ -33,27 +33,26 @@ const calculateEnd = (
   offset: JumpOffset,
   root: JumpRoot,
   start: number,
-  target: JumpTarget,
-  targetNode: JumpTargetNode,
-) => {
+  target: JumpResolvedTarget,
+): number => {
   // ignore `offset` when `target` is a number
   if (typeof target === "number") return start + target
 
-  if (targetNode) {
-    const targetNodeBounds = targetNode.getBoundingClientRect()
+  const targetBounds = target.getBoundingClientRect()
 
-    if (root instanceof Element) {
-      const rootBounds = root.getBoundingClientRect()
+  let result = start + offset
 
-      if (axis === "x") return start + targetNodeBounds.left - rootBounds.left - root.clientLeft + offset
-      if (axis === "y") return start + targetNodeBounds.top - rootBounds.top - root.clientTop + offset
-    } else {
-      if (axis === "x") return start + targetNodeBounds.left + offset
-      if (axis === "y") return start + targetNodeBounds.top + offset
-    }
+  if (root instanceof Element) {
+    const rootBounds = root.getBoundingClientRect()
+
+    if (axis === "x") result += targetBounds.left - rootBounds.left - root.clientLeft
+    if (axis === "y") result += targetBounds.top - rootBounds.top - root.clientTop
+  } else {
+    if (axis === "x") result += targetBounds.left
+    if (axis === "y") result += targetBounds.top
   }
 
-  throw new Error(`Failed to calculate ending location.`)
+  return result
 }
 
 const calculateStart = (axis: JumpAxis, root: JumpRoot): number => {
@@ -67,7 +66,7 @@ const calculateStart = (axis: JumpAxis, root: JumpRoot): number => {
   }
 }
 
-const resolveAccessibility = (a11y: JumpA11y, target: JumpTarget) => {
+const resolveAccessibility = (a11y: JumpA11y, target: JumpResolvedTarget) => {
   if (typeof target === "number") return false
   return a11y
 }
@@ -77,9 +76,8 @@ const resolveDuration = (distance: JumpDistance, duration: JumpDuration) => {
   return duration
 }
 
-const resolveTargetNode = (target: JumpTarget): JumpTargetNode => {
-  if (typeof target === "number") return undefined
-  if (target instanceof Element) return target
+const resolveTarget = (target: JumpTarget): JumpResolvedTarget => {
+  if (target instanceof Element || typeof target === "number") return target
 
   let node: Element | null
 
@@ -137,8 +135,8 @@ const validateTarget: (target: unknown) => asserts target is JumpTarget = target
   throw new TypeError(`Expected "target" to be an Element, number, or string.`)
 }
 
-const jumper = (target: JumpTarget, options: JumpOptions = {}) => {
-  validateTarget(target)
+const jumper = (rawTarget: JumpTarget, options: JumpOptions = {}) => {
+  validateTarget(rawTarget)
   validateOptions(options)
 
   const {
@@ -151,12 +149,12 @@ const jumper = (target: JumpTarget, options: JumpOptions = {}) => {
     root = window,
   } = options
 
-  const a11y = resolveAccessibility(rawA11y, target)
-  const targetNode = resolveTargetNode(target)
+  const target = resolveTarget(rawTarget)
 
   const start = calculateStart(axis, root)
-  const end = calculateEnd(axis, offset, root, start, target, targetNode)
+  const end = calculateEnd(axis, offset, root, start, target)
 
+  const a11y = resolveAccessibility(rawA11y, target)
   const distance = end - start
   const duration = resolveDuration(distance, rawDuration)
 
@@ -189,17 +187,17 @@ const jumper = (target: JumpTarget, options: JumpOptions = {}) => {
     if (axis === "x") root.scrollTo({ left: end })
     if (axis === "y") root.scrollTo({ top: end })
 
-    const isFocusable = targetNode instanceof HTMLElement || targetNode instanceof SVGElement
+    const isFocusable = target instanceof HTMLElement || target instanceof SVGElement
 
     if (a11y && isFocusable) {
       // temporarily add the `tabIndex` attribute, to ensure calling `focus` works, unless:
       // 1. the node already has the `tabIndex` attribute
       // 2. the node is in the tab order by default (example: <a>, <button>, etc)
-      const needTabIndex = !targetNode.hasAttribute("tabindex") && targetNode.tabIndex < 0
+      const needTabIndex = !target.hasAttribute("tabindex") && target.tabIndex < 0
 
-      if (needTabIndex) targetNode.setAttribute("tabindex", "-1")
-      targetNode.focus({ preventScroll: true })
-      if (needTabIndex) targetNode.removeAttribute("tabindex")
+      if (needTabIndex) target.setAttribute("tabindex", "-1")
+      target.focus({ preventScroll: true })
+      if (needTabIndex) target.removeAttribute("tabindex")
     }
 
     // ensure `callback` executes after the above .scrollTo call
