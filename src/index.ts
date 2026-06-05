@@ -75,12 +75,6 @@ const resolveDuration = (distance: JumpDistance, duration: JumpDuration) => {
   throw new Error(`Failed to resolve "duration".`)
 }
 
-const resolveInactive = (axis: JumpAxis, root: JumpRoot) => {
-  if (axis === "x") return calculateStart("y", root)
-  if (axis === "y") return calculateStart("x", root)
-  throw new Error(`Failed to resolve inactive "axis".`)
-}
-
 const resolveTargetNode = (target: JumpTarget): JumpTargetNode => {
   if (typeof target === "number") return undefined
   if (target instanceof Element) return target
@@ -115,7 +109,6 @@ const jumper = (
 
   const start = calculateStart(axis, root)
   const end = calculateEnd(axis, offset, root, start, target, targetNode)
-  const inactive = resolveInactive(axis, root)
 
   const distance = end - start
   const duration = resolveDuration(distance, rawDuration)
@@ -133,7 +126,8 @@ const jumper = (
 
     const next = easing(elapsedTime, start, distance, duration)
 
-    root.scrollTo(axis === "x" ? next : inactive, axis === "y" ? next : inactive)
+    if (axis === "x") root.scrollTo({ left: next })
+    if (axis === "y") root.scrollTo({ top: next })
 
     if (elapsedTime < duration) {
       rafId = window.requestAnimationFrame(loop)
@@ -145,7 +139,8 @@ const jumper = (
 
   const done = () => {
     // rounding inaccuracies
-    root.scrollTo(axis === "x" ? end : inactive, axis === "y" ? end : inactive)
+    if (axis === "x") root.scrollTo({ left: end })
+    if (axis === "y") root.scrollTo({ top: end })
 
     const isFocusable = targetNode instanceof HTMLElement || targetNode instanceof SVGElement
 
