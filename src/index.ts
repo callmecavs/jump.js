@@ -56,6 +56,9 @@ const calculateEnd = (
   if (isElement(root)) {
     const rootBounds = root.getBoundingClientRect()
 
+    // FIX: There's a bug here. We can't assume that the `root` actually has this much room
+    // to scroll. If it doesn't, the animation currently breaks, and it'd be more "correct"
+    // to scroll to the `root`s end instead.
     if (axis === "x") result += targetBounds.left - rootBounds.left - root.clientLeft
     if (axis === "y") result += targetBounds.top - rootBounds.top - root.clientTop
   } else {
