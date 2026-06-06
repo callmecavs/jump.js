@@ -46,7 +46,7 @@ const calculateEnd = (
   start: number,
   target: JumpResolvedTarget,
 ): number => {
-  // ignore `offset` when `target` is a number
+  // Ignore the `offset` when `target` is a number.
   if (typeof target === "number") return start + target
 
   const targetBounds = target.getBoundingClientRect()
@@ -171,14 +171,15 @@ const jumper = (rawTarget: JumpTarget, options: JumpOptions = {}): JumpCancel =>
   let startTime: number
 
   const complete = () => {
-    // ensure the final position is accurate / eliminate rounding inaccuracies
+    // If the jump is not `instant`, make sure the final position is perfect (no rounding inaccuracies).
+    // If the jump is `instant`, complete it immediately.
     if (axis === "x") root.scrollTo({ left: end })
     if (axis === "y") root.scrollTo({ top: end })
 
     if (a11y && isFocusable(target)) {
-      // add the `tabIndex` attribute temporarily, to ensure calling `focus` works, unless:
-      // 1. the node already has the `tabIndex` attribute
-      // 2. the node is in the tab order by default (example: <a>, <button>, etc)
+      // Add the `tabindex` attribute temporarily, to ensure calling `focus` works, unless:
+      // 1. The node already has the `tabindex` attribute.
+      // 2. The node is in the tab order by default (example: <a>, <button>, etc).
       const needTabIndex = !target.hasAttribute("tabindex") && target.tabIndex < 0
 
       if (needTabIndex) target.setAttribute("tabindex", "-1")
@@ -186,16 +187,16 @@ const jumper = (rawTarget: JumpTarget, options: JumpOptions = {}): JumpCancel =>
       if (needTabIndex) target.removeAttribute("tabindex")
     }
 
-    // ensure `callback` executes after the above `scrollTo` call
+    // If the `callback` exists:
+    // 1. Run it no matter what. Disregard the frame ID, it's not intended to be `cancel`-able.
+    // 2. Make sure it runs after the final `scrollTo` call.
     if (callback) window.requestAnimationFrame(() => callback())
   }
 
-  const loop = (currentTime: number) => {
-    if (startTime === undefined) {
-      startTime = currentTime
-    }
+  const loop = (currentTime: DOMHighResTimeStamp) => {
+    if (startTime === undefined) startTime = currentTime
 
-    // prevent going "past the end" of a jump (`elapsedTime` should never exceed `duration`)
+    // Limit `elapsedTime` to `duration` to prevent going "past the end" of the jump.
     const elapsedTime = Math.min(currentTime - startTime, duration)
 
     const next = easing(elapsedTime, start, distance, duration)
@@ -211,13 +212,15 @@ const jumper = (rawTarget: JumpTarget, options: JumpOptions = {}): JumpCancel =>
     complete()
   }
 
-  const isInstant = distance === 0 || duration === 0
+  // Instant jumps complete immediately. No `rAF` loop to `cancel` here.
+  const instant = distance === 0 || duration === 0
 
-  if (isInstant) {
+  if (instant) {
     complete()
     return () => {}
   }
 
+  // Kick off the `rAF` loop, and return the `cancel` function.
   rafId = window.requestAnimationFrame(loop)
   return () => window.cancelAnimationFrame(rafId)
 }
