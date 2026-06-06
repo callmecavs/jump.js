@@ -1,5 +1,5 @@
-import { isElement } from "./dom"
 import type { JumpAxis, JumpResolvedTarget, JumpRoot } from "./types"
+import { isElement } from "./dom"
 
 const clamp = (number: number, min: number, max: number): number => {
   if (number < min) return min

@@ -1,7 +1,7 @@
-import { isFocusable } from "./dom"
-import { calculateEnd, calculateStart } from "./scroll"
-import { resolveAccessibility, resolveDuration, resolveTarget } from "./options"
 import type { JumpCancel, JumpEasing, JumpOptions, JumpTarget } from "./types"
+import { isFocusable } from "./dom"
+import { resolveAccessibility, resolveDuration, resolveTarget } from "./options"
+import { calculateEnd, calculateStart } from "./scroll"
 import { validateOptions, validateTarget } from "./validate"
 
 // Robert Penner's easeInOutQuad
