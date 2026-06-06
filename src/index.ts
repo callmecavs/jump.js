@@ -1,3 +1,9 @@
+const clamp = (number: number, min: number, max: number): number => {
+  if (number < min) return min
+  if (number > max) return max
+  return number
+}
+
 const isElement = (value: unknown): value is Element => {
   return typeof value === "object" && value !== null && (value as Node).nodeType === 1
 }
