@@ -4,6 +4,8 @@ import { resolveAccessibility, resolveDuration, resolveTarget } from "./options"
 import { calculateEnd, calculateStart } from "./scroll"
 import { validateOptions, validateTarget } from "./validate"
 
+export type * from "./types"
+
 // Robert Penner's easeInOutQuad
 // https://github.com/danro/jquery-easing/blob/master/jquery.easing.js#L28-L31
 const easeInOutQuad: JumpEasing = (t, b, c, d) => {
