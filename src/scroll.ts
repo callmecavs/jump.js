@@ -14,27 +14,44 @@ export const calculateEnd = (
   start: number,
   target: JumpResolvedTarget,
 ): number => {
-  // Ignore the `offset` when `target` is a number.
-  if (typeof target === "number") return start + target
+  // Calculate the max amount `root` can be scrolled.
+  let max: number
 
-  const targetBounds = target.getBoundingClientRect()
+  const scroller = isElement(root) ? root : (root.document.scrollingElement ?? root.document.documentElement)
 
-  let result = start + offset
-
-  if (isElement(root)) {
-    const rootBounds = root.getBoundingClientRect()
-
-    // FIX: There's a bug here. We can't assume that the `root` actually has this much room
-    // to scroll. If it doesn't, the animation currently breaks, and it'd be more "correct"
-    // to scroll to the `root`s end instead.
-    if (axis === "x") result += targetBounds.left - rootBounds.left - root.clientLeft
-    if (axis === "y") result += targetBounds.top - rootBounds.top - root.clientTop
-  } else {
-    if (axis === "x") result += targetBounds.left
-    if (axis === "y") result += targetBounds.top
+  switch (axis) {
+    case "x":
+      max = scroller.scrollWidth - scroller.clientWidth
+      break
+    case "y":
+      max = scroller.scrollHeight - scroller.clientHeight
+      break
   }
 
-  return result
+  // Calculate the ideal `end` position.
+  let ideal: number
+
+  if (typeof target === "number") {
+    // Ignore the `offset` when `target` is a number.
+    ideal = start + target
+  } else {
+    ideal = start + offset
+
+    const targetBounds = target.getBoundingClientRect()
+
+    if (isElement(root)) {
+      const rootBounds = root.getBoundingClientRect()
+
+      if (axis === "x") ideal += targetBounds.left - rootBounds.left - root.clientLeft
+      if (axis === "y") ideal += targetBounds.top - rootBounds.top - root.clientTop
+    } else {
+      if (axis === "x") ideal += targetBounds.left
+      if (axis === "y") ideal += targetBounds.top
+    }
+  }
+
+  // Clamp the ideal `end` to the real scroll range.
+  return clamp(ideal, 0, max)
 }
 
 export const calculateStart = (axis: JumpAxis, root: JumpRoot): number => {
