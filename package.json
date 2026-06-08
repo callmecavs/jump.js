@@ -43,7 +43,7 @@
     "build": "tsdown",
     "dev": "tsdown --watch",
     "lint": "eslint --fix . && prettier --write .",
-    "prepublishOnly": "pnpm run build",
+    "prepublishOnly": "pnpm run lint && pnpm run build",
     "release": "bumpp",
     "test": "vitest",
     "test:manual": "python3 -m http.server 3000",
