@@ -6,8 +6,15 @@
   "author": "Michael Cavalea <callmecavs@gmail.com> (https://www.callmecavs.com/)",
   "license": "MIT",
   "repository": "callmecavs/jump.js",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.cts",
   "exports": {
-    ".": "./dist/index.mjs",
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    },
     "./package.json": "./package.json"
   },
   "files": [

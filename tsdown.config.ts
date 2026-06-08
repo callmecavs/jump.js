@@ -1,9 +1,19 @@
 import { defineConfig } from "tsdown"
 
 export default defineConfig({
-  dts: {
-    tsgo: true,
+  dts: { tsgo: true },
+  exports: {
+    customExports(exports) {
+      const rootExport = exports["."]
+
+      if (typeof rootExport === "object" && rootExport !== null && !Array.isArray(rootExport)) {
+        exports["."] = { types: "./dist/index.d.ts", ...rootExport }
+      }
+
+      return exports
+    },
   },
-  exports: true,
-  // ...config options
+  format: ["cjs", "esm", "umd"],
+  globalName: "Jump",
+  platform: "browser",
 })
