@@ -1,14 +1,21 @@
 {
-  "name": "jump.js",
-  "type": "module",
-  "version": "1.0.2",
-  "description": "A modern smooth scrolling library.",
   "author": "Michael Cavalea <callmecavs@gmail.com> (https://www.callmecavs.com/)",
-  "license": "MIT",
-  "repository": "callmecavs/jump.js",
-  "main": "./dist/index.cjs",
-  "module": "./dist/index.js",
-  "types": "./dist/index.d.cts",
+  "bugs": "https://github.com/callmecavs/jump.js/issues",
+  "description": "A modern smooth scrolling library.",
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@ianvs/prettier-plugin-sort-imports": "^4.7.1",
+    "@types/node": "^25.6.2",
+    "@typescript/native-preview": "7.0.0-dev.20260509.2",
+    "bumpp": "^11.1.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint": "^10.4.1",
+    "prettier": "^3.8.3",
+    "tsdown": "^0.22.0",
+    "typescript-eslint": "^8.60.1",
+    "typescript": "^6.0.3",
+    "vitest": "^4.1.5"
+  },
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
@@ -20,6 +27,18 @@
   "files": [
     "dist"
   ],
+  "homepage": "https://github.com/callmecavs/jump.js#readme",
+  "keywords": [
+    "animation",
+    "browser",
+    "scroll",
+    "smooth"
+  ],
+  "license": "MIT",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "name": "jump.js",
+  "repository": "callmecavs/jump.js",
   "scripts": {
     "build": "tsdown",
     "dev": "tsdown --watch",
@@ -30,18 +49,8 @@
     "test:manual": "python3 -m http.server 3000",
     "typecheck": "tsc --noEmit"
   },
-  "devDependencies": {
-    "@eslint/js": "^10.0.1",
-    "@ianvs/prettier-plugin-sort-imports": "^4.7.1",
-    "@types/node": "^25.6.2",
-    "@typescript/native-preview": "7.0.0-dev.20260509.2",
-    "bumpp": "^11.1.0",
-    "eslint": "^10.4.1",
-    "eslint-config-prettier": "^10.1.8",
-    "prettier": "^3.8.3",
-    "tsdown": "^0.22.0",
-    "typescript": "^6.0.3",
-    "typescript-eslint": "^8.60.1",
-    "vitest": "^4.1.5"
-  }
+  "sideEffects": false,
+  "type": "module",
+  "types": "./dist/index.d.cts",
+  "version": "1.0.2"
 }
