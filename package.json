@@ -1,7 +1,7 @@
 {
   "author": "Michael Cavalea <callmecavs@gmail.com> (https://www.callmecavs.com/)",
   "bugs": "https://github.com/callmecavs/jump.js/issues",
-  "description": "A modern smooth scrolling library.",
+  "description": "Modern smooth scrolling for humans and agents.",
   "devDependencies": {
     "@eslint/js": "^10.0.1",
     "@ianvs/prettier-plugin-sort-imports": "^4.7.1",
