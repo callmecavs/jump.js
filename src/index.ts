@@ -13,7 +13,7 @@ const easeInOutQuad: JumpEasing = (t, b, c, d) => {
   return (-c / 2) * (--t * (t - 2) - 1) + b
 }
 
-const jumper = (rawTarget: JumpTarget, options: JumpOptions = {}): JumpCancel => {
+const jump = (rawTarget: JumpTarget, options: JumpOptions = {}): JumpCancel => {
   validateTarget(rawTarget)
   validateOptions(options)
 
@@ -94,4 +94,4 @@ const jumper = (rawTarget: JumpTarget, options: JumpOptions = {}): JumpCancel =>
   return () => window.cancelAnimationFrame(rafId)
 }
 
-export default jumper
+export default jump
