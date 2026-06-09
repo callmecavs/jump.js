@@ -1,118 +1,164 @@
 # Jump.js
 
-[![Jump.js on NPM](https://img.shields.io/npm/v/jump.js.svg?style=flat-square)](https://www.npmjs.com/package/jump.js) [![Jump.js Downloads on NPM](https://img.shields.io/npm/dm/jump.js.svg?style=flat-square)](https://www.npmjs.com/package/jump.js)
+[![Jump.js on NPM](https://img.shields.io/npm/v/jump.js.svg?style=flat-square)](https://www.npmjs.com/package/jump.js) [![Jump.js Monthly Downloads on NPM](https://img.shields.io/npm/dm/jump.js.svg?style=flat-square)](https://www.npmjs.com/package/jump.js)
 
 Modern smooth scrolling for humans and agents.
 
 ## Usage
 
-Jump was developed with a modern JavaScript workflow in mind. To use it, it's recommended you have a build system in place that can transpile ES6, and bundle modules. For a minimal boilerplate that fulfills those requirements, check out [outset](https://github.com/callmecavs/outset).
-
-Follow these steps to get started:
+Follow these steps:
 
 1. [Install](#install)
-2. [Import](#import)
-3. [Call](#call)
-4. [Review Options](#options)
+2. [Call](#call)
+3. [Review Options](#options)
 
 ### Install
 
-Using NPM, install Jump, and save it to your `package.json` dependencies.
+1. Using a package manager (recommended):
 
 ```bash
-$ npm install jump.js --save
+$ npm install jump.js
 ```
 
-### Import
+2. Using a modern script tag (`type="module"`):
 
-Import Jump, naming it according to your preference.
+```html
+<script src="" type="module">
+```
 
-```es6
-// import Jump
+3. Using a legacy script tag (`UMD`):
 
-import jump from "jump.js"
+```html
+<script src="">
 ```
 
 ### Call
 
-Jump exports a _singleton_, so there's no need to create an instance. Just call it, passing a [target](#target).
+Jump is a function. Pass the [target](#target) as the 1st parameter.
 
-```es6
-// call Jump, passing a target
-
+```js
 jump(".target")
 ```
 
-Note that the singleton can make an infinite number of jumps.
+### Options
 
-## Options
+Use the 2nd parameter, an optional configuration object, to customize the jump.
 
-All options, **except [target](#target)**, are optional, and have sensible defaults. The defaults are shown below:
+All the options have a sensible default, shown below:
 
-```es6
+```js
 jump(".target", {
-  duration: 1000,
-  offset: 0,
-  callback: undefined,
-  easing: easeInOutQuad,
   a11y: false,
+  axis: "y",
+  callback: undefined,
+  duration: 1000, // ms
+  easing: easeInOutQuad,
+  offset: 0,
+  root: window,
 })
 ```
 
 Explanation of each option follows:
 
 - [target](#target)
-- [duration](#duration)
-- [offset](#offset)
-- [callback](#callback)
-- [easing](#easing)
 - [a11y](#a11y)
+- [axis](#axis)
+- [callback](#callback)
+- [duration](#duration)
+- [easing](#easing)
+- [offset](#offset)
+- [root](#root)
 
 ### target
 
-Scroll _from the current position_ by passing a number of pixels.
+1. Scroll to an element by:
 
-```es6
-// scroll down 100px
+- Passing in an element, or
+- Passing in a CSS selector string (matching element determined by `document.querySelector` internally)
 
+```js
+// 1. Passing in an element
+const node = document.querySelector(".target")
+jump(node)
+
+// 2. Passing in a CSS selector string
+jump(".target")
+```
+
+2. Scroll a fixed number of pixels by passing in a number:
+
+```js
+// 1. Scroll down `100px`
 jump(100)
 
-// scroll up 100px
-
+// 2. Scroll up `100px`
 jump(-100)
 ```
 
-Or, scroll _to an element_, by passing either:
+### a11y
 
-- a node, or
-- a CSS selector
+If enabled, and the `target` is an element, the `target` will be [`focus`](https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/focus)ed when the jump completes.
 
-```es6
-// passing a node
+```js
+jump(".target", {
+  a11y: true,
+})
+```
 
-const node = document.querySelector(".target")
+This option is disabled by default because `focus` comes with CSS implications. If enabling, make sure to check CSS `:focus` and `:focus-*` declarations.
 
-jump(node)
+### axis
 
-// passing a CSS selector
-// the element referenced by the selector is determined using document.querySelector
+Used to control the direction of the scroll.
 
+```js
+// scroll vertically (default)
 jump(".target")
+
+// scroll horizontally
+jump(".target", { axis: "x" })
+```
+
+### callback
+
+A function called after the `jump` has been completed.
+
+```js
+jump(".target", {
+  callback: () => console.log("Jump completed!"),
+})
+```
+
+Prefer to work with `async` / `await`? Use `callback` to make a `Promise` wrapper:
+
+```js
+const promised = (options: JumpOptions) => new Promise((resolve, reject) => jump('.target', {
+  ...options,
+  callback: () => {
+    options.callback?.()
+    resolve()
+  }
+}))
 ```
 
 ### duration
 
-Pass the time the `jump` takes, in milliseconds.
+Set how long the `jump` takes by:
 
-```es6
+1. Passing in an amount of time (`ms`):
+
+```js
 jump(".target", {
   duration: 1000,
 })
 ```
 
-Or, pass a function that returns the duration of the `jump` in milliseconds. This function is passed the `jump` `distance`, in `px`, as a parameter.
+2. Passing in a function that:
 
-```es6
+- Is passed the `jump` distance, as a `number` of pixels, and
+- Returns the `jump` duration (`ms`)
+
+```js
 jump(".target", {
   duration: distance => Math.abs(distance),
 })
@@ -120,59 +166,35 @@ jump(".target", {
 
 ### offset
 
-Offset a `jump`, _only if to an element_, by a number of pixels.
+Valid only when `jump`ing to an element. Adjust the `jump` by a number of pixels.
 
-```es6
-// stop 10px before the top of the element
+```js
+// stop 100px before the leading edge of the target
 
 jump(".target", {
-  offset: -10,
+  offset: -100,
 })
 
-// stop 10px after the top of the element
+// stop 100px after the leading edge of the target
 
 jump(".target", {
-  offset: 10,
-})
-```
-
-Note that this option is useful for accommodating `position: fixed` elements.
-
-### callback
-
-Pass a function that will be called after the `jump` has been completed.
-
-```es6
-// in both regular and arrow functions, this === window
-
-jump(".target", {
-  callback: () => console.log("Jump completed!"),
+  offset: 100,
 })
 ```
+
+This option is useful for accommodating `position: fixed` elements.
 
 ### easing
 
 Easing function used for the `jump` animation.
 
-```es6
+```js
 jump(".target", {
   easing: easeInOutQuad,
 })
 ```
 
 See [easing.js](https://github.com/callmecavs/jump.js/blob/master/src/easing.js) for the definition of `easeInOutQuad`, the default easing function. Credit for this function goes to Robert Penner.
-
-### a11y
-
-If enabled, and the `jump` is to an element, [`focus`](https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/focus) it.
-
-```es6
-jump(".target", {
-  a11y: true,
-})
-```
-
-This option is disabled by default because it has _visual implications_ in many browsers. Focusing an element triggers the `:focus` CSS state selector, and is often accompanied by an `outline`.
 
 ## Browser Support
 
