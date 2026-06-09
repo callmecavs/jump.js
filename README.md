@@ -129,16 +129,21 @@ jump(".target", {
 })
 ```
 
-Prefer to work with `async` / `await`? Use `callback` to make a `Promise` wrapper:
+Prefer to work with `async` / `await`? Use the `callback` to create a `Promise` wrapper:
 
 ```js
-const promised = (options: JumpOptions) => new Promise((resolve, reject) => jump('.target', {
-  ...options,
-  callback: () => {
-    options.callback?.()
-    resolve()
-  }
-}))
+const promisedJump = (options: JumpOptions): Promise<void> =>
+  new Promise((resolve) =>
+    jump(".target", {
+      ...options,
+      callback: () => {
+        options.callback?.()
+        resolve()
+      },
+    }),
+  )
+
+await promisedJump('.target')
 ```
 
 ### duration
