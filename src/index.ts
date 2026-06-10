@@ -37,8 +37,8 @@ const jump: Jump = (rawTarget, options = {}) => {
   let startTime: number
 
   const complete = () => {
-    // If the jump is not `instant`, make sure the final position is perfect (no rounding inaccuracies).
-    // If the jump is `instant`, complete it immediately.
+    // If the jump is `instant`, this completes it immediately.
+    // If the jump isn't `instant`, this makes sure the final position is perfect.
     if (axis === "x") root.scrollTo({ left: end })
     if (axis === "y") root.scrollTo({ top: end })
 
@@ -53,7 +53,7 @@ const jump: Jump = (rawTarget, options = {}) => {
       if (needTabIndex) target.removeAttribute("tabindex")
     }
 
-    // If the `callback` exists:
+    // If we made it here, and the `callback` exists:
     // 1. Run it no matter what. Disregard the frame ID, it's not intended to be `cancel`-able.
     // 2. Make sure it runs after the final `scrollTo` call.
     if (callback) window.requestAnimationFrame(() => callback())
