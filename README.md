@@ -36,7 +36,7 @@ import type {
 
 2. Using a script tag:
 
-Modern (`type="module"`):
+- Modern (`type="module"`):
 
 ```html
 <script type="module">
@@ -44,7 +44,7 @@ Modern (`type="module"`):
 </script>
 ```
 
-Legacy (`UMD`):
+- Legacy (`UMD`):
 
 ```html
 <script src="https://unpkg.com/jump.js@latest/dist/index.umd.min.js"></script>
@@ -130,7 +130,7 @@ jump(".target", {
 })
 ```
 
-Remember that `focus` comes with visual implications. When enabling this, make sure to check CSS `:focus` and `:focus-*` styles.
+`Focus` comes with visual implications. If enabling this, check `:focus` and `:focus-*` styling.
 
 ### axis
 
@@ -250,7 +250,7 @@ jump(".target", {
 
 Useful for:
 
-- Aligning the `.target`
+- Aligning the `target`
 - Accommodating `sticky` / `fixed` elements
 
 ### root
