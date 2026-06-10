@@ -30,7 +30,7 @@ $ npm install jump.js
 <script src="">
 ```
 
-Note that the `UMD` export exposes the library via `window.Jump`.
+The `UMD` export exposes the library via `window.Jump`.
 
 ## Call
 
@@ -211,7 +211,13 @@ Useful for accommodating `sticky` / `fixed` elements, among other things.
 The element, or `window`, to scroll.
 
 ```js
+const child = document.querySelector(".child")
+const parent = document.querySelector(".parent")
 
+// scroll `parent` to `child`
+jump(child, {
+  root: parent,
+})
 ```
 
 ## Browser Support
