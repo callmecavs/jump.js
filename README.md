@@ -175,10 +175,10 @@ setTimeout(cancel, 250)
 Make a `Promise` wrapper to `jump` with `async` / `await`:
 
 ```js
-const scroll = (options: JumpOptions): Promise<void> =>
+const scroll = (target: JumpTarget, options: JumpOptions = {}): Promise<void> =>
   new Promise((resolve, reject) => {
     try {
-      jump(".target", {
+      jump(target, {
         ...options,
         callback: () => {
           options.callback?.()
