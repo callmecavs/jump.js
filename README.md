@@ -8,7 +8,8 @@ Follow these steps to get started:
 
 1. [Install](#install)
 2. [Call](#call)
-3. [Review Options](#options)
+3. [Options](#options)
+4. [Errors](#errors)
 
 ## Install
 
@@ -206,7 +207,7 @@ jump(".target", {
 
 2. Passing in a function that:
 
-- Receives the `jump` distance, as a `number` of pixels, and
+- Receives the `jump` distance as a `number` of pixels, and
 - Returns the `jump` duration (`ms`)
 
 ```js
@@ -264,6 +265,30 @@ const group = document.querySelector(".group")
 jump(".item", {
   root: group,
 })
+```
+
+## Errors
+
+1. `TypeError`s if the `target` or `options` are an incorrect type:
+
+```js
+// TypeError: Expected "target" to be an Element, number, or string.
+jump(null)
+
+// TypeError: Expected "axis" to be "x" or "y".
+jump(".target", {
+  axis: "z",
+})
+```
+
+2. `Error`s when `target` can't be resolved:
+
+```js
+// Error: Failed to resolve "target" string: CSS selector is invalid.
+jump("...")
+
+// Error: Failed to resolve "target" string: CSS selector didn't match.
+jump(".missing")
 ```
 
 ## Browser Support
