@@ -4,13 +4,11 @@
 
 Modern smooth scrolling for humans and agents.
 
-Follow these steps to get started:
-
 1. [Install](#install)
 2. [Call](#call)
 3. [Options](#options)
-4. [Types](#types)
-5. [Errors](#errors)
+4. [Errors](#errors)
+5. [Types](#types)
 
 ## Install
 
@@ -244,6 +242,32 @@ jump(".item", {
 })
 ```
 
+## Errors
+
+Before scrolling, `jump` validates the `target` and `options`. This validation will throw:
+
+- `TypeError`s if the `target` and / or `options` are incorrect types:
+
+```js
+// TypeError: Expected "target" to be an Element, number, or string.
+jump(null)
+
+// TypeError: Expected "axis" to be "x" or "y".
+jump(".target", {
+  axis: "z",
+})
+```
+
+- `Error`s when `target` can't be resolved:
+
+```js
+// Error: Failed to resolve "target" string: CSS selector is invalid.
+jump("...")
+
+// Error: Failed to resolve "target" string: CSS selector didn't match.
+jump(".missing")
+```
+
 ## Types
 
 `Jump` includes TypeScript definitions.
@@ -296,30 +320,6 @@ type JumpRoot = Window | Element
 
 ```ts
 type JumpCancel = () => void
-```
-
-## Errors
-
-1. `TypeError`s if the `target` or `options` are an incorrect type:
-
-```js
-// TypeError: Expected "target" to be an Element, number, or string.
-jump(null)
-
-// TypeError: Expected "axis" to be "x" or "y".
-jump(".target", {
-  axis: "z",
-})
-```
-
-2. `Error`s when `target` can't be resolved:
-
-```js
-// Error: Failed to resolve "target" string: CSS selector is invalid.
-jump("...")
-
-// Error: Failed to resolve "target" string: CSS selector didn't match.
-jump(".missing")
 ```
 
 ## Browser Support
