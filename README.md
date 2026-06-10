@@ -34,13 +34,13 @@ Note that the `UMD` export exposes the library via `window.Jump`.
 
 ## Call
 
-`Jump` is just a function. The only required parameter is the [target](#target):
+`Jump` is a function. The only required parameter is a [target](#target).
 
 ```js
 jump(".target")
 ```
 
-It returns a function that can be used to cancel it:
+It returns a function that, when called, cancels it:
 
 ```js
 const cancel = jump(".target")
@@ -74,7 +74,7 @@ jump(-100)
 
 ## Options
 
-`Jump` accepts an optional 2nd parameter - a configuration object - to customize it.
+`Jump` accepts an optional 2nd parameter, a configuration object, to customize it.
 
 All options have sensible defaults, shown below:
 
