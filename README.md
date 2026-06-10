@@ -207,7 +207,7 @@ jump(".target", {
 
 2. Passing in a function that:
 
-- Receives the `jump` distance as a `number` of pixels, and
+- Receives the signed `jump` distance as a `number` of pixels, and
 - Returns the `jump` duration (`ms`)
 
 ```js
