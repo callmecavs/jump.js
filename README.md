@@ -34,16 +34,20 @@ import type {
 } from "jump.js"
 ```
 
-2. Using a modern script tag (`type="module"`):
+2. Using a script tag:
+
+Modern (`type="module"`):
 
 ```html
-<script src="" type="module">
+<script type="module">
+  import jump from "https://unpkg.com/jump.js@latest/dist/index.js"
+</script>
 ```
 
-3. Using a legacy script tag (`UMD`):
+Legacy (`UMD`):
 
 ```html
-<script src="">
+<script src="https://unpkg.com/jump.js@latest/dist/index.umd.js"></script>
 ```
 
 The `UMD` export exposes the library via `window.Jump`.
