@@ -4,15 +4,13 @@
 
 Modern smooth scrolling for humans and agents.
 
-## Usage
-
-Follow these steps:
+Follow these steps to get started:
 
 1. [Install](#install)
 2. [Call](#call)
 3. [Review Options](#options)
 
-### Install
+## Install
 
 1. Using a package manager (recommended):
 
@@ -32,19 +30,53 @@ $ npm install jump.js
 <script src="">
 ```
 
-### Call
+Note that the `UMD` export exposes the library via `window.Jump`.
 
-Jump is a function. Pass the [target](#target) as the 1st parameter.
+## Call
+
+`Jump` is just a function. The only required parameter is the [target](#target):
 
 ```js
 jump(".target")
 ```
 
-### Options
+It returns a function that can be used to cancel it:
 
-Use the 2nd parameter, an optional configuration object, to customize the jump.
+```js
+const cancel = jump(".target")
+```
 
-All the options have a sensible default, shown below:
+### target
+
+1. Scroll to an element by:
+
+- Passing in an element, or
+- Passing in a CSS selector string (matched using `document.querySelector`)
+
+```js
+// passing in an element
+const element = document.querySelector(".target")
+jump(element)
+
+// passing in a CSS selector string
+jump(".target")
+```
+
+2. Scroll a fixed number of pixels by passing in a number:
+
+```js
+// scroll down `100px`
+jump(100)
+
+// scroll up `100px`
+jump(-100)
+```
+
+## Options
+
+`Jump` accepts an optional 2nd parameter - a configuration object - to customize it.
+
+All options have sensible defaults, shown below:
 
 ```js
 jump(".target", {
@@ -60,7 +92,6 @@ jump(".target", {
 
 Explanation of each option follows:
 
-- [target](#target)
 - [a11y](#a11y)
 - [axis](#axis)
 - [callback](#callback)
@@ -68,32 +99,6 @@ Explanation of each option follows:
 - [easing](#easing)
 - [offset](#offset)
 - [root](#root)
-
-### target
-
-1. Scroll to an element by:
-
-- Passing in an element, or
-- Passing in a CSS selector string (matching element determined by `document.querySelector` internally)
-
-```js
-// 1. Passing in an element
-const node = document.querySelector(".target")
-jump(node)
-
-// 2. Passing in a CSS selector string
-jump(".target")
-```
-
-2. Scroll a fixed number of pixels by passing in a number:
-
-```js
-// 1. Scroll down `100px`
-jump(100)
-
-// 2. Scroll up `100px`
-jump(-100)
-```
 
 ### a11y
 
@@ -105,31 +110,35 @@ jump(".target", {
 })
 ```
 
-This option is disabled by default because `focus` comes with CSS implications. If enabling, make sure to check CSS `:focus` and `:focus-*` declarations.
+Remember that `focus` comes with visual implications. When enabling, make sure to check CSS `:focus` and `:focus-*` styles.
 
 ### axis
 
-Used to control the direction of the scroll.
+Change the `jump` direction.
 
 ```js
-// scroll vertically (default)
-jump(".target")
+// horizontal
+jump(".target", {
+  axis: "x",
+})
 
-// scroll horizontally
-jump(".target", { axis: "x" })
+// vertical
+jump(".target", {
+  axis: "y",
+})
 ```
 
 ### callback
 
-A function called after the `jump` has been completed.
+A function called after the `jump` has completed.
 
 ```js
 jump(".target", {
-  callback: () => console.log("Jump completed!"),
+  callback: () => console.log("Jump complete."),
 })
 ```
 
-Prefer to work with `async` / `await`? Use the `callback` to create a `Promise` wrapper:
+Prefer `async` / `await`? Use the `callback` to make a `Promise` wrapper:
 
 ```js
 const promisedJump = (options: JumpOptions): Promise<void> =>
@@ -169,29 +178,9 @@ jump(".target", {
 })
 ```
 
-### offset
-
-Valid only when `jump`ing to an element. Adjust the `jump` by a number of pixels.
-
-```js
-// stop 100px before the leading edge of the target
-
-jump(".target", {
-  offset: -100,
-})
-
-// stop 100px after the leading edge of the target
-
-jump(".target", {
-  offset: 100,
-})
-```
-
-This option is useful for accommodating `position: fixed` elements.
-
 ### easing
 
-Easing function used for the `jump` animation.
+The easing function used for the `jump` animation.
 
 ```js
 jump(".target", {
@@ -199,25 +188,43 @@ jump(".target", {
 })
 ```
 
-See [easing.js](https://github.com/callmecavs/jump.js/blob/master/src/easing.js) for the definition of `easeInOutQuad`, the default easing function. Credit for this function goes to Robert Penner.
+### offset
+
+Valid only when `jump`ing to an element. Adjust the `jump` by a number of pixels.
+
+```js
+// stop 100px before the leading edge of the target
+jump(".target", {
+  offset: -100,
+})
+
+// stop 50px after the leading edge of the target
+jump(".target", {
+  offset: 50,
+})
+```
+
+Useful for accommodating `sticky` / `fixed` elements, among other things.
+
+### root
+
+The element, or `window`, to scroll.
+
+```js
+
+```
 
 ## Browser Support
 
-Jump depends on the following browser APIs:
+The newest ECMAScript feature used is [Error `cause`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error/cause).
 
-- [requestAnimationFrame](https://developer.mozilla.org/en-US/docs/Web/API/window/requestAnimationFrame)
+As such, it supports the following natively:
 
-Consequently, it supports the following natively:
-
-- Chrome 24+
-- Firefox 23+
-- Safari 6.1+
-- Opera 15+
-- IE 10+
-- iOS Safari 7.1+
-- Android Browser 4.4+
-
-To add support for older browsers, consider including polyfills/shims for the APIs listed above. There are no plans to include any in the library, in the interest of file size.
+- Chrome 93+
+- Edge 93+
+- Firefox 91+
+- Opera 79+
+- Safari 15+
 
 ## License
 
