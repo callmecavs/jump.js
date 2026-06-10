@@ -6,11 +6,8 @@ import { validateOptions, validateTarget } from "./validate"
 
 export type * from "./types"
 
-// Robert Penner's easeInOutQuad
-// https://github.com/danro/jquery-easing/blob/master/jquery.easing.js#L28-L31
-const easeInOutQuad: JumpEasing = (t, b, c, d) => {
-  if ((t /= d / 2) < 1) return (c / 2) * t * t + b
-  return (-c / 2) * (--t * (t - 2) - 1) + b
+const easeInOutQuad: JumpEasing = p => {
+  return p < 0.5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2
 }
 
 const jump = (rawTarget: JumpTarget, options: JumpOptions = {}): JumpCancel => {
@@ -68,7 +65,8 @@ const jump = (rawTarget: JumpTarget, options: JumpOptions = {}): JumpCancel => {
     // Limit `elapsedTime` to `duration` to prevent going "past the end" of the jump.
     const elapsedTime = Math.min(currentTime - startTime, duration)
 
-    const next = easing(elapsedTime, start, distance, duration)
+    const progress = elapsedTime / duration
+    const next = start + distance * easing(progress)
 
     if (axis === "x") root.scrollTo({ left: next })
     if (axis === "y") root.scrollTo({ top: next })

@@ -218,15 +218,14 @@ jump(".target", {
 
 ### easing
 
-The easing function used for the `jump` animation.
+Provide a custom easing function used for the `jump` animation. It should accept the animation progress (`0` to `1`), and return the eased progress.
 
 ```js
+// linear easing
 jump(".target", {
-  easing: easeInOutQuad,
+  easing: progress => progress,
 })
 ```
-
-Credit for the default belongs to [Robert Penner](https://robertpenner.com/easing/).
 
 ### offset
 

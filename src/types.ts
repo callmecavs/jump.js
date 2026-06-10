@@ -2,7 +2,7 @@ export type JumpAxis = "x" | "y"
 export type JumpCallback = () => void
 export type JumpCancel = () => void
 export type JumpDuration = number | ((distance: number) => number) // ms
-export type JumpEasing = (elapsedTime: number, start: number, distance: number, duration: number) => number
+export type JumpEasing = (progress: number) => number
 export type JumpResolvedTarget = Element | number
 export type JumpRoot = Window | Element
 export type JumpTarget = Element | number | string
