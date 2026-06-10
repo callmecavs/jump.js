@@ -9,7 +9,8 @@ Follow these steps to get started:
 1. [Install](#install)
 2. [Call](#call)
 3. [Options](#options)
-4. [Errors](#errors)
+4. [Types](#types)
+5. [Errors](#errors)
 
 ## Install
 
@@ -21,18 +22,6 @@ $ npm install jump.js
 
 ```js
 import jump from "jump.js"
-
-import type {
-  JumpAxis,
-  JumpCallback,
-  JumpCancel,
-  JumpDuration,
-  JumpEasing,
-  JumpOptions,
-  JumpResolvedTarget,
-  JumpRoot,
-  JumpTarget,
-} from "jump.js"
 ```
 
 2. Using a script tag (legacy):
@@ -253,6 +242,60 @@ const group = document.querySelector(".group")
 jump(".item", {
   root: group,
 })
+```
+
+## Types
+
+`Jump` includes TypeScript definitions.
+
+```ts
+import type {
+  Jump,
+  JumpAxis,
+  JumpCallback,
+  JumpCancel,
+  JumpDuration,
+  JumpEasing,
+  JumpOptions,
+  JumpResolvedTarget,
+  JumpRoot,
+  JumpTarget,
+} from "jump.js"
+```
+
+### Signature
+
+```ts
+type Jump = (target: JumpTarget, options?: JumpOptions) => JumpCancel
+```
+
+### Parameters
+
+```ts
+type JumpTarget = Element | number | string
+type JumpResolvedTarget = Element | number
+
+type JumpOptions = {
+  a11y?: boolean
+  axis?: JumpAxis
+  callback?: JumpCallback
+  duration?: JumpDuration
+  easing?: JumpEasing
+  offset?: number
+  root?: JumpRoot
+}
+
+type JumpAxis = "x" | "y"
+type JumpCallback = () => void
+type JumpDuration = number | ((distance: number) => number)
+type JumpEasing = (progress: number) => number
+type JumpRoot = Window | Element
+```
+
+### Return Value
+
+```ts
+type JumpCancel = () => void
 ```
 
 ## Errors

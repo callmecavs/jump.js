@@ -1,3 +1,4 @@
+export type Jump = (target: JumpTarget, options?: JumpOptions) => JumpCancel
 export type JumpAxis = "x" | "y"
 export type JumpCallback = () => void
 export type JumpCancel = () => void

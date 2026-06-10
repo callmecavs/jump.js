@@ -1,4 +1,4 @@
-import type { JumpCancel, JumpEasing, JumpOptions, JumpTarget } from "./types"
+import type { Jump, JumpEasing } from "./types"
 import { isFocusable } from "./dom"
 import { resolveAccessibility, resolveDuration, resolveTarget } from "./options"
 import { calculateDistance, calculateEnd, calculateStart } from "./scroll"
@@ -10,7 +10,7 @@ const easeInOutQuad: JumpEasing = p => {
   return p < 0.5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2
 }
 
-const jump = (rawTarget: JumpTarget, options: JumpOptions = {}): JumpCancel => {
+const jump: Jump = (rawTarget, options = {}) => {
   validateTarget(rawTarget)
   validateOptions(options)
 
