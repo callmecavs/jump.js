@@ -1,7 +1,7 @@
 import type { JumpCancel, JumpEasing, JumpOptions, JumpTarget } from "./types"
 import { isFocusable } from "./dom"
 import { resolveAccessibility, resolveDuration, resolveTarget } from "./options"
-import { calculateEnd, calculateStart } from "./scroll"
+import { calculateDistance, calculateEnd, calculateStart } from "./scroll"
 import { validateOptions, validateTarget } from "./validate"
 
 export type * from "./types"
@@ -33,7 +33,7 @@ const jump = (rawTarget: JumpTarget, options: JumpOptions = {}): JumpCancel => {
   const end = calculateEnd(axis, offset, root, start, target)
 
   const a11y = resolveAccessibility(rawA11y, target)
-  const distance = end - start
+  const distance = calculateDistance(end, start)
   const duration = resolveDuration(distance, rawDuration)
 
   let rafId: number

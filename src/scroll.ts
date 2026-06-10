@@ -7,6 +7,15 @@ const clamp = (number: number, min: number, max: number): number => {
   return number
 }
 
+export const calculateDistance = (end: number, start: number) => {
+  const delta = end - start
+
+  // Catch sub-pixel distances. These should be `instant`.
+  if (Math.abs(delta) < 1) return 0
+
+  return delta
+}
+
 export const calculateEnd = (
   axis: JumpAxis,
   offset: number,
