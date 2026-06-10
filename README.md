@@ -34,7 +34,7 @@ The `UMD` export exposes the library via `window.Jump`.
 
 ## Call
 
-`Jump` is a function. The only required parameter is a [target](#target).
+`Jump` is a function. The only required parameter is a [target](#target):
 
 ```js
 jump(".target")
@@ -74,7 +74,7 @@ jump(-100)
 
 ## Options
 
-`Jump` accepts an optional 2nd parameter, a configuration object, to customize it.
+`Jump` accepts an optional 2nd parameter - a configuration object - to customize it's behavior.
 
 All options have sensible defaults, shown below:
 
@@ -102,7 +102,7 @@ Explanation of each option follows:
 
 ### a11y
 
-If enabled, and the `target` is an element, the `target` will be [`focus`](https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/focus)ed when the `jump` completes.
+If enabled, and the `target` is an element, the `target` will be [`focus`](https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/focus)ed when the `jump` completes:
 
 ```js
 jump(".target", {
@@ -110,19 +110,19 @@ jump(".target", {
 })
 ```
 
-Remember that `focus` comes with visual implications. When enabling, make sure to check CSS `:focus` and `:focus-*` styles.
+Remember that `focus` comes with visual implications. When enabling this, make sure to check CSS `:focus` and `:focus-*` styles.
 
 ### axis
 
-Change the `jump` direction.
+Change the `jump`'s direction:
 
 ```js
-// horizontal
+// scroll horizontally
 jump(".target", {
   axis: "x",
 })
 
-// vertical
+// scroll vertically (default)
 jump(".target", {
   axis: "y",
 })
@@ -130,7 +130,7 @@ jump(".target", {
 
 ### callback
 
-A function called after the `jump` has completed.
+Called after the `jump` has completed:
 
 ```js
 jump(".target", {
@@ -138,21 +138,38 @@ jump(".target", {
 })
 ```
 
-Prefer `async` / `await`? Use the `callback` to make a `Promise` wrapper:
+Doesn't run if the `jump` is `cancel`ed:
 
 ```js
-const promisedJump = (options: JumpOptions): Promise<void> =>
-  new Promise((resolve) =>
-    jump(".target", {
-      ...options,
-      callback: () => {
-        options.callback?.()
-        resolve()
-      },
-    }),
-  )
+// start a jump, storing the `cancel` function
+const cancel = jump(".target", {
+  callback: () => console.log("Jump complete."),
+  duration: 1000, // default
+})
 
-await promisedJump('.target')
+// jump cancelled, `callback` doesn't run
+setTimeout(cancel, 250)
+```
+
+Make a `Promise` wrapper to `jump` with `async` / `await`:
+
+```js
+const scroll = (options: JumpOptions): Promise<void> =>
+  new Promise((resolve, reject) => {
+    try {
+      jump(".target", {
+        ...options,
+        callback: () => {
+          options.callback?.()
+          resolve()
+        },
+      })
+    } catch (error) {
+      reject(error)
+    }
+  })
+
+await scroll(".target")
 ```
 
 ### duration
@@ -169,7 +186,7 @@ jump(".target", {
 
 2. Passing in a function that:
 
-- Is passed the `jump` distance, as a `number` of pixels, and
+- Receives the `jump` distance, as a `number` of pixels, and
 - Returns the `jump` duration (`ms`)
 
 ```js
@@ -188,11 +205,18 @@ jump(".target", {
 })
 ```
 
+Credit for the default belongs to [Robert Penner](https://robertpenner.com/easing/).
+
 ### offset
 
 Valid only when `jump`ing to an element. Adjust the `jump` by a number of pixels.
 
 ```js
+// scrolls down 150px (`offset` ignored)
+jump(150, {
+  offset: -150,
+})
+
 // stop 100px before the leading edge of the target
 jump(".target", {
   offset: -100,
@@ -204,19 +228,18 @@ jump(".target", {
 })
 ```
 
-Useful for accommodating `sticky` / `fixed` elements, among other things.
+Useful for accommodating `sticky` / `fixed` elements, amongst other things.
 
 ### root
 
 The element, or `window`, to scroll.
 
 ```js
-const child = document.querySelector(".child")
-const parent = document.querySelector(".parent")
+const carousel = document.querySelector(".carousel")
 
-// scroll `parent` to `child`
-jump(child, {
-  root: parent,
+// scroll `carousel` to `slide`
+jump(".slide", {
+  root: carousel,
 })
 ```
 
