@@ -13,7 +13,7 @@ Follow these steps to get started:
 
 ## Install
 
-1. Using a package manager and bundler (recommended):
+1. Using a package manager and an ESM-compatible bundler (recommended):
 
 ```bash
 $ npm install jump.js
@@ -35,23 +35,12 @@ import type {
 } from "jump.js"
 ```
 
-2. Using a script tag:
-
-- Modern (`type="module"`):
+2. Using a script tag (legacy):
 
 ```html
-<script type="module">
-  import jump from "https://unpkg.com/jump.js@latest/dist/index.js"
-</script>
-```
-
-- Legacy (`UMD`):
-
-```html
+<!-- UMD format supports: AMD, CommonJS, and global variable (window.Jump) -->
 <script src="https://unpkg.com/jump.js@latest/dist/index.umd.min.js"></script>
 ```
-
-The `UMD` export exposes the library via `window.Jump`.
 
 ## Call
 
