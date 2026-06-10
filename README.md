@@ -102,7 +102,7 @@ Explanation of each option follows:
 
 ### a11y
 
-If enabled, and the `target` is an element, the `target` will be [`focus`](https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/focus)ed when the jump completes.
+If enabled, and the `target` is an element, the `target` will be [`focus`](https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/focus)ed when the `jump` completes.
 
 ```js
 jump(".target", {
@@ -218,7 +218,7 @@ The element, or `window`, to scroll.
 
 The newest ECMAScript feature used is [Error `cause`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error/cause).
 
-As such, it supports the following natively:
+As such, `jump` supports the following browsers natively:
 
 - Chrome 93+
 - Edge 93+
