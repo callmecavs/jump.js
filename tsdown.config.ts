@@ -6,15 +6,17 @@ export default defineConfig({
     customExports(exports) {
       const rootExport = exports["."]
 
-      if (typeof rootExport === "object" && rootExport !== null && !Array.isArray(rootExport)) {
-        exports["."] = { types: "./dist/index.d.ts", ...rootExport }
+      if (typeof rootExport === "string") {
+        exports["."] = {
+          types: "./dist/index.d.ts",
+          import: rootExport,
+        }
       }
 
       return exports
     },
   },
   format: {
-    cjs: {},
     esm: {},
     umd: {
       minify: true,

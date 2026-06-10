@@ -13,7 +13,7 @@ Follow these steps to get started:
 
 ## Install
 
-1. Using a package manager, and bundler (recommended):
+1. Using a package manager and bundler (recommended):
 
 ```bash
 $ npm install jump.js
