@@ -2,7 +2,7 @@ import type { JumpDuration, JumpResolvedTarget, JumpTarget } from "./types"
 import { isElement } from "./dom"
 
 export const resolveAccessibility = (a11y: boolean, target: JumpResolvedTarget) => {
-  // The `a11y` option doesn't do anything w/o a `target` node.
+  // The `a11y` option requires that the `target` be a node.
   if (typeof target === "number") return false
   return a11y
 }
