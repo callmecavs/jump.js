@@ -47,7 +47,7 @@ Modern (`type="module"`):
 Legacy (`UMD`):
 
 ```html
-<script src="https://unpkg.com/jump.js@latest/dist/index.umd.js"></script>
+<script src="https://unpkg.com/jump.js@latest/dist/index.umd.min.js"></script>
 ```
 
 The `UMD` export exposes the library via `window.Jump`.

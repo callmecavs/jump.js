@@ -13,7 +13,16 @@ export default defineConfig({
       return exports
     },
   },
-  format: ["cjs", "esm", "umd"],
+  format: {
+    cjs: {},
+    esm: {},
+    umd: {
+      minify: true,
+      outputOptions: {
+        entryFileNames: "[name].umd.min.js",
+      },
+    },
+  },
   globalName: "Jump",
   platform: "browser",
 })
