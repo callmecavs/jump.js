@@ -12,10 +12,26 @@ Follow these steps to get started:
 
 ## Install
 
-1. Using a package manager (recommended):
+1. Using a package manager, and bundler (recommended):
 
 ```bash
 $ npm install jump.js
+```
+
+```js
+import jump from "jump.js"
+
+import type {
+  JumpAxis,
+  JumpCallback,
+  JumpCancel,
+  JumpDuration,
+  JumpEasing,
+  JumpOptions,
+  JumpResolvedTarget,
+  JumpRoot,
+  JumpTarget,
+} from "jump.js"
 ```
 
 2. Using a modern script tag (`type="module"`):
@@ -74,7 +90,7 @@ jump(-100)
 
 ## Options
 
-`Jump` accepts an optional 2nd parameter - a configuration object - to customize it's behavior.
+`Jump` accepts an optional 2nd parameter - a configuration object - to customize its behavior.
 
 All options have sensible defaults, shown below:
 
@@ -228,26 +244,27 @@ jump(".target", {
 })
 ```
 
-Useful for accommodating `sticky` / `fixed` elements, amongst other things.
+Useful for:
+
+- Aligning the `.target`
+- Accommodating `sticky` / `fixed` elements
 
 ### root
 
 The element, or `window`, to scroll.
 
 ```js
-const carousel = document.querySelector(".carousel")
+const group = document.querySelector(".group")
 
-// scroll `carousel` to `slide`
-jump(".slide", {
-  root: carousel,
+// scroll `group` to `item`
+jump(".item", {
+  root: group,
 })
 ```
 
 ## Browser Support
 
-The newest ECMAScript feature used is [Error `cause`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error/cause).
-
-As such, `jump` supports the following browsers natively:
+The newest ECMAScript feature used in the codebase is [Error `cause`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error/cause). As such, `jump` supports the following natively:
 
 - Chrome 93+
 - Edge 93+
