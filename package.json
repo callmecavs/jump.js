@@ -35,7 +35,7 @@
   "name": "jump.js",
   "repository": {
     "type": "git",
-    "url": "git+github.com/callmecavs/jump.js.git"
+    "url": "git+https://github.com/callmecavs/jump.js.git"
   },
   "scripts": {
     "build": "tsdown",
