@@ -33,7 +33,10 @@
   ],
   "license": "MIT",
   "name": "jump.js",
-  "repository": "callmecavs/jump.js",
+  "repository": {
+    "type": "git",
+    "url": "git+github.com/callmecavs/jump.js.git"
+  },
   "scripts": {
     "build": "tsdown",
     "dev": "tsdown --watch",
