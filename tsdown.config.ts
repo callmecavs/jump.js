@@ -11,6 +11,6 @@ export default defineConfig({
   exports: true,
   platform: "browser",
   publint: {
-    level: "error",
+    level: "suggestion",
   },
 })
