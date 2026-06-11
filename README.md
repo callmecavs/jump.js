@@ -4,62 +4,94 @@
 
 Modern smooth scrolling for humans and agents.
 
+## Contents
+
 1. [Install](#install)
-2. [Call](#call)
-3. [Options](#options)
-4. [Errors](#errors)
-5. [Types](#types)
+2. [Types](#types)
+3. [Call](#call)
+4. [Parameters](#parameters)
+   1. [target](#target)
+   2. [options](#options)
+      1. [a11y](#a11y)
+      2. [axis](#axis)
+      3. [callback](#callback)
+      4. [duration](#duration)
+      5. [easing](#easing)
+      6. [offset](#offset)
+      7. [root](#root)
+5. [Return Value](#return-value)
+6. [Errors](#errors)
+7. [Browser Support](#browser-support)
+8. [License](#license)
 
 ## Install
 
-1. Using a package manager and an ESM-compatible bundler (recommended):
+Jump is ESM-only.
 
 ```bash
 $ npm install jump.js
 ```
 
-```js
-import jump from "jump.js"
+## Types
+
+Jump ships with the following TypeScript definitions (`.d.ts`):
+
+```ts
+import type {
+  Jump,
+  JumpAxis,
+  JumpCallback,
+  JumpCancel,
+  JumpDuration,
+  JumpEasing,
+  JumpOptions,
+  JumpRoot,
+  JumpTarget,
+} from "jump.js"
 ```
 
-2. Using a script tag (legacy):
-
-```html
-<!-- UMD format supports: AMD, CommonJS, and global variable (window.Jump) -->
-<script src="https://unpkg.com/jump.js@latest/dist/index.umd.min.js"></script>
-```
+Each `type` is re-surfaced in the relevant portion of this documentation.
 
 ## Call
 
-`Jump` is a function. The only required parameter is a [target](#target):
+Jump is a function that scrolls to a [target](#target) in a [configurable](#options) and [cancelable](#return-value) way.
 
 ```js
-jump(".target")
+import jump from "jump.js"
+
+const options = {
+  // ...
+}
+
+const cancel = jump(".target", options)
 ```
 
-It returns a function that, when called, cancels it:
+## Parameters
 
-```js
-const cancel = jump(".target")
+```ts
+type Jump = (target: JumpTarget, options?: JumpOptions) => JumpCancel
 ```
 
 ### target
 
-1. Scroll to an element by:
+```ts
+type JumpTarget = Element | number | string
+```
 
-- Passing in an element, or
-- Passing in a CSS selector string (matched using `document.querySelector`)
+Scroll to an element by passing in:
+
+- An element, or
+- A CSS selector (matched using `document.querySelector`)
 
 ```js
-// passing in an element
-const element = document.querySelector(".target")
-jump(element)
+// pass in an element
+jump(document.querySelector(".target"))
 
-// passing in a CSS selector string
+// pass in a CSS selector
 jump(".target")
 ```
 
-2. Scroll a fixed number of pixels by passing in a number:
+Scroll a fixed amount by passing in a number of pixels:
 
 ```js
 // scroll down `100px`
@@ -69,35 +101,41 @@ jump(100)
 jump(-100)
 ```
 
-## Options
+### options
 
-`Jump` accepts an optional 2nd parameter - a configuration object - to customize its behavior.
+```ts
+type JumpOptions = {
+  a11y?: boolean
+  axis?: JumpAxis
+  callback?: JumpCallback
+  duration?: JumpDuration // ms
+  easing?: JumpEasing
+  offset?: number // px
+  root?: JumpRoot
+}
 
-All options have sensible defaults, shown below:
+type JumpAxis = "x" | "y"
+type JumpCallback = () => void
+type JumpDuration = number | ((distance: number) => number)
+type JumpEasing = (progress: number) => number
+type JumpRoot = Window | Element
+```
 
-```js
-jump(".target", {
+Customize the scroll behavior by passing in an `options` object. Default `options` are shown below:
+
+```ts
+const defaults: JumpOptions = {
   a11y: false,
   axis: "y",
   callback: undefined,
-  duration: 1000, // ms
+  duration: 1000,
   easing: easeInOutQuad,
   offset: 0,
   root: window,
-})
+}
 ```
 
-Explanation of each option follows:
-
-- [a11y](#a11y)
-- [axis](#axis)
-- [callback](#callback)
-- [duration](#duration)
-- [easing](#easing)
-- [offset](#offset)
-- [root](#root)
-
-### a11y
+#### a11y
 
 If enabled, and the `target` is an element, the `target` will be [`focus`](https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/focus)ed when the `jump` completes:
 
@@ -109,7 +147,7 @@ jump(".target", {
 
 `Focus` comes with visual implications. If enabling this, check `:focus` and `:focus-*` styling.
 
-### axis
+#### axis
 
 Change the `jump`'s direction:
 
@@ -125,7 +163,7 @@ jump(".target", {
 })
 ```
 
-### callback
+#### callback
 
 Called after the `jump` has completed:
 
@@ -150,7 +188,7 @@ setTimeout(cancel, 250)
 
 Make a `Promise` wrapper to `jump` with `async` / `await`:
 
-```js
+```ts
 const scroll = (target: JumpTarget, options: JumpOptions = {}): Promise<void> =>
   new Promise((resolve, reject) => {
     try {
@@ -169,7 +207,7 @@ const scroll = (target: JumpTarget, options: JumpOptions = {}): Promise<void> =>
 await scroll(".target")
 ```
 
-### duration
+#### duration
 
 Set how long the `jump` takes by:
 
@@ -192,9 +230,9 @@ jump(".target", {
 })
 ```
 
-### easing
+#### easing
 
-Provide a custom easing function used for the `jump` animation. It should accept the animation progress (`0` to `1`), and return the eased progress.
+Provide a custom easing function used for the `jump` animation. It should accept the progress (`0` to `1`), and return the eased progress.
 
 ```js
 // linear easing
@@ -203,7 +241,7 @@ jump(".target", {
 })
 ```
 
-### offset
+#### offset
 
 Valid only when `jump`ing to an element. Adjust the `jump` by a number of pixels.
 
@@ -229,7 +267,7 @@ Useful for:
 - Aligning the `target`
 - Accommodating `sticky` / `fixed` elements
 
-### root
+#### root
 
 The element, or `window`, to scroll.
 
@@ -242,9 +280,17 @@ jump(".item", {
 })
 ```
 
+## Return Value
+
+```ts
+type JumpCancel = () => void
+```
+
+Jump returns a function that can be used to cancel it.
+
 ## Errors
 
-Before scrolling, `jump` validates the `target` and `options`. This validation will throw:
+Before scrolling, `jump` validates the `target` and `options`. This validation can throw:
 
 - `TypeError`s if the `target` and / or `options` are incorrect types:
 
@@ -258,7 +304,7 @@ jump(".target", {
 })
 ```
 
-- `Error`s when `target` can't be resolved:
+- `Error`s if the `target` can't be resolved:
 
 ```js
 // Error: Failed to resolve "target" string: CSS selector is invalid.
@@ -266,60 +312,6 @@ jump("...")
 
 // Error: Failed to resolve "target" string: CSS selector didn't match.
 jump(".missing")
-```
-
-## Types
-
-`Jump` includes TypeScript definitions.
-
-```ts
-import type {
-  Jump,
-  JumpAxis,
-  JumpCallback,
-  JumpCancel,
-  JumpDuration,
-  JumpEasing,
-  JumpOptions,
-  JumpResolvedTarget,
-  JumpRoot,
-  JumpTarget,
-} from "jump.js"
-```
-
-### Signature
-
-```ts
-type Jump = (target: JumpTarget, options?: JumpOptions) => JumpCancel
-```
-
-### Parameters
-
-```ts
-type JumpTarget = Element | number | string
-type JumpResolvedTarget = Element | number
-
-type JumpOptions = {
-  a11y?: boolean
-  axis?: JumpAxis
-  callback?: JumpCallback
-  duration?: JumpDuration
-  easing?: JumpEasing
-  offset?: number
-  root?: JumpRoot
-}
-
-type JumpAxis = "x" | "y"
-type JumpCallback = () => void
-type JumpDuration = number | ((distance: number) => number)
-type JumpEasing = (progress: number) => number
-type JumpRoot = Window | Element
-```
-
-### Return Value
-
-```ts
-type JumpCancel = () => void
 ```
 
 ## Browser Support
