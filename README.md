@@ -20,7 +20,7 @@ Modern smooth scrolling for humans and agents.
       6. [offset](#offset)
       7. [root](#root)
 5. [Return Value](#return-value)
-6. [Errors](#errors)
+6. [Error Handling](#error-handling)
 7. [Browser Support](#browser-support)
 8. [License](#license)
 
@@ -137,7 +137,7 @@ const defaults: JumpOptions = {
 
 #### a11y
 
-If enabled, and the `target` is an element, the `target` will be [`focus`](https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/focus)ed when the `jump` completes:
+If enabled, and the `target` resolves to an element, the `target` will be focused when the scroll completes:
 
 ```js
 jump(".target", {
@@ -145,7 +145,7 @@ jump(".target", {
 })
 ```
 
-`Focus` comes with visual implications. If enabling this, check `:focus` and `:focus-*` styling.
+Likely to cause visual changes (`:focus` / `:focus-*` styles).
 
 #### axis
 
@@ -288,11 +288,11 @@ type JumpCancel = () => void
 
 Jump returns a function that can be used to cancel it.
 
-## Errors
+## Error Handling
 
-Before scrolling, `jump` validates the `target` and `options`. This validation can throw:
+Jump will throw:
 
-- `TypeError`s if the `target` and / or `options` are incorrect types:
+- `TypeError`s if invalid parameters are passed:
 
 ```js
 // TypeError: Expected "target" to be an Element, number, or string.
@@ -304,7 +304,7 @@ jump(".target", {
 })
 ```
 
-- `Error`s if the `target` can't be resolved:
+- Generic `Error`s if the `target` can't be resolved:
 
 ```js
 // Error: Failed to resolve "target" string: CSS selector is invalid.
@@ -316,7 +316,9 @@ jump(".missing")
 
 ## Browser Support
 
-The newest ECMAScript feature used in the codebase is [Error `cause`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error/cause). As such, `jump` supports the following natively:
+Limiting ECMAScript feature: [Error `cause`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error/cause).
+
+Jump supports the following natively:
 
 - Chrome 93+
 - Edge 93+
