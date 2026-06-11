@@ -4,7 +4,18 @@ import { resolveAccessibility, resolveDuration, resolveTarget } from "./options"
 import { calculateDistance, calculateEnd, calculateStart } from "./scroll"
 import { validateOptions, validateTarget } from "./validate"
 
-export type * from "./types"
+// Export the types, excluding `JumpResolvedTarget` (internal only).
+export type {
+  Jump,
+  JumpAxis,
+  JumpCallback,
+  JumpCancel,
+  JumpDuration,
+  JumpEasing,
+  JumpOptions,
+  JumpRoot,
+  JumpTarget,
+} from "./types"
 
 const easeInOutQuad: JumpEasing = p => {
   return p < 0.5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2
