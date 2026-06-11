@@ -145,19 +145,23 @@ jump(".target", {
 })
 ```
 
-Likely to cause visual changes (`:focus` / `:focus-*` styles).
+Likely to cause visual changes because of `:focus` / `:focus-*` styling.
 
 #### axis
 
-Change the `jump`'s direction:
+```ts
+type JumpAxis = "x" | "y"
+```
+
+Deteremines the scroll direction:
 
 ```js
-// scroll horizontally
+// horizontal
 jump(".target", {
   axis: "x",
 })
 
-// scroll vertically (default)
+// vertical (default)
 jump(".target", {
   axis: "y",
 })
@@ -165,28 +169,31 @@ jump(".target", {
 
 #### callback
 
-Called after the `jump` has completed:
+```ts
+type JumpCallback = () => void
+```
+
+A function called after the scroll has completed:
 
 ```js
 jump(".target", {
-  callback: () => console.log("Jump complete."),
+  callback: () => console.log("Jump completed."),
 })
 ```
 
-Doesn't run if the `jump` is `cancel`ed:
+Doesn't run if the scroll is cancelled:
 
 ```js
-// start a jump, storing the `cancel` function
 const cancel = jump(".target", {
-  callback: () => console.log("Jump complete."),
+  callback: () => console.log("Jump completed."),
   duration: 1000, // default
 })
 
-// jump cancelled, `callback` doesn't run
-setTimeout(cancel, 250)
+// scroll cancelled, `callback` never runs
+setTimeout(cancel, 500)
 ```
 
-Make a `Promise` wrapper to `jump` with `async` / `await`:
+Enables `Promise`-based, or `async` / `await`-based, scrolling:
 
 ```ts
 const scroll = (target: JumpTarget, options: JumpOptions = {}): Promise<void> =>
@@ -209,9 +216,7 @@ await scroll(".target")
 
 #### duration
 
-Set how long the `jump` takes by:
-
-1. Passing in an amount of time (`ms`):
+Scroll over a fixed amount of time by passing in a number of milliseconds (`ms`):
 
 ```js
 jump(".target", {
@@ -219,12 +224,13 @@ jump(".target", {
 })
 ```
 
-2. Passing in a function that:
+Scroll over an amount of time relative to the distance by passing in a function that:
 
-- Receives the signed `jump` distance as a `number` of pixels, and
-- Returns the `jump` duration (`ms`)
+- Receives the signed scroll distance as a number of pixels, and
+- Returns the scroll duration in milliseconds (`ms`)
 
 ```js
+// scroll speed = 1 px / ms
 jump(".target", {
   duration: distance => Math.abs(distance),
 })
@@ -232,7 +238,10 @@ jump(".target", {
 
 #### easing
 
-Provide a custom easing function used for the `jump` animation. It should accept the progress (`0` to `1`), and return the eased progress.
+Provide a custom easing function used for the scroll animation. The `easing` function must:
+
+1. Accept the progress (`0` to `1`), and
+2. Return the eased progress.
 
 ```js
 // linear easing
@@ -243,14 +252,9 @@ jump(".target", {
 
 #### offset
 
-Valid only when `jump`ing to an element. Adjust the `jump` by a number of pixels.
+If the `target` resolves to an element, adjust the scroll by a number of pixels.
 
 ```js
-// scrolls down 150px (`offset` ignored)
-jump(150, {
-  offset: -150,
-})
-
 // stop 100px before the leading edge of the target
 jump(".target", {
   offset: -100,
@@ -259,6 +263,11 @@ jump(".target", {
 // stop 50px after the leading edge of the target
 jump(".target", {
   offset: 50,
+})
+
+// scroll down `150px` (ignored)
+jump(150, {
+  offset: -150,
 })
 ```
 
@@ -286,7 +295,7 @@ jump(".item", {
 type JumpCancel = () => void
 ```
 
-Jump returns a function that can be used to cancel it.
+A function that can be used to cancel the scroll.
 
 ## Error Handling
 
@@ -308,15 +317,13 @@ jump(".target", {
 
 ```js
 // Error: Failed to resolve "target" string: CSS selector is invalid.
-jump("...")
+jump("1337")
 
 // Error: Failed to resolve "target" string: CSS selector didn't match.
-jump(".missing")
+jump(".no-match")
 ```
 
 ## Browser Support
-
-Limiting ECMAScript feature: [Error `cause`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error/cause).
 
 Jump supports the following natively:
 
@@ -325,6 +332,8 @@ Jump supports the following natively:
 - Firefox 91+
 - Opera 79+
 - Safari 15+
+
+Limiting ECMAScript feature: [Error `cause`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error/cause).
 
 ## License
 
