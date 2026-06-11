@@ -1,30 +1,16 @@
 import { defineConfig } from "tsdown"
 
 export default defineConfig({
-  dts: { tsgo: true },
-  exports: {
-    customExports(exports) {
-      const rootExport = exports["."]
-
-      if (typeof rootExport === "string") {
-        exports["."] = {
-          types: "./dist/index.d.ts",
-          import: rootExport,
-        }
-      }
-
-      return exports
-    },
+  attw: {
+    level: "error",
+    profile: "esm-only",
   },
-  format: {
-    esm: {},
-    umd: {
-      minify: true,
-      outputOptions: {
-        entryFileNames: "[name].umd.min.js",
-      },
-    },
+  dts: {
+    tsgo: true,
   },
-  globalName: "Jump",
+  exports: true,
   platform: "browser",
+  publint: {
+    level: "error",
+  },
 })
