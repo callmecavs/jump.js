@@ -9,7 +9,7 @@ Modern smooth scrolling for humans and agents.
 1. [Install](#install)
 2. [TypeScript](#typescript)
 3. [Basic Usage](#basic-usage)
-4. [Parameters](#parameters)
+4. [API](#api)
    1. [target](#target)
    2. [options](#options)
       1. [a11y](#a11y)
@@ -19,14 +19,14 @@ Modern smooth scrolling for humans and agents.
       5. [easing](#easing)
       6. [offset](#offset)
       7. [root](#root)
-5. [Return Value](#return-value)
-6. [Error Handling](#error-handling)
-7. [Browser Support](#browser-support)
-8. [License](#license)
+   3. [Return Value](#return-value)
+5. [Error Handling](#error-handling)
+6. [Browser Support](#browser-support)
+7. [License](#license)
 
 ## Install
 
-Jump is ESM-only.
+Jump requires ESM-compatible tooling.
 
 ```bash
 $ npm install jump.js
@@ -66,7 +66,7 @@ const options = {
 const cancel = jump(".target", options)
 ```
 
-## Parameters
+## API
 
 ```ts
 type Jump = (target: JumpTarget, options?: JumpOptions) => JumpCancel
@@ -121,16 +121,18 @@ type JumpEasing = (progress: number) => number
 type JumpRoot = Window | Element
 ```
 
-Customize the scroll behavior by passing in an `options` object. Default `options` are shown below:
+Customize the scroll behavior by passing in an `options` object.
+
+All `options` have a sensible default:
 
 ```ts
 const defaults: JumpOptions = {
   a11y: false,
   axis: "y",
   callback: undefined,
-  duration: 1000,
+  duration: 1000, // ms
   easing: easeInOutQuad,
-  offset: 0,
+  offset: 0, // px
   root: window,
 }
 ```
