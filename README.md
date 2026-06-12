@@ -295,13 +295,12 @@ type JumpRoot = Window | Element
 The `window`, or element, that is scrolled.
 
 ```js
-const group = document.querySelector(".group")
-const items = Array.from(group.querySelectorAll(".item"))
+const parent = document.querySelector(".parent")
+const children = Array.from(parent.children)
 
-// scrolls `group` horizontally to the 2nd `item`
-jump(items[1], {
-  axis: "x",
-  root: group,
+// scroll `parent` to 1st `child`
+jump(children[0], {
+  root: parent,
 })
 ```
 
