@@ -305,7 +305,7 @@ jump(items[1], {
 })
 ```
 
-## Return Value
+### Return Value
 
 ```ts
 type JumpCancel = () => void
