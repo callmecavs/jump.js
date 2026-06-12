@@ -7,8 +7,8 @@ Modern smooth scrolling for humans and agents.
 ## Contents
 
 1. [Install](#install)
-2. [Types](#types)
-3. [Call](#call)
+2. [TypeScript](#typescript)
+3. [Basic Usage](#basic-usage)
 4. [Parameters](#parameters)
    1. [target](#target)
    2. [options](#options)
@@ -32,9 +32,9 @@ Jump is ESM-only.
 $ npm install jump.js
 ```
 
-## Types
+## TypeScript
 
-Jump ships with the following TypeScript definitions (`.d.ts`):
+Jump ships with the following `type` definitions (`.d.ts`):
 
 ```ts
 import type {
@@ -50,11 +50,11 @@ import type {
 } from "jump.js"
 ```
 
-Each `type` is re-surfaced in the relevant portion of this documentation.
+Each `type` is shown again in the relevant portion of this documentation.
 
-## Call
+## Basic Usage
 
-Jump is a function that scrolls to a [target](#target) in a [configurable](#options) and [cancelable](#return-value) way.
+Jump is a function that scrolls to a [target](#target) in a [configurable](#options) and [cancellable](#return-value) way.
 
 ```js
 import jump from "jump.js"
@@ -145,7 +145,7 @@ jump(".target", {
 })
 ```
 
-Likely to cause visual changes because of `:focus` / `:focus-*` styling.
+Beware of visual changes caused by CSS `:focus` / `:focus-*` styles.
 
 #### axis
 
@@ -153,7 +153,7 @@ Likely to cause visual changes because of `:focus` / `:focus-*` styling.
 type JumpAxis = "x" | "y"
 ```
 
-Deteremines the scroll direction:
+The direction the `root` is scrolled:
 
 ```js
 // horizontal
@@ -181,19 +181,19 @@ jump(".target", {
 })
 ```
 
-Doesn't run if the scroll is cancelled:
+It won't be called if the scroll is cancelled:
 
 ```js
 const cancel = jump(".target", {
   callback: () => console.log("Jump completed."),
-  duration: 1000, // default
+  duration: 1000,
 })
 
 // scroll cancelled, `callback` never runs
 setTimeout(cancel, 500)
 ```
 
-Enables `Promise`-based, or `async` / `await`-based, scrolling:
+It enables scrolling with `Promise`s, and `async` / `await`:
 
 ```ts
 const scroll = (target: JumpTarget, options: JumpOptions = {}): Promise<void> =>
@@ -215,6 +215,10 @@ await scroll(".target")
 ```
 
 #### duration
+
+```ts
+type JumpDuration = number | ((distance: number) => number)
+```
 
 Scroll over a fixed amount of time by passing in a number of milliseconds (`ms`):
 
@@ -238,7 +242,11 @@ jump(".target", {
 
 #### easing
 
-Provide a custom easing function used for the scroll animation. The `easing` function must:
+```ts
+type JumpEasing = (progress: number) => number
+```
+
+The easing function used for the scroll animation. It must:
 
 1. Accept the progress (`0` to `1`), and
 2. Return the eased progress.
@@ -278,13 +286,19 @@ Useful for:
 
 #### root
 
-The element, or `window`, to scroll.
+```ts
+type JumpRoot = Window | Element
+```
+
+The `window`, or element, that is scrolled.
 
 ```js
 const group = document.querySelector(".group")
+const items = Array.from(group.querySelectorAll(".item"))
 
-// scroll `group` to `item`
-jump(".item", {
+// scrolls `group` horizontally to the 2nd `item`
+jump(items[1], {
+  axis: "x",
   root: group,
 })
 ```
@@ -295,7 +309,15 @@ jump(".item", {
 type JumpCancel = () => void
 ```
 
-A function that can be used to cancel the scroll.
+A function that, when called, stops a scroll-in-progress.
+
+```js
+// start scrolling (default `duration` of 1000ms)
+const cancel = jump(".target")
+
+// cancel scrolling halfway through
+setTimeout(cancel, 500)
+```
 
 ## Error Handling
 
@@ -325,6 +347,8 @@ jump(".no-match")
 
 ## Browser Support
 
+Limiting ECMAScript feature: [Error `cause`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error/cause).
+
 Jump supports the following natively:
 
 - Chrome 93+
@@ -332,8 +356,6 @@ Jump supports the following natively:
 - Firefox 91+
 - Opera 79+
 - Safari 15+
-
-Limiting ECMAScript feature: [Error `cause`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error/cause).
 
 ## License
 
