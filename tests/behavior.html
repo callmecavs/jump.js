@@ -1,0 +1,40 @@
+<!doctype html>
+
+<html lang="en">
+  <head>
+    <style>
+      html {
+        height: 250dvh;
+      }
+    </style>
+  </head>
+
+  <body>
+    <script type="module">
+      import jump from "../dist/index.js"
+
+      const scroll = (target, options) =>
+        new Promise((resolve, reject) => {
+          try {
+            jump(target, {
+              ...options,
+              callback: () => {
+                options?.callback?.()
+                resolve()
+              },
+            })
+          } catch (error) {
+            reject(error)
+          }
+        })
+
+      window.fixtures = {
+        getY: () => window.scrollY,
+        jump,
+        reset: () => window.scrollTo(0, 0),
+        scroll,
+        setY: top => window.scrollTo({ top }),
+      }
+    </script>
+  </body>
+</html>

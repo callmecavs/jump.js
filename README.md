@@ -204,7 +204,7 @@ const scroll = (target: JumpTarget, options: JumpOptions = {}): Promise<void> =>
       jump(target, {
         ...options,
         callback: () => {
-          options.callback?.()
+          options?.callback?.()
           resolve()
         },
       })
