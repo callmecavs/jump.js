@@ -41,8 +41,8 @@
     "build": "tsdown",
     "dev": "tsdown --watch",
     "lint": "eslint --fix . && prettier --write .",
-    "prepublishOnly": "pnpm run lint && pnpm run build",
-    "test": "pnpm exec playwright test --project chromium",
+    "prepublishOnly": "pnpm lint && pnpm build",
+    "test": "pnpm build && pnpm exec playwright test --project chromium",
     "test:server": "python3 -m http.server 3000",
     "typecheck": "tsc --noEmit"
   },
