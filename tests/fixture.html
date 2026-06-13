@@ -1,0 +1,20 @@
+<!doctype html>
+
+<html lang="en">
+  <head>
+    <style></style>
+  </head>
+
+  <body>
+    <script type="module">
+      import jump from "../dist/index.js"
+
+      window.api = {
+        jump,
+        reset: () => {
+          window.scrollTo(0, 0)
+        },
+      }
+    </script>
+  </body>
+</html>
