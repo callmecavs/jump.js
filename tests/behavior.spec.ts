@@ -26,10 +26,16 @@ test.beforeEach(async ({ page }) => {
   await page.waitForFunction(() => window.fixtures !== undefined)
 })
 
-test("target: number", async ({ page }) => {
+test("target: number (positive)", async ({ page }) => {
   await page.evaluate(() => window.fixtures.setWindowY(50))
   await page.evaluate(() => window.fixtures.scroll(100))
   expect(await page.evaluate(() => window.fixtures.getWindowY())).toEqual(150)
+})
+
+test("target: number (negative)", async ({ page }) => {
+  await page.evaluate(() => window.fixtures.setWindowY(150))
+  await page.evaluate(() => window.fixtures.scroll(-100))
+  expect(await page.evaluate(() => window.fixtures.getWindowY())).toEqual(50)
 })
 
 test("target: number ignores offset", async ({ page }) => {
