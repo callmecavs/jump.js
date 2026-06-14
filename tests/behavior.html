@@ -3,13 +3,54 @@
 <html lang="en">
   <head>
     <style>
-      html {
-        height: 250dvh;
+      * {
+        all: unset;
+        display: revert;
+      }
+
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+      }
+
+      .page {
+      }
+
+      .target {
+        height: 25px;
+        background-color: red;
+      }
+
+      .spacer {
+        --height: 400px;
+      }
+
+      .spacer.small {
+        height: calc(var(--height));
+      }
+
+      .spacer.medium {
+        height: calc(2 * var(--height));
+      }
+
+      .spacer.large {
+        height: calc(3 * var(--height));
       }
     </style>
   </head>
 
   <body>
+    <div class="page">
+      <div class="target start"></div>
+      <div class="spacer small"></div>
+      <div class="target element"></div>
+      <div class="spacer medium"></div>
+      <div class="target string"></div>
+      <div class="spacer large"></div>
+      <div class="target end"></div>
+    </div>
+
     <script type="module">
       import jump from "../dist/index.js"
 
