@@ -6,7 +6,7 @@ declare global {
   interface Window {
     fixtures: {
       captureWindowScrollToArgs: () => void
-      getLatestWindowScrollToArgs: () => number
+      getLatestWindowScrollToArgs: () => Array<ScrollToOptions> | undefined
 
       getElement: (selector: string) => Element
       getElementY: (element: Element) => number
