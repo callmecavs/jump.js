@@ -9,6 +9,7 @@ declare global {
       getLatestWindowScrollToArgs: () => number
 
       getWindowY: () => number
+      getWindowYMax: () => number
       setWindowY: (top: number) => void
 
       jump: Jump
@@ -39,4 +40,12 @@ test("target: number is clamped (start)", async ({ page }) => {
   await page.evaluate(() => window.fixtures.captureWindowScrollToArgs())
   await page.evaluate(() => window.fixtures.scroll(-50))
   expect(await page.evaluate(() => window.fixtures.getLatestWindowScrollToArgs())).toEqual([{ top: 0 }])
+})
+
+test("target: number is clamped (end)", async ({ page }) => {
+  const maxY = await page.evaluate(() => window.fixtures.getWindowYMax())
+  await page.evaluate(maxY => window.fixtures.setWindowY(maxY - 25), maxY)
+  await page.evaluate(() => window.fixtures.captureWindowScrollToArgs())
+  await page.evaluate(() => window.fixtures.scroll(50))
+  expect(await page.evaluate(() => window.fixtures.getLatestWindowScrollToArgs())).toEqual([{ top: maxY }])
 })

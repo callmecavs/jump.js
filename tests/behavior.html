@@ -47,6 +47,10 @@
         getLatestWindowScrollToArgs: () => latestWindowScrollToArgs,
 
         getWindowY: () => window.scrollY,
+        getWindowYMax: () => {
+          const root = document.scrollingElement ?? document.documentElement
+          return root.scrollHeight - root.clientHeight
+        },
         setWindowY: top => window.scrollTo({ top }),
 
         jump,
