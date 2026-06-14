@@ -92,7 +92,7 @@
           if (match === null) throw new Error("`getElement` failed, `selector` didn't match.")
           return match
         },
-        getElementY: element => element.getBoundingClientRect().top,
+        getElementY: element => element.getBoundingClientRect().top + window.scrollY,
 
         getWindowY: () => window.scrollY,
         getWindowYMax: () => {
