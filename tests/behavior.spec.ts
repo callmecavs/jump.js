@@ -60,7 +60,7 @@ test("target: element", async ({ page }) => {
   expect(await page.evaluate(() => window.fixtures.getLatestWindowScrollToArgs())).toEqual([{ top: expected }])
 })
 
-test("target: element and offset", async ({ page }) => {
+test("target: element with offset", async ({ page }) => {
   const offset = 50
 
   const expected = await page.evaluate(
@@ -85,7 +85,7 @@ test("target: string", async ({ page }) => {
   expect(await page.evaluate(() => window.fixtures.getLatestWindowScrollToArgs())).toEqual([{ top: expected }])
 })
 
-test("target: string and offset", async ({ page }) => {
+test("target: string with offset", async ({ page }) => {
   const offset = -50
 
   const expected = await page.evaluate(
