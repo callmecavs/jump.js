@@ -8,6 +8,9 @@ declare global {
       captureWindowScrollToArgs: () => void
       getLatestWindowScrollToArgs: () => number
 
+      getElement: (selector: string) => Element
+      getElementY: (element: Element) => number
+
       getWindowY: () => number
       getWindowYMax: () => number
       setWindowY: (top: number) => void

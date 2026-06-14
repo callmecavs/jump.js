@@ -87,6 +87,13 @@
         captureWindowScrollToArgs,
         getLatestWindowScrollToArgs: () => latestWindowScrollToArgs,
 
+        getElement: selector => {
+          const match = document.querySelector(selector)
+          if (match === null) throw new Error("`getElement` failed, `selector` didn't match.")
+          return match
+        },
+        getElementY: element => element.getBoundingClientRect().top,
+
         getWindowY: () => window.scrollY,
         getWindowYMax: () => {
           const root = document.scrollingElement ?? document.documentElement
