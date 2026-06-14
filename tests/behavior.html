@@ -28,12 +28,29 @@
           }
         })
 
+      let latestWindowScrollToArgs
+
+      const captureWindowScrollToArgs = () => {
+        const original = window.scrollTo.bind(window)
+
+        const wrapped = (...args) => {
+          // `[{ left: ... }]` or `[{ top: ... }]` based on `axis`
+          latestWindowScrollToArgs = args
+          original(...args)
+        }
+
+        window.scrollTo = wrapped
+      }
+
       window.fixtures = {
-        getY: () => window.scrollY,
+        captureWindowScrollToArgs,
+        getLatestWindowScrollToArgs: () => latestWindowScrollToArgs,
+
+        getWindowY: () => window.scrollY,
+        setWindowY: top => window.scrollTo({ top }),
+
         jump,
-        reset: () => window.scrollTo(0, 0),
         scroll,
-        setY: top => window.scrollTo({ top }),
       }
     </script>
   </body>
