@@ -52,3 +52,53 @@ test("target: number is clamped (end)", async ({ page }) => {
   await page.evaluate(() => window.fixtures.scroll(50))
   expect(await page.evaluate(() => window.fixtures.getLatestWindowScrollToArgs())).toEqual([{ top: maxY }])
 })
+
+test("target: element", async ({ page }) => {
+  const expected = await page.evaluate(() => window.fixtures.getElementY(window.fixtures.getElement(".target.element")))
+  await page.evaluate(() => window.fixtures.captureWindowScrollToArgs())
+  await page.evaluate(() => window.fixtures.scroll(window.fixtures.getElement(".target.element")))
+  expect(await page.evaluate(() => window.fixtures.getLatestWindowScrollToArgs())).toEqual([{ top: expected }])
+})
+
+test("target: element and offset", async ({ page }) => {
+  const offset = 50
+
+  const expected = await page.evaluate(
+    offset => window.fixtures.getElementY(window.fixtures.getElement(".target.element")) + offset,
+    offset,
+  )
+
+  await page.evaluate(() => window.fixtures.captureWindowScrollToArgs())
+
+  await page.evaluate(
+    offset => window.fixtures.scroll(window.fixtures.getElement(".target.element"), { offset }),
+    offset,
+  )
+
+  expect(await page.evaluate(() => window.fixtures.getLatestWindowScrollToArgs())).toEqual([{ top: expected }])
+})
+
+test("target: string", async ({ page }) => {
+  const expected = await page.evaluate(() => window.fixtures.getElementY(window.fixtures.getElement(".target.string")))
+  await page.evaluate(() => window.fixtures.captureWindowScrollToArgs())
+  await page.evaluate(() => window.fixtures.scroll(".target.string"))
+  expect(await page.evaluate(() => window.fixtures.getLatestWindowScrollToArgs())).toEqual([{ top: expected }])
+})
+
+test("target: string and offset", async ({ page }) => {
+  const offset = -50
+
+  const expected = await page.evaluate(
+    offset => window.fixtures.getElementY(window.fixtures.getElement(".target.string")) + offset,
+    offset,
+  )
+
+  await page.evaluate(() => window.fixtures.captureWindowScrollToArgs())
+
+  await page.evaluate(
+    offset => window.fixtures.scroll(window.fixtures.getElement(".target.string"), { offset }),
+    offset,
+  )
+
+  expect(await page.evaluate(() => window.fixtures.getLatestWindowScrollToArgs())).toEqual([{ top: expected }])
+})
