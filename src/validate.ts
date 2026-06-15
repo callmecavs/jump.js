@@ -20,8 +20,14 @@ export const validateOptions: (options: unknown) => asserts options is JumpOptio
     throw new TypeError(`Expected "callback" to be a function.`)
   }
 
-  if (duration !== undefined && typeof duration !== "number" && typeof duration !== "function") {
-    throw new TypeError(`Expected "duration" to be a number, or function.`)
+  if (duration !== undefined) {
+    if (typeof duration !== "number" && typeof duration !== "function") {
+      throw new TypeError(`Expected "duration" to be a number, or function.`)
+    }
+
+    if (typeof duration === "number" && (!isFinite(duration) || duration < 0)) {
+      throw new TypeError(`Expected "duration" to be a finite, non-negative number.`)
+    }
   }
 
   if (easing !== undefined && typeof easing !== "function") {
