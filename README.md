@@ -216,6 +216,11 @@ const scroll = (target: JumpTarget, options: JumpOptions = {}): Promise<void> =>
 await scroll(".target")
 ```
 
+It runs in the frame after:
+
+- The final `scroll` call
+- The `focus` call, if `a11y` is enabled
+
 #### duration
 
 ```ts
