@@ -18,24 +18,81 @@
       }
 
       .target {
-        height: 25px;
+        height: 24px;
         background-color: red;
       }
 
       .spacer {
-        --height: 400px;
+        --spacer-height: 400px;
       }
 
       .spacer.small {
-        height: calc(var(--height));
+        height: calc(var(--spacer-height));
       }
 
       .spacer.medium {
-        height: calc(2 * var(--height));
+        height: calc(2 * var(--spacer-height));
       }
 
       .spacer.large {
-        height: calc(3 * var(--height));
+        height: calc(3 * var(--spacer-height));
+      }
+
+      .root {
+        --root-width: 240px;
+        --root-height: 240px;
+
+        overflow: scroll;
+        overscroll-behavior: contain;
+        width: var(--root-width);
+        height: var(--root-height);
+        margin-top: 24px;
+        margin-left: 24px;
+      }
+
+      .root-content {
+        position: relative;
+        width: calc(5 * var(--root-width));
+        height: calc(5 * var(--root-height));
+      }
+
+      .root-target {
+        position: absolute;
+        width: 24px;
+        height: 24px;
+        background-color: red;
+      }
+
+      .root-target-x {
+        top: 24px;
+      }
+
+      .root-target-x.root-target-element {
+        left: var(--root-width);
+      }
+
+      .root-target-x.root-target-string {
+        left: calc(var(--root-width) * 2);
+      }
+
+      .root-target-x.root-target-offset {
+        left: calc(var(--root-width) * 3);
+      }
+
+      .root-target-y {
+        left: 24px;
+      }
+
+      .root-target-y.root-target-element {
+        top: var(--root-height);
+      }
+
+      .root-target-y.root-target-string {
+        top: calc(var(--root-height) * 2);
+      }
+
+      .root-target-y.root-target-offset {
+        top: calc(var(--root-height) * 3);
       }
     </style>
   </head>
@@ -43,11 +100,29 @@
   <body>
     <div class="page">
       <div class="target start"></div>
+
       <div class="spacer small"></div>
+
       <div class="target element"></div>
+
+      <div class="root">
+        <div class="root-content">
+          <div class="root-target root-target-x root-target-element"></div>
+          <div class="root-target root-target-x root-target-string"></div>
+          <div class="root-target root-target-x root-target-offset"></div>
+
+          <div class="root-target root-target-y root-target-element"></div>
+          <div class="root-target root-target-y root-target-string"></div>
+          <div class="root-target root-target-y root-target-offset"></div>
+        </div>
+      </div>
+
       <div class="spacer medium"></div>
+
       <div class="target string"></div>
+
       <div class="spacer large"></div>
+
       <div class="target end"></div>
     </div>
 
