@@ -75,7 +75,7 @@
         left: calc(var(--root-width) * 2);
       }
 
-      .root-target-x.root-target-offset {
+      .root-target-x.root-offset {
         left: calc(var(--root-width) * 3);
       }
 
@@ -91,7 +91,7 @@
         top: calc(var(--root-height) * 2);
       }
 
-      .root-target-y.root-target-offset {
+      .root-target-y.root-offset {
         top: calc(var(--root-height) * 3);
       }
     </style>
@@ -105,15 +105,15 @@
 
       <div class="target element"></div>
 
-      <div class="root">
+      <div class="root" data-root>
         <div class="root-content">
-          <div class="root-target root-target-x root-target-element"></div>
-          <div class="root-target root-target-x root-target-string"></div>
-          <div class="root-target root-target-x root-target-offset"></div>
+          <div class="root-target root-target-x root-target-element" data-root-x-element></div>
+          <div class="root-target root-target-x root-target-string" data-root-x-string></div>
+          <div class="root-target root-target-x root-offset" data-root-x-offset></div>
 
-          <div class="root-target root-target-y root-target-element"></div>
-          <div class="root-target root-target-y root-target-string"></div>
-          <div class="root-target root-target-y root-target-offset"></div>
+          <div class="root-target root-target-y root-target-element" data-root-y-element></div>
+          <div class="root-target root-target-y root-target-string" data-root-y-string></div>
+          <div class="root-target root-target-y root-offset" data-root-y-offset></div>
         </div>
       </div>
 
@@ -164,7 +164,8 @@
 
         getElement: selector => {
           const match = document.querySelector(selector)
-          if (match === null) throw new Error("`getElement` failed, `selector` didn't match.")
+          if (match === null) throw new Error("`getElement` failed: `selector` didn't match.")
+          if (!(match instanceof HTMLElement)) throw new Error("`getElement` failed: match isn't an `HTMLElement`.")
           return match
         },
         getElementY: element => element.getBoundingClientRect().top + window.scrollY,
