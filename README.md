@@ -325,7 +325,7 @@ const cancel = jump(".target")
 setTimeout(cancel, 500)
 ```
 
-Conflicting scrolls are not internally managed by the library. Use this `cancel` function to prevent / manage them.
+Conflicting scrolls are not handled by the library. Use this `cancel` function to prevent / manage them.
 
 ## Error Handling
 
