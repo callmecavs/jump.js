@@ -67,6 +67,10 @@
         top: 24px;
       }
 
+      .root-target-x.root-clamp-start {
+        left: -24px;
+      }
+
       .root-target-x.root-target-element {
         left: var(--root-width);
       }
@@ -79,8 +83,16 @@
         left: calc(var(--root-width) * 3);
       }
 
+      .root-target-x.root-clamp-end {
+        left: calc(100% + 24px);
+      }
+
       .root-target-y {
         left: 24px;
+      }
+
+      .root-target-y.root-clamp-start {
+        top: -24px;
       }
 
       .root-target-y.root-target-element {
@@ -93,6 +105,10 @@
 
       .root-target-y.root-offset {
         top: calc(var(--root-height) * 3);
+      }
+
+      .root-target-y.root-clamp-end {
+        top: calc(100% + 24px);
       }
     </style>
   </head>
@@ -107,13 +123,17 @@
 
       <div class="root" data-root>
         <div class="root-content">
+          <div class="root-target root-target-x root-clamp-start" data-root-x-clamp-start></div>
           <div class="root-target root-target-x root-target-element" data-root-x-element></div>
           <div class="root-target root-target-x root-target-string" data-root-x-string></div>
           <div class="root-target root-target-x root-offset" data-root-x-offset></div>
+          <div class="root-target root-target-x root-clamp-end" data-root-x-clamp-end></div>
 
+          <div class="root-target root-target-y root-clamp-start" data-root-y-clamp-start></div>
           <div class="root-target root-target-y root-target-element" data-root-y-element></div>
           <div class="root-target root-target-y root-target-string" data-root-y-string></div>
           <div class="root-target root-target-y root-offset" data-root-y-offset></div>
+          <div class="root-target root-target-y root-clamp-end" data-root-y-clamp-end></div>
         </div>
       </div>
 
@@ -144,6 +164,20 @@
           }
         })
 
+      let latestElementScrollToArgs
+
+      const captureElementScrollToArgs = element => {
+        const original = element.scrollTo.bind(element)
+
+        const wrapped = (...args) => {
+          // `[{ left: ... }]` or `[{ top: ... }]` based on `axis`
+          latestElementScrollToArgs = args
+          original(...args)
+        }
+
+        element.scrollTo = wrapped
+      }
+
       let latestWindowScrollToArgs
 
       const captureWindowScrollToArgs = () => {
@@ -159,6 +193,9 @@
       }
 
       window.fixtures = {
+        captureElementScrollToArgs,
+        getLatestElementScrollToArgs: () => latestElementScrollToArgs,
+
         captureWindowScrollToArgs,
         getLatestWindowScrollToArgs: () => latestWindowScrollToArgs,
 
@@ -168,7 +205,9 @@
           if (!(match instanceof HTMLElement)) throw new Error("`getElement` failed: match isn't an `HTMLElement`.")
           return match
         },
+        getElementXMax: element => element.scrollWidth - element.clientWidth,
         getElementY: element => element.getBoundingClientRect().top + window.scrollY,
+        getElementYMax: element => element.scrollHeight - element.clientHeight,
 
         getWindowY: () => window.scrollY,
         getWindowYMax: () => {
