@@ -123,7 +123,7 @@ type JumpRoot = Window | Element
 
 Customize the scroll behavior by passing in an `options` object.
 
-All `options` have a sensible default:
+All `options` have sensible defaults:
 
 ```ts
 const defaults: JumpOptions = {
@@ -324,6 +324,8 @@ const cancel = jump(".target")
 // cancel scrolling halfway through
 setTimeout(cancel, 500)
 ```
+
+Conflicting scrolls are not internally managed by the library. Use this `cancel` function to prevent / manage them.
 
 ## Error Handling
 
