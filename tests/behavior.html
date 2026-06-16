@@ -205,16 +205,18 @@
           if (!(match instanceof HTMLElement)) throw new Error("`getElement` failed: match isn't an `HTMLElement`.")
           return match
         },
-        getElementXMax: element => element.scrollWidth - element.clientWidth,
         getElementY: element => element.getBoundingClientRect().top + window.scrollY,
-        getElementYMax: element => element.scrollHeight - element.clientHeight,
+
+        getElementScrollXMax: element => element.scrollWidth - element.clientWidth,
+        getElementScrollYMax: element => element.scrollHeight - element.clientHeight,
 
         getWindowY: () => window.scrollY,
-        getWindowYMax: () => {
+        setWindowY: top => window.scrollTo({ top }),
+
+        getWindowScrollYMax: () => {
           const root = document.scrollingElement ?? document.documentElement
           return root.scrollHeight - root.clientHeight
         },
-        setWindowY: top => window.scrollTo({ top }),
 
         jump,
         scroll,

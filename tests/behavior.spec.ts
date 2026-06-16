@@ -5,15 +5,22 @@ import type { Jump, JumpOptions, JumpTarget } from "../src/types"
 declare global {
   interface Window {
     fixtures: {
+      captureElementScrollToArgs: (element: HTMLElement) => void
+      getLatestElementScrollToArgs: () => Array<ScrollToOptions> | undefined
+
       captureWindowScrollToArgs: () => void
       getLatestWindowScrollToArgs: () => Array<ScrollToOptions> | undefined
 
       getElement: (selector: string) => HTMLElement
       getElementY: (element: HTMLElement) => number
 
+      getElementScrollXMax: (element: HTMLElement) => number
+      getElementScrollYMax: (element: HTMLElement) => number
+
       getWindowY: () => number
-      getWindowYMax: () => number
       setWindowY: (top: number) => void
+
+      getWindowScrollYMax: () => number
 
       jump: Jump
       scroll: (target: JumpTarget, options?: JumpOptions) => Promise<void>
@@ -52,7 +59,7 @@ test("target: number is clamped (start)", async ({ page }) => {
 })
 
 test("target: number is clamped (end)", async ({ page }) => {
-  const maxY = await page.evaluate(() => window.fixtures.getWindowYMax())
+  const maxY = await page.evaluate(() => window.fixtures.getWindowScrollYMax())
   await page.evaluate(maxY => window.fixtures.setWindowY(maxY - 25), maxY)
   await page.evaluate(() => window.fixtures.captureWindowScrollToArgs())
   await page.evaluate(() => window.fixtures.scroll(50))
@@ -91,7 +98,7 @@ test("target: element is clamped (start)", async ({ page }) => {
 })
 
 test("target: element is clamped (end)", async ({ page }) => {
-  const maxY = await page.evaluate(() => window.fixtures.getWindowYMax())
+  const maxY = await page.evaluate(() => window.fixtures.getWindowScrollYMax())
   await page.evaluate(() => window.fixtures.captureWindowScrollToArgs())
   await page.evaluate(() => window.fixtures.scroll(window.fixtures.getElement(".target.end")))
   expect(await page.evaluate(() => window.fixtures.getLatestWindowScrollToArgs())).toEqual([{ top: maxY }])
@@ -124,7 +131,7 @@ test("target: string is clamped (start)", async ({ page }) => {
 })
 
 test("target: string is clamped (end)", async ({ page }) => {
-  const maxY = await page.evaluate(() => window.fixtures.getWindowYMax())
+  const maxY = await page.evaluate(() => window.fixtures.getWindowScrollYMax())
   await page.evaluate(() => window.fixtures.captureWindowScrollToArgs())
   await page.evaluate(() => window.fixtures.scroll(".target.end"))
   expect(await page.evaluate(() => window.fixtures.getLatestWindowScrollToArgs())).toEqual([{ top: maxY }])
@@ -167,6 +174,30 @@ test("root: element, axis: x, with offset", async ({ page }) => {
   }, offset)
 
   expect(await page.evaluate(() => window.fixtures.getElement("[data-root]").scrollLeft)).toEqual(expected)
+})
+
+test("root: element, axis: x, is clamped (start)", async ({ page }) => {
+  await page.evaluate(async () => {
+    const root = window.fixtures.getElement("[data-root]")
+    await window.fixtures.scroll("[data-root-x-clamp-start]", { axis: "x", root })
+  })
+
+  expect(await page.evaluate(() => window.fixtures.getElement("[data-root]").scrollLeft)).toEqual(0)
+})
+
+test("root: element, axis: x, is clamped (end)", async ({ page }) => {
+  const expected = await page.evaluate(async () =>
+    window.fixtures.getElementScrollXMax(window.fixtures.getElement("[data-root]")),
+  )
+
+  await page.evaluate(async () => window.fixtures.captureElementScrollToArgs(window.fixtures.getElement("[data-root]")))
+
+  await page.evaluate(async () => {
+    const root = window.fixtures.getElement("[data-root]")
+    await window.fixtures.scroll("[data-root-x-clamp-end]", { axis: "x", root })
+  })
+
+  expect(await page.evaluate(() => window.fixtures.getLatestElementScrollToArgs())).toEqual([{ left: expected }])
 })
 
 test("root: element, axis: y, target: element", async ({ page }) => {
@@ -230,4 +261,28 @@ test("axis: y, doesn't mutate other axis", async ({ page }) => {
   }, x)
 
   expect(await page.evaluate(() => window.fixtures.getElement("[data-root]").scrollLeft)).toEqual(x)
+})
+
+test("root: element, axis: y, is clamped (start)", async ({ page }) => {
+  await page.evaluate(async () => {
+    const root = window.fixtures.getElement("[data-root]")
+    await window.fixtures.scroll("[data-root-y-clamp-start]", { root })
+  })
+
+  expect(await page.evaluate(() => window.fixtures.getElement("[data-root]").scrollTop)).toEqual(0)
+})
+
+test("root: element, axis: y, is clamped (end)", async ({ page }) => {
+  const expected = await page.evaluate(async () =>
+    window.fixtures.getElementScrollYMax(window.fixtures.getElement("[data-root]")),
+  )
+
+  await page.evaluate(async () => window.fixtures.captureElementScrollToArgs(window.fixtures.getElement("[data-root]")))
+
+  await page.evaluate(async () => {
+    const root = window.fixtures.getElement("[data-root]")
+    await window.fixtures.scroll("[data-root-y-clamp-end]", { root })
+  })
+
+  expect(await page.evaluate(() => window.fixtures.getLatestElementScrollToArgs())).toEqual([{ top: expected }])
 })
