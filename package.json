@@ -40,9 +40,10 @@
   "scripts": {
     "build": "tsdown",
     "dev": "tsdown --watch",
-    "lint": "eslint --fix . && prettier --write .",
-    "prepublishOnly": "pnpm lint && pnpm build",
-    "test": "pnpm build && pnpm exec playwright test --project chromium",
+    "lint:check": "eslint . && prettier --check .",
+    "lint:fix": "eslint --fix . && prettier --write .",
+    "prepublishOnly": "pnpm test",
+    "test": "pnpm lint:check && pnpm typecheck && pnpm build && pnpm exec playwright test --project chromium",
     "test:report": "pnpm exec playwright show-report",
     "test:server": "python3 -m http.server 3000",
     "typecheck": "tsc --noEmit"
