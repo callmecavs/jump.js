@@ -167,6 +167,7 @@ test("target: string", async ({ page }) => {
 test("target: string with offset", async ({ page }) => {
   const { actual, expected } = await page.evaluate(async () => {
     const offset = -50
+
     window.fixtures.captureWindowScrollToArgs()
     await window.fixtures.scroll("[data-target-string]", { offset })
 
@@ -226,7 +227,7 @@ test("root: element, axis: x, target: string", async ({ page }) => {
     await window.fixtures.scroll("[data-root-x-string]", { axis: "x", root })
 
     return {
-      actual: window.fixtures.getElement("[data-root]").scrollLeft,
+      actual: root.scrollLeft,
       expected: window.fixtures.getElement("[data-root-x-string]").offsetLeft,
     }
   })
@@ -243,7 +244,7 @@ test("root: element, axis: x, with offset", async ({ page }) => {
     await window.fixtures.scroll(target, { axis: "x", offset, root })
 
     return {
-      actual: window.fixtures.getElement("[data-root]").scrollLeft,
+      actual: root.scrollLeft,
       expected: target.offsetLeft + offset,
     }
   })
@@ -252,114 +253,137 @@ test("root: element, axis: x, with offset", async ({ page }) => {
 })
 
 test("root: element, axis: x, is clamped (start)", async ({ page }) => {
-  await page.evaluate(async () => {
-    const root = window.fixtures.getElement("[data-root]")
-    await window.fixtures.scroll("[data-root-x-clamp-start]", { axis: "x", root })
-  })
-
-  expect(await page.evaluate(() => window.fixtures.getElement("[data-root]").scrollLeft)).toEqual(0)
+  expect(
+    await page.evaluate(async () => {
+      const root = window.fixtures.getElement("[data-root]")
+      await window.fixtures.scroll("[data-root-x-clamp-start]", { axis: "x", root })
+      return root.scrollLeft
+    }),
+  ).toEqual(0)
 })
 
 test("root: element, axis: x, is clamped (end)", async ({ page }) => {
-  const expected = await page.evaluate(async () =>
-    window.fixtures.getElementScrollXMax(window.fixtures.getElement("[data-root]")),
-  )
-
-  await page.evaluate(async () => window.fixtures.captureElementScrollToArgs(window.fixtures.getElement("[data-root]")))
-
-  await page.evaluate(async () => {
+  const { actual, expected } = await page.evaluate(async () => {
     const root = window.fixtures.getElement("[data-root]")
+
+    window.fixtures.captureElementScrollToArgs(root)
     await window.fixtures.scroll("[data-root-x-clamp-end]", { axis: "x", root })
+
+    return {
+      actual: window.fixtures.getLatestElementScrollToArgs(),
+      expected: window.fixtures.getElementScrollXMax(root),
+    }
   })
 
-  expect(await page.evaluate(() => window.fixtures.getLatestElementScrollToArgs())).toEqual([{ left: expected }])
+  expect(actual).toEqual([{ left: expected }])
 })
 
 test("root: element, axis: x, doesn't mutate other axis", async ({ page }) => {
-  const y = 24
-
-  await page.evaluate(async y => {
+  const { actual, expected } = await page.evaluate(async () => {
     const root = window.fixtures.getElement("[data-root]")
+    const y = 24
+
     root.scrollTo({ top: y })
     await window.fixtures.scroll("[data-root-x-string]", { axis: "x", root })
-  }, y)
 
-  expect(await page.evaluate(() => window.fixtures.getElement("[data-root]").scrollTop)).toEqual(y)
+    return {
+      actual: root.scrollTop,
+      expected: y,
+    }
+  })
+
+  expect(actual).toEqual(expected)
 })
 
 test("root: element, axis: y, target: element", async ({ page }) => {
-  const expected = await page.evaluate(() => window.fixtures.getElement("[data-root-y-element]").offsetTop)
-
-  await page.evaluate(async () => {
-    const target = window.fixtures.getElement("[data-root-y-element]")
+  const { actual, expected } = await page.evaluate(async () => {
     const root = window.fixtures.getElement("[data-root]")
+    const target = window.fixtures.getElement("[data-root-y-element]")
+
     await window.fixtures.scroll(target, { root })
+
+    return {
+      actual: root.scrollTop,
+      expected: target.offsetTop,
+    }
   })
 
-  expect(await page.evaluate(() => window.fixtures.getElement("[data-root]").scrollTop)).toEqual(expected)
+  expect(actual).toEqual(expected)
 })
 
 test("root: element, axis: y, target: string", async ({ page }) => {
-  const expected = await page.evaluate(() => window.fixtures.getElement("[data-root-y-string]").offsetTop)
-
-  await page.evaluate(async () => {
+  const { actual, expected } = await page.evaluate(async () => {
     const root = window.fixtures.getElement("[data-root]")
+
     await window.fixtures.scroll("[data-root-y-string]", { root })
+
+    return {
+      actual: root.scrollTop,
+      expected: window.fixtures.getElement("[data-root-y-string]").offsetTop,
+    }
   })
 
-  expect(await page.evaluate(() => window.fixtures.getElement("[data-root]").scrollTop)).toEqual(expected)
+  expect(actual).toEqual(expected)
 })
 
 test("root: element, axis: y, with offset", async ({ page }) => {
-  const offset = 24
-
-  const expected = await page.evaluate(
-    offset => window.fixtures.getElement("[data-root-y-offset]").offsetTop + offset,
-    offset,
-  )
-
-  await page.evaluate(async offset => {
+  const { actual, expected } = await page.evaluate(async () => {
+    const offset = 24
     const root = window.fixtures.getElement("[data-root]")
-    await window.fixtures.scroll("[data-root-y-offset]", { offset, root })
-  }, offset)
+    const target = window.fixtures.getElement("[data-root-y-offset]")
 
-  expect(await page.evaluate(() => window.fixtures.getElement("[data-root]").scrollTop)).toEqual(expected)
+    await window.fixtures.scroll(target, { offset, root })
+
+    return {
+      actual: root.scrollTop,
+      expected: target.offsetTop + offset,
+    }
+  })
+
+  expect(actual).toEqual(expected)
 })
 
 test("root: element, axis: y, is clamped (start)", async ({ page }) => {
-  await page.evaluate(async () => {
-    const root = window.fixtures.getElement("[data-root]")
-    await window.fixtures.scroll("[data-root-y-clamp-start]", { root })
-  })
-
-  expect(await page.evaluate(() => window.fixtures.getElement("[data-root]").scrollTop)).toEqual(0)
+  expect(
+    await page.evaluate(async () => {
+      const root = window.fixtures.getElement("[data-root]")
+      await window.fixtures.scroll("[data-root-y-clamp-start]", { root })
+      return root.scrollTop
+    }),
+  ).toEqual(0)
 })
 
 test("root: element, axis: y, is clamped (end)", async ({ page }) => {
-  const expected = await page.evaluate(async () =>
-    window.fixtures.getElementScrollYMax(window.fixtures.getElement("[data-root]")),
-  )
-
-  await page.evaluate(async () => window.fixtures.captureElementScrollToArgs(window.fixtures.getElement("[data-root]")))
-
-  await page.evaluate(async () => {
+  const { actual, expected } = await page.evaluate(async () => {
     const root = window.fixtures.getElement("[data-root]")
+
+    window.fixtures.captureElementScrollToArgs(root)
     await window.fixtures.scroll("[data-root-y-clamp-end]", { root })
+
+    return {
+      actual: window.fixtures.getLatestElementScrollToArgs(),
+      expected: window.fixtures.getElementScrollYMax(root),
+    }
   })
 
-  expect(await page.evaluate(() => window.fixtures.getLatestElementScrollToArgs())).toEqual([{ top: expected }])
+  expect(actual).toEqual([{ top: expected }])
 })
 
 test("root: element, axis: y, doesn't mutate other axis", async ({ page }) => {
-  const x = 24
-
-  await page.evaluate(async x => {
+  const { actual, expected } = await page.evaluate(async () => {
     const root = window.fixtures.getElement("[data-root]")
+    const x = 24
+
     root.scrollTo({ left: x })
     await window.fixtures.scroll("[data-root-y-string]", { root })
-  }, x)
 
-  expect(await page.evaluate(() => window.fixtures.getElement("[data-root]").scrollLeft)).toEqual(x)
+    return {
+      actual: root.scrollLeft,
+      expected: x,
+    }
+  })
+
+  expect(actual).toEqual(expected)
 })
 
 test("a11y: falsy", async ({ page }) => {
