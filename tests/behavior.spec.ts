@@ -348,3 +348,25 @@ test("a11y, preserves pre-existing tabindex", async ({ page }) => {
   ).toEqual(true)
 })
 
+test("a11y, temporary tabindex is added and removed", async ({ page }) => {
+  expect(
+    await page.evaluate(async () => {
+      const sentinel = window.fixtures.getElement("[data-focus]")
+
+      await window.fixtures.scroll(sentinel, { a11y: true })
+      const wasAdded = sentinel.getAttribute("tabindex") === "-1"
+
+      sentinel.blur()
+      const wasRemoved = sentinel.getAttribute("tabindex") === null
+
+      return {
+        wasAdded,
+        wasRemoved,
+      }
+    }),
+  ).toEqual({
+    wasAdded: true,
+    wasRemoved: true,
+  })
+})
+
