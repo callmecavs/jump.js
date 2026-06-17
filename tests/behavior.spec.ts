@@ -287,7 +287,31 @@ test("root: element, axis: y, doesn't mutate other axis", async ({ page }) => {
   expect(await page.evaluate(() => window.fixtures.getElement("[data-root]").scrollLeft)).toEqual(x)
 })
 
-test("a11y, target: element", async ({ page }) => {
+test("a11y: falsy", async ({ page }) => {
+  expect(
+    await page.evaluate(async () => {
+      const sentinel = window.fixtures.getElement("[data-focus-button]")
+
+      sentinel.focus({ preventScroll: true })
+      await window.fixtures.scroll("[data-focus]", { a11y: false })
+      const whenExplicit = sentinel === document.activeElement
+
+      sentinel.focus({ preventScroll: true })
+      await window.fixtures.scroll("[data-focus]")
+      const whenOmitted = sentinel === document.activeElement
+
+      return {
+        whenExplicit,
+        whenOmitted,
+      }
+    }),
+  ).toEqual({
+    whenExplicit: true,
+    whenOmitted: true,
+  })
+})
+
+test("a11y: true, target: element", async ({ page }) => {
   await page.evaluate(async () => {
     const root = window.fixtures.getElement("[data-focus]")
     const target = window.fixtures.getElement("[data-focus-element]")
@@ -303,7 +327,7 @@ test("a11y, target: element", async ({ page }) => {
   ).toEqual(true)
 })
 
-test("a11y, target: string", async ({ page }) => {
+test("a11y: true, target: string", async ({ page }) => {
   await page.evaluate(async () => {
     const root = window.fixtures.getElement("[data-focus]")
     await window.fixtures.scroll("[data-focus-string]", { a11y: true, root })
@@ -318,7 +342,7 @@ test("a11y, target: string", async ({ page }) => {
   ).toEqual(true)
 })
 
-test("a11y, target: number doesn't change focus", async ({ page }) => {
+test("a11y: true, target: number doesn't change focus", async ({ page }) => {
   expect(
     await page.evaluate(async () => {
       const sentinel = window.fixtures.getElement("[data-focus-button]")
@@ -332,7 +356,7 @@ test("a11y, target: number doesn't change focus", async ({ page }) => {
   ).toEqual(true)
 })
 
-test("a11y, preserves pre-existing tabindex", async ({ page }) => {
+test("a11y: true, preserves pre-existing tabindex", async ({ page }) => {
   expect(
     await page.evaluate(async () => {
       const expected = 10
@@ -348,7 +372,7 @@ test("a11y, preserves pre-existing tabindex", async ({ page }) => {
   ).toEqual(true)
 })
 
-test("a11y, temporary tabindex is added and removed", async ({ page }) => {
+test("a11y: true, temporary tabindex is added and removed", async ({ page }) => {
   expect(
     await page.evaluate(async () => {
       const sentinel = window.fixtures.getElement("[data-focus]")
@@ -369,4 +393,3 @@ test("a11y, temporary tabindex is added and removed", async ({ page }) => {
     wasRemoved: true,
   })
 })
-
