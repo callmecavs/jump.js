@@ -60,8 +60,11 @@ const jump: Jump = (rawTarget, options = {}) => {
       const needTabIndex = !target.hasAttribute("tabindex") && target.tabIndex < 0
 
       if (needTabIndex) target.setAttribute("tabindex", "-1")
+
       target.focus({ preventScroll: true })
-      if (needTabIndex) target.removeAttribute("tabindex")
+
+      // Removing `tabindex` also removes `focus`. Wait until until the user changes the `focus` to do it.
+      if (needTabIndex) target.addEventListener("blur", () => target.removeAttribute("tabindex"), { once: true })
     }
 
     // If we made it here, and the `callback` exists:

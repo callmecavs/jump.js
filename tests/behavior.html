@@ -38,25 +38,31 @@
         height: calc(3 * var(--spacer-height));
       }
 
-      .root {
-        --root-width: 240px;
-        --root-height: 240px;
+      .sandbox {
+        --sandbox-width: 240px;
+        --sandbox-height: 240px;
 
         overflow: scroll;
         overscroll-behavior: contain;
-        width: var(--root-width);
-        height: var(--root-height);
+        width: var(--sandbox-width);
+        height: var(--sandbox-height);
         margin-top: 24px;
         margin-left: 24px;
       }
 
-      .root-content {
+      .sandbox-content {
         position: relative;
-        width: calc(5 * var(--root-width));
-        height: calc(5 * var(--root-height));
       }
 
-      .root-target {
+      .sandbox-content-x {
+        width: calc(5 * var(--sandbox-width));
+      }
+
+      .sandbox-content-y {
+        height: calc(5 * var(--sandbox-height));
+      }
+
+      .sandbox-target {
         position: absolute;
         width: 24px;
         height: 24px;
@@ -72,15 +78,15 @@
       }
 
       .root-target-x.root-target-element {
-        left: var(--root-width);
+        left: var(--sandbox-width);
       }
 
       .root-target-x.root-target-string {
-        left: calc(var(--root-width) * 2);
+        left: calc(var(--sandbox-width) * 2);
       }
 
       .root-target-x.root-offset {
-        left: calc(var(--root-width) * 3);
+        left: calc(var(--sandbox-width) * 3);
       }
 
       .root-target-x.root-clamp-end {
@@ -96,19 +102,31 @@
       }
 
       .root-target-y.root-target-element {
-        top: var(--root-height);
+        top: var(--sandbox-height);
       }
 
       .root-target-y.root-target-string {
-        top: calc(var(--root-height) * 2);
+        top: calc(var(--sandbox-height) * 2);
       }
 
       .root-target-y.root-offset {
-        top: calc(var(--root-height) * 3);
+        top: calc(var(--sandbox-height) * 3);
       }
 
       .root-target-y.root-clamp-end {
         top: calc(100% + 24px);
+      }
+
+      .focus-target-y {
+        left: 24px;
+      }
+
+      .focus-target-element {
+        top: var(--sandbox-height);
+      }
+
+      .focus-target-string {
+        top: calc(var(--sandbox-height) * 2);
       }
     </style>
   </head>
@@ -121,25 +139,32 @@
 
       <div class="target element"></div>
 
-      <div class="root" data-root>
-        <div class="root-content">
-          <div class="root-target root-target-x root-clamp-start" data-root-x-clamp-start></div>
-          <div class="root-target root-target-x root-target-element" data-root-x-element></div>
-          <div class="root-target root-target-x root-target-string" data-root-x-string></div>
-          <div class="root-target root-target-x root-offset" data-root-x-offset></div>
-          <div class="root-target root-target-x root-clamp-end" data-root-x-clamp-end></div>
+      <div class="sandbox" data-root>
+        <div class="sandbox-content sandbox-content-x sandbox-content-y">
+          <div class="sandbox-target root-target-x root-clamp-start" data-root-x-clamp-start></div>
+          <div class="sandbox-target root-target-x root-target-element" data-root-x-element></div>
+          <div class="sandbox-target root-target-x root-target-string" data-root-x-string></div>
+          <div class="sandbox-target root-target-x root-offset" data-root-x-offset></div>
+          <div class="sandbox-target root-target-x root-clamp-end" data-root-x-clamp-end></div>
 
-          <div class="root-target root-target-y root-clamp-start" data-root-y-clamp-start></div>
-          <div class="root-target root-target-y root-target-element" data-root-y-element></div>
-          <div class="root-target root-target-y root-target-string" data-root-y-string></div>
-          <div class="root-target root-target-y root-offset" data-root-y-offset></div>
-          <div class="root-target root-target-y root-clamp-end" data-root-y-clamp-end></div>
+          <div class="sandbox-target root-target-y root-clamp-start" data-root-y-clamp-start></div>
+          <div class="sandbox-target root-target-y root-target-element" data-root-y-element></div>
+          <div class="sandbox-target root-target-y root-target-string" data-root-y-string></div>
+          <div class="sandbox-target root-target-y root-offset" data-root-y-offset></div>
+          <div class="sandbox-target root-target-y root-clamp-end" data-root-y-clamp-end></div>
         </div>
       </div>
 
       <div class="spacer medium"></div>
 
       <div class="target string"></div>
+
+      <div class="sandbox" data-focus>
+        <div class="sandbox-content sandbox-content-y">
+          <div class="sandbox-target focus-target-y focus-target-element" data-focus-element></div>
+          <div class="sandbox-target focus-target-y focus-target-string" data-focus-string></div>
+        </div>
+      </div>
 
       <div class="spacer large"></div>
 
