@@ -318,31 +318,22 @@ test("a11y: falsy", async ({ page }) => {
 })
 
 test("a11y: true, target: element", async ({ page }) => {
-  await page.evaluate(async () => {
-    const root = window.fixtures.getElement("[data-focus]")
-    const target = window.fixtures.getElement("[data-focus-element]")
-    await window.fixtures.scroll(target, { a11y: true, root })
-  })
-
   expect(
-    await page.evaluate(() => {
-      // elements can't be serialized, so compare them here
+    await page.evaluate(async () => {
+      const root = window.fixtures.getElement("[data-focus]")
       const target = window.fixtures.getElement("[data-focus-element]")
+      await window.fixtures.scroll(target, { a11y: true, root })
       return target === document.activeElement
     }),
   ).toEqual(true)
 })
 
 test("a11y: true, target: string", async ({ page }) => {
-  await page.evaluate(async () => {
-    const root = window.fixtures.getElement("[data-focus]")
-    await window.fixtures.scroll("[data-focus-string]", { a11y: true, root })
-  })
-
   expect(
-    await page.evaluate(() => {
-      // elements can't be serialized, so compare them here
+    await page.evaluate(async () => {
+      const root = window.fixtures.getElement("[data-focus]")
       const target = window.fixtures.getElement("[data-focus-string]")
+      await window.fixtures.scroll("[data-focus-string]", { a11y: true, root })
       return target === document.activeElement
     }),
   ).toEqual(true)
