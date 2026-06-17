@@ -317,3 +317,17 @@ test("a11y, target: string", async ({ page }) => {
     }),
   ).toEqual(true)
 })
+
+test("a11y, target: number doesn't change focus", async ({ page }) => {
+  expect(
+    await page.evaluate(async () => {
+      const sentinel = window.fixtures.getElement("[data-focus-button]")
+      sentinel.focus({ preventScroll: true })
+
+      const root = window.fixtures.getElement("[data-focus]")
+      await window.fixtures.scroll(100, { a11y: true, root })
+
+      return sentinel === document.activeElement
+    }),
+  ).toEqual(true)
+})

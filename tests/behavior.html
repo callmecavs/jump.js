@@ -128,6 +128,21 @@
       .focus-target-string {
         top: calc(var(--sandbox-height) * 2);
       }
+
+      .focus-button {
+        display: block;
+        border: 1px solid red;
+        padding: 12px 24px;
+        margin-top: 24px;
+        margin-left: 24px;
+      }
+
+      .focus-button:focus {
+        outline-width: 1px;
+        outline-style: solid;
+        outline-color: blue;
+        outline-offset: 2px;
+      }
     </style>
   </head>
 
@@ -163,6 +178,7 @@
         <div class="sandbox-content sandbox-content-y">
           <div class="sandbox-target focus-target-y focus-target-element" data-focus-element></div>
           <div class="sandbox-target focus-target-y focus-target-string" data-focus-string></div>
+          <button class="focus-button" type="button" data-focus-button>Focus Button</button>
         </div>
       </div>
 
