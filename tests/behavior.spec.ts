@@ -331,3 +331,20 @@ test("a11y, target: number doesn't change focus", async ({ page }) => {
     }),
   ).toEqual(true)
 })
+
+test("a11y, preserves pre-existing tabindex", async ({ page }) => {
+  expect(
+    await page.evaluate(async () => {
+      const expected = 10
+      const root = window.fixtures.getElement("[data-focus]")
+      const sentinel = window.fixtures.getElement("[data-focus-button]")
+
+      sentinel.setAttribute("tabindex", `${expected}`)
+      await window.fixtures.scroll(sentinel, { a11y: true, root })
+      sentinel.blur()
+
+      return sentinel.hasAttribute("tabindex") && Number(sentinel.getAttribute("tabindex")) === expected
+    }),
+  ).toEqual(true)
+})
+
