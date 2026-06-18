@@ -513,7 +513,7 @@ test("error: target is wrong type", async ({ page }) => {
   expect(
     await page.evaluate(() => {
       try {
-        // @ts-expect-error Runtime validation check. Target is purposely invalid.
+        // @ts-expect-error Runtime validation check.
         window.fixtures.jump(null)
       } catch (error) {
         return error instanceof TypeError
@@ -545,6 +545,140 @@ test("error: target selector didn't match", async ({ page }) => {
         window.fixtures.jump(".no-match")
       } catch (error) {
         return error instanceof Error
+      }
+
+      return false
+    }),
+  ).toEqual(true)
+})
+
+test("error: options is wrong type", async ({ page }) => {
+  expect(
+    await page.evaluate(() => {
+      try {
+        // @ts-expect-error Runtime validation check.
+        window.fixtures.jump(".target", null)
+      } catch (error) {
+        return error instanceof TypeError
+      }
+
+      return false
+    }),
+  ).toEqual(true)
+})
+
+test("error: a11y is wrong type", async ({ page }) => {
+  expect(
+    await page.evaluate(() => {
+      try {
+        // @ts-expect-error Runtime validation check.
+        window.fixtures.jump(".target", { a11y: "true" })
+      } catch (error) {
+        return error instanceof TypeError
+      }
+
+      return false
+    }),
+  ).toEqual(true)
+})
+
+test("error: axis is invalid", async ({ page }) => {
+  expect(
+    await page.evaluate(() => {
+      try {
+        // @ts-expect-error Runtime validation check.
+        window.fixtures.jump(".target", { axis: "z" })
+      } catch (error) {
+        return error instanceof TypeError
+      }
+
+      return false
+    }),
+  ).toEqual(true)
+})
+
+test("error: callback is wrong type", async ({ page }) => {
+  expect(
+    await page.evaluate(() => {
+      try {
+        // @ts-expect-error Runtime validation check.
+        window.fixtures.jump(".target", { callback: true })
+      } catch (error) {
+        return error instanceof TypeError
+      }
+
+      return false
+    }),
+  ).toEqual(true)
+})
+
+test("error: duration is wrong type", async ({ page }) => {
+  expect(
+    await page.evaluate(() => {
+      try {
+        // @ts-expect-error Runtime validation check.
+        window.fixtures.jump(".target", { duration: "1000" })
+      } catch (error) {
+        return error instanceof TypeError
+      }
+
+      return false
+    }),
+  ).toEqual(true)
+})
+
+test("error: duration is invalid", async ({ page }) => {
+  expect(
+    await page.evaluate(() => {
+      try {
+        window.fixtures.jump(".target", { duration: -1000 })
+      } catch (error) {
+        return error instanceof TypeError
+      }
+
+      return false
+    }),
+  ).toEqual(true)
+})
+
+test("error: easing is wrong type", async ({ page }) => {
+  expect(
+    await page.evaluate(() => {
+      try {
+        // @ts-expect-error Runtime validation check.
+        window.fixtures.jump(".target", { easing: true })
+      } catch (error) {
+        return error instanceof TypeError
+      }
+
+      return false
+    }),
+  ).toEqual(true)
+})
+
+test("error: offset is wrong type", async ({ page }) => {
+  expect(
+    await page.evaluate(() => {
+      try {
+        // @ts-expect-error Runtime validation check.
+        window.fixtures.jump(".target", { offset: "100" })
+      } catch (error) {
+        return error instanceof TypeError
+      }
+
+      return false
+    }),
+  ).toEqual(true)
+})
+
+test("error: root is wrong type", async ({ page }) => {
+  expect(
+    await page.evaluate(() => {
+      try {
+        // @ts-expect-error Runtime validation check.
+        window.fixtures.jump(".target", { root: true })
+      } catch (error) {
+        return error instanceof TypeError
       }
 
       return false
