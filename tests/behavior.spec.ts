@@ -210,6 +210,22 @@ test("root: window, axis: x, target: string is clamped (end)", async ({ page }) 
   expect(actual).toEqual([{ left: expected }])
 })
 
+test("root: window, axis: x, doesn't mutate other axis", async ({ page }) => {
+  const { actual, expected } = await page.evaluate(async () => {
+    const y = 24
+
+    window.scrollTo({ top: y })
+    await window.fixtures.scroll("[data-window-x-target-string]", { axis: "x" })
+
+    return {
+      actual: window.fixtures.getWindowY(),
+      expected: y,
+    }
+  })
+
+  expect(actual).toEqual(expected)
+})
+
 test("root: window, axis: y, target: number (positive)", async ({ page }) => {
   expect(
     await page.evaluate(async () => {
@@ -381,6 +397,22 @@ test("root: window, axis: y, target: string is clamped (end)", async ({ page }) 
   })
 
   expect(actual).toEqual([{ top: expected }])
+})
+
+test("root: window, axis: y, doesn't mutate other axis", async ({ page }) => {
+  const { actual, expected } = await page.evaluate(async () => {
+    const x = 24
+
+    window.scrollTo({ left: x })
+    await window.fixtures.scroll("[data-window-y-target-string]")
+
+    return {
+      actual: window.fixtures.getWindowX(),
+      expected: x,
+    }
+  })
+
+  expect(actual).toEqual(expected)
 })
 
 test("root: element, axis: x, target: element", async ({ page }) => {
