@@ -277,6 +277,7 @@
           if (!(match instanceof HTMLElement)) throw new Error("`getElement` failed: match isn't an `HTMLElement`.")
           return match
         },
+        getElementX: element => element.getBoundingClientRect().left + window.scrollX,
         getElementY: element => element.getBoundingClientRect().top + window.scrollY,
 
         getElementScrollXMax: element => element.scrollWidth - element.clientWidth,

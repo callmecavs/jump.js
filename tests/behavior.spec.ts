@@ -12,6 +12,7 @@ declare global {
       getLatestWindowScrollToArgs: () => Array<ScrollToOptions> | undefined
 
       getElement: (selector: string) => HTMLElement
+      getElementX: (element: HTMLElement) => number
       getElementY: (element: HTMLElement) => number
 
       getElementScrollXMax: (element: HTMLElement) => number
@@ -22,6 +23,7 @@ declare global {
       setWindowX: (left: number) => void
       setWindowY: (top: number) => void
 
+      getWindowScrollXMax: () => number
       getWindowScrollYMax: () => number
 
       jump: Jump
