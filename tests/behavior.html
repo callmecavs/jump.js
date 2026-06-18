@@ -14,12 +14,38 @@
         box-sizing: border-box;
       }
 
+      body {
+        width: 200dvw;
+      }
+
       .page {
       }
 
-      .target {
+      .page-target {
+        width: 24px;
         height: 24px;
         background-color: red;
+      }
+
+      .page-target-x {
+        position: absolute;
+        top: 0;
+      }
+
+      .page-target-x.page-target-start {
+        left: 0;
+      }
+
+      .page-target-x.page-target-element {
+        left: 25dvw;
+      }
+
+      .page-target-x.page-target-string {
+        left: 75dvw;
+      }
+
+      .page-target-x.page-target-end {
+        left: 100dvw;
       }
 
       .spacer {
@@ -148,7 +174,12 @@
 
   <body>
     <div class="page">
-      <div class="target" data-target-start></div>
+      <div class="page-target page-target-x page-target-start" data-window-x-target-start></div>
+      <div class="page-target page-target-x page-target-element" data-window-x-target-element></div>
+      <div class="page-target page-target-x page-target-string" data-window-x-target-string></div>
+      <div class="page-target page-target-x page-target-end" data-window-x-target-end></div>
+
+      <div class="page-target page-target-y page-target-start" data-window-y-target-start></div>
 
       <div class="sandbox" data-root>
         <div class="sandbox-content sandbox-content-x sandbox-content-y">
@@ -168,7 +199,7 @@
 
       <div class="spacer small"></div>
 
-      <div class="target" data-target-element></div>
+      <div class="page-target page-target-y page-target-element" data-window-y-target-element></div>
 
       <div class="sandbox" data-focus>
         <div class="sandbox-content sandbox-content-y">
@@ -180,11 +211,11 @@
 
       <div class="spacer medium"></div>
 
-      <div class="target" data-target-string></div>
+      <div class="page-target page-target-y page-target-string" data-window-y-target-string></div>
 
       <div class="spacer large"></div>
 
-      <div class="target" data-target-end></div>
+      <div class="page-target page-target-y page-target-end" data-window-y-target-end></div>
     </div>
 
     <script type="module">
