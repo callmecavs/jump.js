@@ -282,9 +282,15 @@
         getElementScrollXMax: element => element.scrollWidth - element.clientWidth,
         getElementScrollYMax: element => element.scrollHeight - element.clientHeight,
 
+        getWindowX: () => window.scrollX,
         getWindowY: () => window.scrollY,
+        setWindowX: left => window.scrollTo({ left }),
         setWindowY: top => window.scrollTo({ top }),
 
+        getWindowScrollXMax: () => {
+          const root = document.scrollingElement ?? document.documentElement
+          return root.scrollWidth - root.clientWidth
+        },
         getWindowScrollYMax: () => {
           const root = document.scrollingElement ?? document.documentElement
           return root.scrollHeight - root.clientHeight

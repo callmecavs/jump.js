@@ -17,7 +17,9 @@ declare global {
       getElementScrollXMax: (element: HTMLElement) => number
       getElementScrollYMax: (element: HTMLElement) => number
 
+      getWindowX: () => number
       getWindowY: () => number
+      setWindowX: (left: number) => void
       setWindowY: (top: number) => void
 
       getWindowScrollYMax: () => number
