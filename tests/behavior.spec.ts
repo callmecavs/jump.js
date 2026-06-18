@@ -508,3 +508,46 @@ test("a11y: true, temporary tabindex is added and removed", async ({ page }) => 
     wasRemoved: true,
   })
 })
+
+test("error: target is wrong type", async ({ page }) => {
+  expect(
+    await page.evaluate(() => {
+      try {
+        // @ts-expect-error Runtime validation check. Target is purposely invalid.
+        window.fixtures.jump(null)
+      } catch (error) {
+        return error instanceof TypeError
+      }
+
+      return false
+    }),
+  ).toEqual(true)
+})
+
+test("error: target selector is invalid", async ({ page }) => {
+  expect(
+    await page.evaluate(() => {
+      try {
+        window.fixtures.jump("1337")
+      } catch (error) {
+        return error instanceof Error
+      }
+
+      return false
+    }),
+  ).toEqual(true)
+})
+
+test("error: target selector didn't match", async ({ page }) => {
+  expect(
+    await page.evaluate(() => {
+      try {
+        window.fixtures.jump(".no-match")
+      } catch (error) {
+        return error instanceof Error
+      }
+
+      return false
+    }),
+  ).toEqual(true)
+})
