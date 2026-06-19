@@ -801,6 +801,20 @@ test("error: target is wrong type", async ({ page }) => {
   ).toEqual(true)
 })
 
+test("error: target number is invalid", async ({ page }) => {
+  expect(
+    await page.evaluate(() => {
+      try {
+        window.fixtures.jump(Infinity)
+      } catch (error) {
+        return error instanceof TypeError
+      }
+
+      return false
+    }),
+  ).toEqual(true)
+})
+
 test("error: target selector is invalid", async ({ page }) => {
   expect(
     await page.evaluate(() => {
@@ -939,6 +953,20 @@ test("error: offset is wrong type", async ({ page }) => {
       try {
         // @ts-expect-error Runtime validation check.
         window.fixtures.jump(".target", { offset: "100" })
+      } catch (error) {
+        return error instanceof TypeError
+      }
+
+      return false
+    }),
+  ).toEqual(true)
+})
+
+test("error: offset number is invalid", async ({ page }) => {
+  expect(
+    await page.evaluate(() => {
+      try {
+        window.fixtures.jump(".target", { offset: NaN })
       } catch (error) {
         return error instanceof TypeError
       }
