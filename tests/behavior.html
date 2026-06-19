@@ -236,6 +236,20 @@
           }
         })
 
+      let latestElementFocusArgs
+
+      const captureElementFocusArgs = element => {
+        const original = element.focus.bind(element)
+
+        const wrapped = (...args) => {
+          // `[{ preventScroll: true }]`
+          latestElementFocusArgs = args
+          original(...args)
+        }
+
+        element.focus = wrapped
+      }
+
       let latestElementScrollToArgs
 
       const captureElementScrollToArgs = element => {
@@ -267,6 +281,9 @@
       const windowElement = document.scrollingElement ?? document.documentElement
 
       window.fixtures = {
+        captureElementFocusArgs,
+        getLatestElementFocusArgs: () => latestElementFocusArgs,
+
         captureElementScrollToArgs,
         getLatestElementScrollToArgs: () => latestElementScrollToArgs,
 

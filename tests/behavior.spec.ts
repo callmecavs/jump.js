@@ -5,6 +5,9 @@ import type { Jump, JumpOptions, JumpTarget } from "../src/types"
 declare global {
   interface Window {
     fixtures: {
+      captureElementFocusArgs: (element: HTMLElement) => void
+      getLatestElementFocusArgs: () => Array<FocusOptions> | undefined
+
       captureElementScrollToArgs: (element: HTMLElement) => void
       getLatestElementScrollToArgs: () => Array<ScrollToOptions> | undefined
 
@@ -721,6 +724,18 @@ test("a11y: true, target: number doesn't change focus", async ({ page }) => {
       return sentinel === document.activeElement
     }),
   ).toEqual(true)
+})
+
+test("a11y: true, does call focus({ preventScroll: true })", async ({ page }) => {
+  expect(
+    await page.evaluate(async () => {
+      const root = window.fixtures.getElement("[data-focus]")
+      const target = window.fixtures.getElement("[data-focus-element]")
+      window.fixtures.captureElementFocusArgs(target)
+      await window.fixtures.scroll(target, { a11y: true, root })
+      return window.fixtures.getLatestElementFocusArgs()
+    }),
+  ).toEqual([{ preventScroll: true }])
 })
 
 test("a11y: true, focus doesn't change scroll position", async ({ page }) => {
