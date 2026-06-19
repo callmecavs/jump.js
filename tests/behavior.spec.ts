@@ -415,6 +415,39 @@ test("root: window, axis: y, doesn't mutate other axis", async ({ page }) => {
   expect(actual).toEqual(expected)
 })
 
+test("root: element, axis: x, target: number (positive)", async ({ page }) => {
+  expect(
+    await page.evaluate(async () => {
+      const root = window.fixtures.getElement("[data-root]")
+      root.scrollLeft = 50
+      await window.fixtures.scroll(100, { axis: "x", root })
+      return root.scrollLeft
+    }),
+  ).toEqual(150)
+})
+
+test("root: element, axis: x, target: number (negative)", async ({ page }) => {
+  expect(
+    await page.evaluate(async () => {
+      const root = window.fixtures.getElement("[data-root]")
+      root.scrollLeft = 150
+      await window.fixtures.scroll(-100, { axis: "x", root })
+      return root.scrollLeft
+    }),
+  ).toEqual(50)
+})
+
+test("root: element, axis: x, target: number ignores offset", async ({ page }) => {
+  expect(
+    await page.evaluate(async () => {
+      const root = window.fixtures.getElement("[data-root]")
+      root.scrollLeft = 50
+      await window.fixtures.scroll(100, { axis: "x", offset: -50, root })
+      return root.scrollLeft
+    }),
+  ).toEqual(150)
+})
+
 test("root: element, axis: x, target: element", async ({ page }) => {
   const { actual, expected } = await page.evaluate(async () => {
     const root = window.fixtures.getElement("[data-root]")
@@ -504,6 +537,39 @@ test("root: element, axis: x, doesn't mutate other axis", async ({ page }) => {
   })
 
   expect(actual).toEqual(expected)
+})
+
+test("root: element, axis: y, target: number (positive)", async ({ page }) => {
+  expect(
+    await page.evaluate(async () => {
+      const root = window.fixtures.getElement("[data-root]")
+      root.scrollTop = 50
+      await window.fixtures.scroll(100, { root })
+      return root.scrollTop
+    }),
+  ).toEqual(150)
+})
+
+test("root: element, axis: y, target: number (negative)", async ({ page }) => {
+  expect(
+    await page.evaluate(async () => {
+      const root = window.fixtures.getElement("[data-root]")
+      root.scrollTop = 150
+      await window.fixtures.scroll(-100, { root })
+      return root.scrollTop
+    }),
+  ).toEqual(50)
+})
+
+test("root: element, axis: y, target: number ignores offset", async ({ page }) => {
+  expect(
+    await page.evaluate(async () => {
+      const root = window.fixtures.getElement("[data-root]")
+      root.scrollTop = 50
+      await window.fixtures.scroll(100, { offset: -50, root })
+      return root.scrollTop
+    }),
+  ).toEqual(150)
 })
 
 test("root: element, axis: y, target: element", async ({ page }) => {

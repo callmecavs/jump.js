@@ -264,6 +264,8 @@
         window.scrollTo = wrapped
       }
 
+      const windowElement = document.scrollingElement ?? document.documentElement
+
       window.fixtures = {
         captureElementScrollToArgs,
         getLatestElementScrollToArgs: () => latestElementScrollToArgs,
@@ -288,14 +290,8 @@
         setWindowX: left => window.scrollTo({ left }),
         setWindowY: top => window.scrollTo({ top }),
 
-        getWindowScrollXMax: () => {
-          const root = document.scrollingElement ?? document.documentElement
-          return root.scrollWidth - root.clientWidth
-        },
-        getWindowScrollYMax: () => {
-          const root = document.scrollingElement ?? document.documentElement
-          return root.scrollHeight - root.clientHeight
-        },
+        getWindowScrollXMax: () => windowElement.scrollWidth - windowElement.clientWidth,
+        getWindowScrollYMax: () => windowElement.scrollHeight - windowElement.clientHeight,
 
         jump,
         scroll,
