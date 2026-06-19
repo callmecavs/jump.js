@@ -34,8 +34,14 @@ export const validateOptions: (options: unknown) => asserts options is JumpOptio
     throw new TypeError(`Expected "easing" to be a function.`)
   }
 
-  if (offset !== undefined && typeof offset !== "number") {
-    throw new TypeError(`Expected "offset" to be a number.`)
+  if (offset !== undefined) {
+    if (typeof offset !== "number") {
+      throw new TypeError(`Expected "offset" to be a number.`)
+    }
+
+    if (typeof offset === "number" && !isFinite(offset)) {
+      throw new TypeError(`Expected "offset" to be a finite number.`)
+    }
   }
 
   if (root !== undefined && !isWindow(root) && !isElement(root)) {
@@ -44,6 +50,15 @@ export const validateOptions: (options: unknown) => asserts options is JumpOptio
 }
 
 export const validateTarget: (target: unknown) => asserts target is JumpTarget = target => {
-  if (isElement(target) || typeof target === "number" || typeof target === "string") return
+  if (isElement(target) || typeof target === "string") return
+
+  if (typeof target === "number") {
+    if (!isFinite(target)) {
+      throw new TypeError(`Expected "target" to be a finite number.`)
+    }
+
+    return
+  }
+
   throw new TypeError(`Expected "target" to be an Element, number, or string.`)
 }
