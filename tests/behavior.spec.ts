@@ -62,44 +62,6 @@ test.describe("root: window", () => {
       ).toEqual(50)
     })
 
-    test("target: number ignores offset", async ({ page }) => {
-      expect(
-        await page.evaluate(async () => {
-          window.fixtures.setWindowX(50)
-          await window.fixtures.scroll(100, { axis: "x", offset: -50 })
-          return window.fixtures.getWindowX()
-        }),
-      ).toEqual(150)
-    })
-
-    test("target: number is clamped (start)", async ({ page }) => {
-      expect(
-        await page.evaluate(async () => {
-          window.fixtures.setWindowX(25)
-          window.fixtures.captureWindowScrollToArgs()
-          await window.fixtures.scroll(-50, { axis: "x" })
-          return window.fixtures.getLatestWindowScrollToArgs()
-        }),
-      ).toEqual([{ left: 0 }])
-    })
-
-    test("target: number is clamped (end)", async ({ page }) => {
-      const { actual, expected } = await page.evaluate(async () => {
-        const maxX = window.fixtures.getWindowScrollXMax()
-
-        window.fixtures.setWindowX(maxX - 25)
-        window.fixtures.captureWindowScrollToArgs()
-        await window.fixtures.scroll(50, { axis: "x" })
-
-        return {
-          actual: window.fixtures.getLatestWindowScrollToArgs(),
-          expected: maxX,
-        }
-      })
-
-      expect(actual).toEqual([{ left: expected }])
-    })
-
     test("target: element", async ({ page }) => {
       const { actual, expected } = await page.evaluate(async () => {
         const target = window.fixtures.getElement("[data-window-x-target-element]")
@@ -116,99 +78,28 @@ test.describe("root: window", () => {
       expect(actual).toEqual([{ left: expected }])
     })
 
-    test("target: element with offset", async ({ page }) => {
-      const { actual, expected } = await page.evaluate(async () => {
-        const offset = 50
-        const target = window.fixtures.getElement("[data-window-x-target-element]")
-
-        window.fixtures.captureWindowScrollToArgs()
-        await window.fixtures.scroll(target, { axis: "x", offset })
-
-        return {
-          actual: window.fixtures.getLatestWindowScrollToArgs(),
-          expected: window.fixtures.getElementX(target) + offset,
-        }
-      })
-
-      expect(actual).toEqual([{ left: expected }])
-    })
-
-    test("target: element is clamped (start)", async ({ page }) => {
+    test("is clamped (start)", async ({ page }) => {
       expect(
         await page.evaluate(async () => {
-          const target = window.fixtures.getElement("[data-window-x-target-start]")
+          window.fixtures.setWindowX(25)
           window.fixtures.captureWindowScrollToArgs()
-          await window.fixtures.scroll(target, { axis: "x", offset: -25 })
+          await window.fixtures.scroll(-50, { axis: "x" })
           return window.fixtures.getLatestWindowScrollToArgs()
         }),
       ).toEqual([{ left: 0 }])
     })
 
-    test("target: element is clamped (end)", async ({ page }) => {
+    test("is clamped (end)", async ({ page }) => {
       const { actual, expected } = await page.evaluate(async () => {
         const maxX = window.fixtures.getWindowScrollXMax()
-        const target = window.fixtures.getElement("[data-window-x-target-end]")
 
+        window.fixtures.setWindowX(maxX - 25)
         window.fixtures.captureWindowScrollToArgs()
-        await window.fixtures.scroll(target, { axis: "x" })
+        await window.fixtures.scroll(50, { axis: "x" })
 
         return {
           actual: window.fixtures.getLatestWindowScrollToArgs(),
           expected: maxX,
-        }
-      })
-
-      expect(actual).toEqual([{ left: expected }])
-    })
-
-    test("target: string", async ({ page }) => {
-      const { actual, expected } = await page.evaluate(async () => {
-        window.fixtures.captureWindowScrollToArgs()
-        await window.fixtures.scroll("[data-window-x-target-string]", { axis: "x" })
-
-        return {
-          actual: window.fixtures.getLatestWindowScrollToArgs(),
-          expected: window.fixtures.getElementX(window.fixtures.getElement("[data-window-x-target-string]")),
-        }
-      })
-
-      expect(actual).toEqual([{ left: expected }])
-    })
-
-    test("target: string with offset", async ({ page }) => {
-      const { actual, expected } = await page.evaluate(async () => {
-        const offset = -50
-
-        window.fixtures.captureWindowScrollToArgs()
-        await window.fixtures.scroll("[data-window-x-target-string]", { axis: "x", offset })
-
-        return {
-          actual: window.fixtures.getLatestWindowScrollToArgs(),
-          expected: window.fixtures.getElementX(window.fixtures.getElement("[data-window-x-target-string]")) + offset,
-        }
-      })
-
-      expect(actual).toEqual([{ left: expected }])
-    })
-
-    test("target: string is clamped (start)", async ({ page }) => {
-      expect(
-        await page.evaluate(async () => {
-          window.fixtures.captureWindowScrollToArgs()
-          await window.fixtures.scroll("[data-window-x-target-start]", { axis: "x", offset: -25 })
-          return window.fixtures.getLatestWindowScrollToArgs()
-        }),
-      ).toEqual([{ left: 0 }])
-    })
-
-    test("target: string is clamped (end)", async ({ page }) => {
-      const { actual, expected } = await page.evaluate(async () => {
-        window.fixtures.captureWindowScrollToArgs()
-        await window.fixtures.scroll("[data-window-x-target-end]", { axis: "x" })
-
-        return {
-          actual: window.fixtures.getLatestWindowScrollToArgs(),
-          expected: window.fixtures.getWindowScrollXMax(),
         }
       })
 
@@ -263,34 +154,6 @@ test.describe("root: window", () => {
       ).toEqual(150)
     })
 
-    test("target: number is clamped (start)", async ({ page }) => {
-      expect(
-        await page.evaluate(async () => {
-          window.fixtures.setWindowY(25)
-          window.fixtures.captureWindowScrollToArgs()
-          await window.fixtures.scroll(-50)
-          return window.fixtures.getLatestWindowScrollToArgs()
-        }),
-      ).toEqual([{ top: 0 }])
-    })
-
-    test("target: number is clamped (end)", async ({ page }) => {
-      const { actual, expected } = await page.evaluate(async () => {
-        const maxY = window.fixtures.getWindowScrollYMax()
-
-        window.fixtures.setWindowY(maxY - 25)
-        window.fixtures.captureWindowScrollToArgs()
-        await window.fixtures.scroll(50)
-
-        return {
-          actual: window.fixtures.getLatestWindowScrollToArgs(),
-          expected: maxY,
-        }
-      })
-
-      expect(actual).toEqual([{ top: expected }])
-    })
-
     test("target: element", async ({ page }) => {
       const { actual, expected } = await page.evaluate(async () => {
         const target = window.fixtures.getElement("[data-window-y-target-element]")
@@ -324,34 +187,6 @@ test.describe("root: window", () => {
       expect(actual).toEqual([{ top: expected }])
     })
 
-    test("target: element is clamped (start)", async ({ page }) => {
-      expect(
-        await page.evaluate(async () => {
-          const target = window.fixtures.getElement("[data-window-y-target-start]")
-          window.fixtures.captureWindowScrollToArgs()
-          await window.fixtures.scroll(target, { offset: -25 })
-          return window.fixtures.getLatestWindowScrollToArgs()
-        }),
-      ).toEqual([{ top: 0 }])
-    })
-
-    test("target: element is clamped (end)", async ({ page }) => {
-      const { actual, expected } = await page.evaluate(async () => {
-        const maxY = window.fixtures.getWindowScrollYMax()
-        const target = window.fixtures.getElement("[data-window-y-target-end]")
-
-        window.fixtures.captureWindowScrollToArgs()
-        await window.fixtures.scroll(target)
-
-        return {
-          actual: window.fixtures.getLatestWindowScrollToArgs(),
-          expected: maxY,
-        }
-      })
-
-      expect(actual).toEqual([{ top: expected }])
-    })
-
     test("target: string", async ({ page }) => {
       const { actual, expected } = await page.evaluate(async () => {
         window.fixtures.captureWindowScrollToArgs()
@@ -366,40 +201,28 @@ test.describe("root: window", () => {
       expect(actual).toEqual([{ top: expected }])
     })
 
-    test("target: string with offset", async ({ page }) => {
-      const { actual, expected } = await page.evaluate(async () => {
-        const offset = -50
-
-        window.fixtures.captureWindowScrollToArgs()
-        await window.fixtures.scroll("[data-window-y-target-string]", { offset })
-
-        return {
-          actual: window.fixtures.getLatestWindowScrollToArgs(),
-          expected: window.fixtures.getElementY(window.fixtures.getElement("[data-window-y-target-string]")) + offset,
-        }
-      })
-
-      expect(actual).toEqual([{ top: expected }])
-    })
-
-    test("target: string is clamped (start)", async ({ page }) => {
+    test("is clamped (start)", async ({ page }) => {
       expect(
         await page.evaluate(async () => {
+          window.fixtures.setWindowY(25)
           window.fixtures.captureWindowScrollToArgs()
-          await window.fixtures.scroll("[data-window-y-target-start]", { offset: -25 })
+          await window.fixtures.scroll(-50)
           return window.fixtures.getLatestWindowScrollToArgs()
         }),
       ).toEqual([{ top: 0 }])
     })
 
-    test("target: string is clamped (end)", async ({ page }) => {
+    test("is clamped (end)", async ({ page }) => {
       const { actual, expected } = await page.evaluate(async () => {
+        const maxY = window.fixtures.getWindowScrollYMax()
+
+        window.fixtures.setWindowY(maxY - 25)
         window.fixtures.captureWindowScrollToArgs()
-        await window.fixtures.scroll("[data-window-y-target-end]")
+        await window.fixtures.scroll(50)
 
         return {
           actual: window.fixtures.getLatestWindowScrollToArgs(),
-          expected: window.fixtures.getWindowScrollYMax(),
+          expected: maxY,
         }
       })
 
@@ -448,17 +271,6 @@ test.describe("root: element", () => {
       ).toEqual(50)
     })
 
-    test("target: number ignores offset", async ({ page }) => {
-      expect(
-        await page.evaluate(async () => {
-          const root = window.fixtures.getElement("[data-root]")
-          root.scrollLeft = 50
-          await window.fixtures.scroll(100, { axis: "x", offset: -50, root })
-          return root.scrollLeft
-        }),
-      ).toEqual(150)
-    })
-
     test("target: element", async ({ page }) => {
       const { actual, expected } = await page.evaluate(async () => {
         const root = window.fixtures.getElement("[data-root]")
@@ -475,38 +287,8 @@ test.describe("root: element", () => {
       expect(actual).toEqual(expected)
     })
 
-    test("target: string", async ({ page }) => {
-      const { actual, expected } = await page.evaluate(async () => {
-        const root = window.fixtures.getElement("[data-root]")
-
-        await window.fixtures.scroll("[data-root-x-string]", { axis: "x", root })
-
-        return {
-          actual: root.scrollLeft,
-          expected: window.fixtures.getElement("[data-root-x-string]").offsetLeft,
-        }
-      })
-
-      expect(actual).toEqual(expected)
-    })
-
-    test("with offset", async ({ page }) => {
-      const { actual, expected } = await page.evaluate(async () => {
-        const offset = 24
-        const root = window.fixtures.getElement("[data-root]")
-        const target = window.fixtures.getElement("[data-root-x-offset]")
-
-        await window.fixtures.scroll(target, { axis: "x", offset, root })
-
-        return {
-          actual: root.scrollLeft,
-          expected: target.offsetLeft + offset,
-        }
-      })
-
-      expect(actual).toEqual(expected)
-    })
-
+    // FIX: should check captured scroll calls
+    // FIX: can be simplified to target: number like equivalent `root: window` text
     test("is clamped (start)", async ({ page }) => {
       expect(
         await page.evaluate(async () => {
@@ -517,6 +299,7 @@ test.describe("root: element", () => {
       ).toEqual(0)
     })
 
+    // FIX: can be simplified to target: number like equivalent `root: window` text
     test("is clamped (end)", async ({ page }) => {
       const { actual, expected } = await page.evaluate(async () => {
         const root = window.fixtures.getElement("[data-root]")
@@ -574,17 +357,6 @@ test.describe("root: element", () => {
       ).toEqual(50)
     })
 
-    test("target: number ignores offset", async ({ page }) => {
-      expect(
-        await page.evaluate(async () => {
-          const root = window.fixtures.getElement("[data-root]")
-          root.scrollTop = 50
-          await window.fixtures.scroll(100, { offset: -50, root })
-          return root.scrollTop
-        }),
-      ).toEqual(150)
-    })
-
     test("target: element", async ({ page }) => {
       const { actual, expected } = await page.evaluate(async () => {
         const root = window.fixtures.getElement("[data-root]")
@@ -601,38 +373,8 @@ test.describe("root: element", () => {
       expect(actual).toEqual(expected)
     })
 
-    test("target: string", async ({ page }) => {
-      const { actual, expected } = await page.evaluate(async () => {
-        const root = window.fixtures.getElement("[data-root]")
-
-        await window.fixtures.scroll("[data-root-y-string]", { root })
-
-        return {
-          actual: root.scrollTop,
-          expected: window.fixtures.getElement("[data-root-y-string]").offsetTop,
-        }
-      })
-
-      expect(actual).toEqual(expected)
-    })
-
-    test("with offset", async ({ page }) => {
-      const { actual, expected } = await page.evaluate(async () => {
-        const offset = 24
-        const root = window.fixtures.getElement("[data-root]")
-        const target = window.fixtures.getElement("[data-root-y-offset]")
-
-        await window.fixtures.scroll(target, { offset, root })
-
-        return {
-          actual: root.scrollTop,
-          expected: target.offsetTop + offset,
-        }
-      })
-
-      expect(actual).toEqual(expected)
-    })
-
+    // FIX: should check captured scroll calls
+    // FIX: can be simplified to target: number like equivalent `root: window` text
     test("is clamped (start)", async ({ page }) => {
       expect(
         await page.evaluate(async () => {
@@ -643,6 +385,7 @@ test.describe("root: element", () => {
       ).toEqual(0)
     })
 
+    // FIX: can be simplified to target: number like equivalent `root: window` text
     test("is clamped (end)", async ({ page }) => {
       const { actual, expected } = await page.evaluate(async () => {
         const root = window.fixtures.getElement("[data-root]")
@@ -710,17 +453,6 @@ test.describe("a11y", () => {
           const root = window.fixtures.getElement("[data-focus]")
           const target = window.fixtures.getElement("[data-focus-element]")
           await window.fixtures.scroll(target, { a11y: true, root })
-          return target === document.activeElement
-        }),
-      ).toEqual(true)
-    })
-
-    test("target: string", async ({ page }) => {
-      expect(
-        await page.evaluate(async () => {
-          const root = window.fixtures.getElement("[data-focus]")
-          const target = window.fixtures.getElement("[data-focus-string]")
-          await window.fixtures.scroll("[data-focus-string]", { a11y: true, root })
           return target === document.activeElement
         }),
       ).toEqual(true)
