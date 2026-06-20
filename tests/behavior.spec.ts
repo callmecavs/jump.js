@@ -678,342 +678,348 @@ test.describe("root: element", () => {
   })
 })
 
-test("a11y: falsy", async ({ page }) => {
-  expect(
-    await page.evaluate(async () => {
-      const sentinel = window.fixtures.getElement("[data-focus-button]")
+test.describe("a11y", () => {
+  test.describe("disabled", () => {
+    test("false", async ({ page }) => {
+      expect(
+        await page.evaluate(async () => {
+          const sentinel = window.fixtures.getElement("[data-focus-button]")
+          sentinel.focus({ preventScroll: true })
+          await window.fixtures.scroll("[data-focus]", { a11y: false })
+          return sentinel === document.activeElement
+        }),
+      ).toEqual(true)
+    })
 
-      sentinel.focus({ preventScroll: true })
-      await window.fixtures.scroll("[data-focus]", { a11y: false })
-      const whenExplicit = sentinel === document.activeElement
+    test("undefined", async ({ page }) => {
+      expect(
+        await page.evaluate(async () => {
+          const sentinel = window.fixtures.getElement("[data-focus-button]")
+          sentinel.focus({ preventScroll: true })
+          await window.fixtures.scroll("[data-focus]", { a11y: undefined })
+          return sentinel === document.activeElement
+        }),
+      ).toEqual(true)
+    })
+  })
 
-      sentinel.focus({ preventScroll: true })
-      await window.fixtures.scroll("[data-focus]")
-      const whenOmitted = sentinel === document.activeElement
+  test.describe("enabled", () => {
+    test("target: element", async ({ page }) => {
+      expect(
+        await page.evaluate(async () => {
+          const root = window.fixtures.getElement("[data-focus]")
+          const target = window.fixtures.getElement("[data-focus-element]")
+          await window.fixtures.scroll(target, { a11y: true, root })
+          return target === document.activeElement
+        }),
+      ).toEqual(true)
+    })
 
-      return {
-        whenExplicit,
-        whenOmitted,
-      }
-    }),
-  ).toEqual({
-    whenExplicit: true,
-    whenOmitted: true,
+    test("target: string", async ({ page }) => {
+      expect(
+        await page.evaluate(async () => {
+          const root = window.fixtures.getElement("[data-focus]")
+          const target = window.fixtures.getElement("[data-focus-string]")
+          await window.fixtures.scroll("[data-focus-string]", { a11y: true, root })
+          return target === document.activeElement
+        }),
+      ).toEqual(true)
+    })
+
+    test("target: number doesn't change focus", async ({ page }) => {
+      expect(
+        await page.evaluate(async () => {
+          const sentinel = window.fixtures.getElement("[data-focus-button]")
+          sentinel.focus({ preventScroll: true })
+
+          const root = window.fixtures.getElement("[data-focus]")
+          await window.fixtures.scroll(100, { a11y: true, root })
+
+          return sentinel === document.activeElement
+        }),
+      ).toEqual(true)
+    })
+
+    test("does call focus({ preventScroll: true })", async ({ page }) => {
+      expect(
+        await page.evaluate(async () => {
+          const root = window.fixtures.getElement("[data-focus]")
+          const target = window.fixtures.getElement("[data-focus-element]")
+          window.fixtures.captureElementFocusArgs(target)
+          await window.fixtures.scroll(target, { a11y: true, root })
+          return window.fixtures.getLatestElementFocusArgs()
+        }),
+      ).toEqual([{ preventScroll: true }])
+    })
+
+    test("focus doesn't change scroll position", async ({ page }) => {
+      expect(
+        await page.evaluate(async () => {
+          // Scroll past the target so that it ends up offscreen. Makes it easier to see regressions.
+          const offset = 500
+
+          const target = window.fixtures.getElement("[data-focus]")
+          const expected = window.fixtures.getElementY(target) + offset
+
+          await window.fixtures.scroll(target, { a11y: true, offset })
+
+          return {
+            didFocus: target === document.activeElement,
+
+            // Small tolerance in case the browser ignores fractional scroll values. Can't check captured
+            // `scrollTo` calls here, because browsers might not use it when `focus` is called.
+            didScroll: Math.abs(window.fixtures.getWindowY() - expected) >= 1,
+          }
+        }),
+      ).toEqual({
+        didFocus: true,
+        didScroll: false,
+      })
+    })
+
+    test("preserves pre-existing tabindex", async ({ page }) => {
+      expect(
+        await page.evaluate(async () => {
+          const expected = 10
+          const root = window.fixtures.getElement("[data-focus]")
+          const sentinel = window.fixtures.getElement("[data-focus-button]")
+
+          sentinel.setAttribute("tabindex", `${expected}`)
+          await window.fixtures.scroll(sentinel, { a11y: true, root })
+          sentinel.blur()
+
+          return sentinel.hasAttribute("tabindex") && Number(sentinel.getAttribute("tabindex")) === expected
+        }),
+      ).toEqual(true)
+    })
+
+    test("temporary tabindex is added and removed", async ({ page }) => {
+      expect(
+        await page.evaluate(async () => {
+          const sentinel = window.fixtures.getElement("[data-focus]")
+
+          await window.fixtures.scroll(sentinel, { a11y: true })
+          const wasAdded = sentinel.getAttribute("tabindex") === "-1"
+
+          sentinel.blur()
+          const wasRemoved = sentinel.getAttribute("tabindex") === null
+
+          return {
+            wasAdded,
+            wasRemoved,
+          }
+        }),
+      ).toEqual({
+        wasAdded: true,
+        wasRemoved: true,
+      })
+    })
   })
 })
 
-test("a11y: true, target: element", async ({ page }) => {
-  expect(
-    await page.evaluate(async () => {
-      const root = window.fixtures.getElement("[data-focus]")
-      const target = window.fixtures.getElement("[data-focus-element]")
-      await window.fixtures.scroll(target, { a11y: true, root })
-      return target === document.activeElement
-    }),
-  ).toEqual(true)
-})
+test.describe("error", () => {
+  test("target is wrong type", async ({ page }) => {
+    expect(
+      await page.evaluate(() => {
+        try {
+          // @ts-expect-error Runtime validation check.
+          window.fixtures.jump(null)
+        } catch (error) {
+          return error instanceof TypeError
+        }
 
-test("a11y: true, target: string", async ({ page }) => {
-  expect(
-    await page.evaluate(async () => {
-      const root = window.fixtures.getElement("[data-focus]")
-      const target = window.fixtures.getElement("[data-focus-string]")
-      await window.fixtures.scroll("[data-focus-string]", { a11y: true, root })
-      return target === document.activeElement
-    }),
-  ).toEqual(true)
-})
-
-test("a11y: true, target: number doesn't change focus", async ({ page }) => {
-  expect(
-    await page.evaluate(async () => {
-      const sentinel = window.fixtures.getElement("[data-focus-button]")
-      sentinel.focus({ preventScroll: true })
-
-      const root = window.fixtures.getElement("[data-focus]")
-      await window.fixtures.scroll(100, { a11y: true, root })
-
-      return sentinel === document.activeElement
-    }),
-  ).toEqual(true)
-})
-
-test("a11y: true, does call focus({ preventScroll: true })", async ({ page }) => {
-  expect(
-    await page.evaluate(async () => {
-      const root = window.fixtures.getElement("[data-focus]")
-      const target = window.fixtures.getElement("[data-focus-element]")
-      window.fixtures.captureElementFocusArgs(target)
-      await window.fixtures.scroll(target, { a11y: true, root })
-      return window.fixtures.getLatestElementFocusArgs()
-    }),
-  ).toEqual([{ preventScroll: true }])
-})
-
-test("a11y: true, focus doesn't change scroll position", async ({ page }) => {
-  expect(
-    await page.evaluate(async () => {
-      // Scroll past the target so that it ends up offscreen. Makes it easier to see regressions.
-      const offset = 500
-
-      const target = window.fixtures.getElement("[data-focus]")
-      const expected = window.fixtures.getElementY(target) + offset
-
-      await window.fixtures.scroll(target, { a11y: true, offset })
-
-      return {
-        didFocus: target === document.activeElement,
-
-        // Small tolerance in case the browser ignores fractional scroll values. Can't check captured
-        // `scrollTo` calls here, because browsers might not use it when `focus` is called.
-        didScroll: Math.abs(window.fixtures.getWindowY() - expected) >= 1,
-      }
-    }),
-  ).toEqual({
-    didFocus: true,
-    didScroll: false,
+        return false
+      }),
+    ).toEqual(true)
   })
-})
 
-test("a11y: true, preserves pre-existing tabindex", async ({ page }) => {
-  expect(
-    await page.evaluate(async () => {
-      const expected = 10
-      const root = window.fixtures.getElement("[data-focus]")
-      const sentinel = window.fixtures.getElement("[data-focus-button]")
+  test("target number is invalid", async ({ page }) => {
+    expect(
+      await page.evaluate(() => {
+        try {
+          window.fixtures.jump(Infinity)
+        } catch (error) {
+          return error instanceof TypeError
+        }
 
-      sentinel.setAttribute("tabindex", `${expected}`)
-      await window.fixtures.scroll(sentinel, { a11y: true, root })
-      sentinel.blur()
-
-      return sentinel.hasAttribute("tabindex") && Number(sentinel.getAttribute("tabindex")) === expected
-    }),
-  ).toEqual(true)
-})
-
-test("a11y: true, temporary tabindex is added and removed", async ({ page }) => {
-  expect(
-    await page.evaluate(async () => {
-      const sentinel = window.fixtures.getElement("[data-focus]")
-
-      await window.fixtures.scroll(sentinel, { a11y: true })
-      const wasAdded = sentinel.getAttribute("tabindex") === "-1"
-
-      sentinel.blur()
-      const wasRemoved = sentinel.getAttribute("tabindex") === null
-
-      return {
-        wasAdded,
-        wasRemoved,
-      }
-    }),
-  ).toEqual({
-    wasAdded: true,
-    wasRemoved: true,
+        return false
+      }),
+    ).toEqual(true)
   })
-})
 
-test("error: target is wrong type", async ({ page }) => {
-  expect(
-    await page.evaluate(() => {
-      try {
-        // @ts-expect-error Runtime validation check.
-        window.fixtures.jump(null)
-      } catch (error) {
-        return error instanceof TypeError
-      }
+  test("target selector is invalid", async ({ page }) => {
+    expect(
+      await page.evaluate(() => {
+        try {
+          window.fixtures.jump("1337")
+        } catch (error) {
+          return error instanceof Error
+        }
 
-      return false
-    }),
-  ).toEqual(true)
-})
+        return false
+      }),
+    ).toEqual(true)
+  })
 
-test("error: target number is invalid", async ({ page }) => {
-  expect(
-    await page.evaluate(() => {
-      try {
-        window.fixtures.jump(Infinity)
-      } catch (error) {
-        return error instanceof TypeError
-      }
+  test("target selector didn't match", async ({ page }) => {
+    expect(
+      await page.evaluate(() => {
+        try {
+          window.fixtures.jump(".no-match")
+        } catch (error) {
+          return error instanceof Error
+        }
 
-      return false
-    }),
-  ).toEqual(true)
-})
+        return false
+      }),
+    ).toEqual(true)
+  })
 
-test("error: target selector is invalid", async ({ page }) => {
-  expect(
-    await page.evaluate(() => {
-      try {
-        window.fixtures.jump("1337")
-      } catch (error) {
-        return error instanceof Error
-      }
+  test("options is wrong type", async ({ page }) => {
+    expect(
+      await page.evaluate(() => {
+        try {
+          // @ts-expect-error Runtime validation check.
+          window.fixtures.jump(".target", null)
+        } catch (error) {
+          return error instanceof TypeError
+        }
 
-      return false
-    }),
-  ).toEqual(true)
-})
+        return false
+      }),
+    ).toEqual(true)
+  })
 
-test("error: target selector didn't match", async ({ page }) => {
-  expect(
-    await page.evaluate(() => {
-      try {
-        window.fixtures.jump(".no-match")
-      } catch (error) {
-        return error instanceof Error
-      }
+  test("a11y is wrong type", async ({ page }) => {
+    expect(
+      await page.evaluate(() => {
+        try {
+          // @ts-expect-error Runtime validation check.
+          window.fixtures.jump(".target", { a11y: "true" })
+        } catch (error) {
+          return error instanceof TypeError
+        }
 
-      return false
-    }),
-  ).toEqual(true)
-})
+        return false
+      }),
+    ).toEqual(true)
+  })
 
-test("error: options is wrong type", async ({ page }) => {
-  expect(
-    await page.evaluate(() => {
-      try {
-        // @ts-expect-error Runtime validation check.
-        window.fixtures.jump(".target", null)
-      } catch (error) {
-        return error instanceof TypeError
-      }
+  test("axis is invalid", async ({ page }) => {
+    expect(
+      await page.evaluate(() => {
+        try {
+          // @ts-expect-error Runtime validation check.
+          window.fixtures.jump(".target", { axis: "z" })
+        } catch (error) {
+          return error instanceof TypeError
+        }
 
-      return false
-    }),
-  ).toEqual(true)
-})
+        return false
+      }),
+    ).toEqual(true)
+  })
 
-test("error: a11y is wrong type", async ({ page }) => {
-  expect(
-    await page.evaluate(() => {
-      try {
-        // @ts-expect-error Runtime validation check.
-        window.fixtures.jump(".target", { a11y: "true" })
-      } catch (error) {
-        return error instanceof TypeError
-      }
+  test("callback is wrong type", async ({ page }) => {
+    expect(
+      await page.evaluate(() => {
+        try {
+          // @ts-expect-error Runtime validation check.
+          window.fixtures.jump(".target", { callback: true })
+        } catch (error) {
+          return error instanceof TypeError
+        }
 
-      return false
-    }),
-  ).toEqual(true)
-})
+        return false
+      }),
+    ).toEqual(true)
+  })
 
-test("error: axis is invalid", async ({ page }) => {
-  expect(
-    await page.evaluate(() => {
-      try {
-        // @ts-expect-error Runtime validation check.
-        window.fixtures.jump(".target", { axis: "z" })
-      } catch (error) {
-        return error instanceof TypeError
-      }
+  test("duration is wrong type", async ({ page }) => {
+    expect(
+      await page.evaluate(() => {
+        try {
+          // @ts-expect-error Runtime validation check.
+          window.fixtures.jump(".target", { duration: "1000" })
+        } catch (error) {
+          return error instanceof TypeError
+        }
 
-      return false
-    }),
-  ).toEqual(true)
-})
+        return false
+      }),
+    ).toEqual(true)
+  })
 
-test("error: callback is wrong type", async ({ page }) => {
-  expect(
-    await page.evaluate(() => {
-      try {
-        // @ts-expect-error Runtime validation check.
-        window.fixtures.jump(".target", { callback: true })
-      } catch (error) {
-        return error instanceof TypeError
-      }
+  test("duration is invalid", async ({ page }) => {
+    expect(
+      await page.evaluate(() => {
+        try {
+          window.fixtures.jump(".target", { duration: -1000 })
+        } catch (error) {
+          return error instanceof TypeError
+        }
 
-      return false
-    }),
-  ).toEqual(true)
-})
+        return false
+      }),
+    ).toEqual(true)
+  })
 
-test("error: duration is wrong type", async ({ page }) => {
-  expect(
-    await page.evaluate(() => {
-      try {
-        // @ts-expect-error Runtime validation check.
-        window.fixtures.jump(".target", { duration: "1000" })
-      } catch (error) {
-        return error instanceof TypeError
-      }
+  test("easing is wrong type", async ({ page }) => {
+    expect(
+      await page.evaluate(() => {
+        try {
+          // @ts-expect-error Runtime validation check.
+          window.fixtures.jump(".target", { easing: true })
+        } catch (error) {
+          return error instanceof TypeError
+        }
 
-      return false
-    }),
-  ).toEqual(true)
-})
+        return false
+      }),
+    ).toEqual(true)
+  })
 
-test("error: duration is invalid", async ({ page }) => {
-  expect(
-    await page.evaluate(() => {
-      try {
-        window.fixtures.jump(".target", { duration: -1000 })
-      } catch (error) {
-        return error instanceof TypeError
-      }
+  test("offset is wrong type", async ({ page }) => {
+    expect(
+      await page.evaluate(() => {
+        try {
+          // @ts-expect-error Runtime validation check.
+          window.fixtures.jump(".target", { offset: "100" })
+        } catch (error) {
+          return error instanceof TypeError
+        }
 
-      return false
-    }),
-  ).toEqual(true)
-})
+        return false
+      }),
+    ).toEqual(true)
+  })
 
-test("error: easing is wrong type", async ({ page }) => {
-  expect(
-    await page.evaluate(() => {
-      try {
-        // @ts-expect-error Runtime validation check.
-        window.fixtures.jump(".target", { easing: true })
-      } catch (error) {
-        return error instanceof TypeError
-      }
+  test("offset number is invalid", async ({ page }) => {
+    expect(
+      await page.evaluate(() => {
+        try {
+          window.fixtures.jump(".target", { offset: NaN })
+        } catch (error) {
+          return error instanceof TypeError
+        }
 
-      return false
-    }),
-  ).toEqual(true)
-})
+        return false
+      }),
+    ).toEqual(true)
+  })
 
-test("error: offset is wrong type", async ({ page }) => {
-  expect(
-    await page.evaluate(() => {
-      try {
-        // @ts-expect-error Runtime validation check.
-        window.fixtures.jump(".target", { offset: "100" })
-      } catch (error) {
-        return error instanceof TypeError
-      }
+  test("root is wrong type", async ({ page }) => {
+    expect(
+      await page.evaluate(() => {
+        try {
+          // @ts-expect-error Runtime validation check.
+          window.fixtures.jump(".target", { root: true })
+        } catch (error) {
+          return error instanceof TypeError
+        }
 
-      return false
-    }),
-  ).toEqual(true)
-})
-
-test("error: offset number is invalid", async ({ page }) => {
-  expect(
-    await page.evaluate(() => {
-      try {
-        window.fixtures.jump(".target", { offset: NaN })
-      } catch (error) {
-        return error instanceof TypeError
-      }
-
-      return false
-    }),
-  ).toEqual(true)
-})
-
-test("error: root is wrong type", async ({ page }) => {
-  expect(
-    await page.evaluate(() => {
-      try {
-        // @ts-expect-error Runtime validation check.
-        window.fixtures.jump(".target", { root: true })
-      } catch (error) {
-        return error instanceof TypeError
-      }
-
-      return false
-    }),
-  ).toEqual(true)
+        return false
+      }),
+    ).toEqual(true)
+  })
 })
