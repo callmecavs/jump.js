@@ -950,7 +950,7 @@ test.describe("error", () => {
     ).toEqual(true)
   })
 
-  test("duration is invalid", async ({ page }) => {
+  test("duration number is invalid", async ({ page }) => {
     expect(
       await page.evaluate(() => {
         try {
