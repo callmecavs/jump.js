@@ -32,20 +32,12 @@
         top: 0;
       }
 
-      .page-target-x.page-target-start {
-        left: 0;
-      }
-
       .page-target-x.page-target-element {
         left: 25dvw;
       }
 
       .page-target-x.page-target-string {
         left: 75dvw;
-      }
-
-      .page-target-x.page-target-end {
-        left: calc(100dvw + 24px);
       }
 
       .spacer {
@@ -111,10 +103,6 @@
         left: calc(var(--sandbox-width) * 2);
       }
 
-      .root-target-x.root-offset {
-        left: calc(var(--sandbox-width) * 3);
-      }
-
       .root-target-x.root-clamp-end {
         left: calc(100% + 24px);
       }
@@ -133,10 +121,6 @@
 
       .root-target-y.root-target-string {
         top: calc(var(--sandbox-height) * 2);
-      }
-
-      .root-target-y.root-offset {
-        top: calc(var(--sandbox-height) * 3);
       }
 
       .root-target-y.root-clamp-end {
@@ -174,25 +158,19 @@
 
   <body>
     <div class="page">
-      <div class="page-target page-target-x page-target-start" data-window-x-target-start></div>
       <div class="page-target page-target-x page-target-element" data-window-x-target-element></div>
       <div class="page-target page-target-x page-target-string" data-window-x-target-string></div>
-      <div class="page-target page-target-x page-target-end" data-window-x-target-end></div>
-
-      <div class="page-target page-target-y page-target-start" data-window-y-target-start></div>
 
       <div class="sandbox" data-root>
         <div class="sandbox-content sandbox-content-x sandbox-content-y">
           <div class="sandbox-target root-target-x root-clamp-start" data-root-x-clamp-start></div>
           <div class="sandbox-target root-target-x root-target-element" data-root-x-element></div>
           <div class="sandbox-target root-target-x root-target-string" data-root-x-string></div>
-          <div class="sandbox-target root-target-x root-offset" data-root-x-offset></div>
           <div class="sandbox-target root-target-x root-clamp-end" data-root-x-clamp-end></div>
 
           <div class="sandbox-target root-target-y root-clamp-start" data-root-y-clamp-start></div>
           <div class="sandbox-target root-target-y root-target-element" data-root-y-element></div>
           <div class="sandbox-target root-target-y root-target-string" data-root-y-string></div>
-          <div class="sandbox-target root-target-y root-offset" data-root-y-offset></div>
           <div class="sandbox-target root-target-y root-clamp-end" data-root-y-clamp-end></div>
         </div>
       </div>
@@ -214,8 +192,6 @@
       <div class="page-target page-target-y page-target-string" data-window-y-target-string></div>
 
       <div class="spacer large"></div>
-
-      <div class="page-target page-target-y page-target-end" data-window-y-target-end></div>
     </div>
 
     <script type="module">
