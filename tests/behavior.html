@@ -91,10 +91,6 @@
         top: 24px;
       }
 
-      .root-target-x.root-clamp-start {
-        left: -24px;
-      }
-
       .root-target-x.root-target-element {
         left: var(--sandbox-width);
       }
@@ -103,16 +99,8 @@
         left: calc(var(--sandbox-width) * 2);
       }
 
-      .root-target-x.root-clamp-end {
-        left: calc(100% + 24px);
-      }
-
       .root-target-y {
         left: 24px;
-      }
-
-      .root-target-y.root-clamp-start {
-        top: -24px;
       }
 
       .root-target-y.root-target-element {
@@ -121,10 +109,6 @@
 
       .root-target-y.root-target-string {
         top: calc(var(--sandbox-height) * 2);
-      }
-
-      .root-target-y.root-clamp-end {
-        top: calc(100% + 24px);
       }
 
       .focus-target-y {
@@ -163,15 +147,11 @@
 
       <div class="sandbox" data-root>
         <div class="sandbox-content sandbox-content-x sandbox-content-y">
-          <div class="sandbox-target root-target-x root-clamp-start" data-root-x-clamp-start></div>
           <div class="sandbox-target root-target-x root-target-element" data-root-x-element></div>
           <div class="sandbox-target root-target-x root-target-string" data-root-x-string></div>
-          <div class="sandbox-target root-target-x root-clamp-end" data-root-x-clamp-end></div>
 
-          <div class="sandbox-target root-target-y root-clamp-start" data-root-y-clamp-start></div>
           <div class="sandbox-target root-target-y root-target-element" data-root-y-element></div>
           <div class="sandbox-target root-target-y root-target-string" data-root-y-string></div>
-          <div class="sandbox-target root-target-y root-clamp-end" data-root-y-clamp-end></div>
         </div>
       </div>
 

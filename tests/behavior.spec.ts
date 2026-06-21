@@ -287,29 +287,30 @@ test.describe("root: element", () => {
       expect(actual).toEqual(expected)
     })
 
-    // FIX: should check captured scroll calls
-    // FIX: can be simplified to target: number like equivalent `root: window` text
     test("is clamped (start)", async ({ page }) => {
       expect(
         await page.evaluate(async () => {
           const root = window.fixtures.getElement("[data-root]")
-          await window.fixtures.scroll("[data-root-x-clamp-start]", { axis: "x", root })
-          return root.scrollLeft
+          root.scrollLeft = 25
+          window.fixtures.captureElementScrollToArgs(root)
+          await window.fixtures.scroll(-50, { axis: "x", root })
+          return window.fixtures.getLatestElementScrollToArgs()
         }),
-      ).toEqual(0)
+      ).toEqual([{ left: 0 }])
     })
 
-    // FIX: can be simplified to target: number like equivalent `root: window` text
     test("is clamped (end)", async ({ page }) => {
       const { actual, expected } = await page.evaluate(async () => {
         const root = window.fixtures.getElement("[data-root]")
+        const maxX = window.fixtures.getElementScrollXMax(root)
 
+        root.scrollLeft = maxX - 25
         window.fixtures.captureElementScrollToArgs(root)
-        await window.fixtures.scroll("[data-root-x-clamp-end]", { axis: "x", root })
+        await window.fixtures.scroll(50, { axis: "x", root })
 
         return {
           actual: window.fixtures.getLatestElementScrollToArgs(),
-          expected: window.fixtures.getElementScrollXMax(root),
+          expected: maxX,
         }
       })
 
@@ -373,29 +374,30 @@ test.describe("root: element", () => {
       expect(actual).toEqual(expected)
     })
 
-    // FIX: should check captured scroll calls
-    // FIX: can be simplified to target: number like equivalent `root: window` text
     test("is clamped (start)", async ({ page }) => {
       expect(
         await page.evaluate(async () => {
           const root = window.fixtures.getElement("[data-root]")
-          await window.fixtures.scroll("[data-root-y-clamp-start]", { root })
-          return root.scrollTop
+          root.scrollTop = 25
+          window.fixtures.captureElementScrollToArgs(root)
+          await window.fixtures.scroll(-50, { root })
+          return window.fixtures.getLatestElementScrollToArgs()
         }),
-      ).toEqual(0)
+      ).toEqual([{ top: 0 }])
     })
 
-    // FIX: can be simplified to target: number like equivalent `root: window` text
     test("is clamped (end)", async ({ page }) => {
       const { actual, expected } = await page.evaluate(async () => {
         const root = window.fixtures.getElement("[data-root]")
+        const maxY = window.fixtures.getElementScrollYMax(root)
 
+        root.scrollTop = maxY - 25
         window.fixtures.captureElementScrollToArgs(root)
-        await window.fixtures.scroll("[data-root-y-clamp-end]", { root })
+        await window.fixtures.scroll(50, { root })
 
         return {
           actual: window.fixtures.getLatestElementScrollToArgs(),
-          expected: window.fixtures.getElementScrollYMax(root),
+          expected: maxY,
         }
       })
 
