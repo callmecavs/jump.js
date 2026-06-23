@@ -21,11 +21,6 @@ declare global {
       getElementScrollXMax: (element: HTMLElement) => number
       getElementScrollYMax: (element: HTMLElement) => number
 
-      getWindowX: () => number
-      getWindowY: () => number
-      setWindowX: (left: number) => void
-      setWindowY: (top: number) => void
-
       getWindowScrollXMax: () => number
       getWindowScrollYMax: () => number
 
@@ -45,9 +40,9 @@ test.describe("root: window", () => {
     test("target: number (positive)", async ({ page }) => {
       expect(
         await page.evaluate(async () => {
-          window.fixtures.setWindowX(50)
+          window.scrollTo({ left: 50 })
           await window.fixtures.scroll(100, { axis: "x" })
-          return window.fixtures.getWindowX()
+          return window.scrollX
         }),
       ).toEqual(150)
     })
@@ -55,9 +50,9 @@ test.describe("root: window", () => {
     test("target: number (negative)", async ({ page }) => {
       expect(
         await page.evaluate(async () => {
-          window.fixtures.setWindowX(150)
+          window.scrollTo({ left: 150 })
           await window.fixtures.scroll(-100, { axis: "x" })
-          return window.fixtures.getWindowX()
+          return window.scrollX
         }),
       ).toEqual(50)
     })
@@ -81,7 +76,7 @@ test.describe("root: window", () => {
     test("is clamped (start)", async ({ page }) => {
       expect(
         await page.evaluate(async () => {
-          window.fixtures.setWindowX(25)
+          window.scrollTo({ left: 25 })
           window.fixtures.captureWindowScrollToArgs()
           await window.fixtures.scroll(-50, { axis: "x" })
           return window.fixtures.getLatestWindowScrollToArgs()
@@ -93,7 +88,7 @@ test.describe("root: window", () => {
       const { actual, expected } = await page.evaluate(async () => {
         const maxX = window.fixtures.getWindowScrollXMax()
 
-        window.fixtures.setWindowX(maxX - 25)
+        window.scrollTo({ left: maxX - 25 })
         window.fixtures.captureWindowScrollToArgs()
         await window.fixtures.scroll(50, { axis: "x" })
 
@@ -114,7 +109,7 @@ test.describe("root: window", () => {
         await window.fixtures.scroll("[data-window-x-target-string]", { axis: "x" })
 
         return {
-          actual: window.fixtures.getWindowY(),
+          actual: window.scrollY,
           expected: y,
         }
       })
@@ -127,9 +122,9 @@ test.describe("root: window", () => {
     test("target: number (positive)", async ({ page }) => {
       expect(
         await page.evaluate(async () => {
-          window.fixtures.setWindowY(50)
+          window.scrollTo({ top: 50 })
           await window.fixtures.scroll(100)
-          return window.fixtures.getWindowY()
+          return window.scrollY
         }),
       ).toEqual(150)
     })
@@ -137,9 +132,9 @@ test.describe("root: window", () => {
     test("target: number (negative)", async ({ page }) => {
       expect(
         await page.evaluate(async () => {
-          window.fixtures.setWindowY(150)
+          window.scrollTo({ top: 150 })
           await window.fixtures.scroll(-100)
-          return window.fixtures.getWindowY()
+          return window.scrollY
         }),
       ).toEqual(50)
     })
@@ -147,9 +142,9 @@ test.describe("root: window", () => {
     test("target: number ignores offset", async ({ page }) => {
       expect(
         await page.evaluate(async () => {
-          window.fixtures.setWindowY(50)
+          window.scrollTo({ top: 50 })
           await window.fixtures.scroll(100, { offset: -50 })
-          return window.fixtures.getWindowY()
+          return window.scrollY
         }),
       ).toEqual(150)
     })
@@ -204,7 +199,7 @@ test.describe("root: window", () => {
     test("is clamped (start)", async ({ page }) => {
       expect(
         await page.evaluate(async () => {
-          window.fixtures.setWindowY(25)
+          window.scrollTo({ top: 25 })
           window.fixtures.captureWindowScrollToArgs()
           await window.fixtures.scroll(-50)
           return window.fixtures.getLatestWindowScrollToArgs()
@@ -216,7 +211,7 @@ test.describe("root: window", () => {
       const { actual, expected } = await page.evaluate(async () => {
         const maxY = window.fixtures.getWindowScrollYMax()
 
-        window.fixtures.setWindowY(maxY - 25)
+        window.scrollTo({ top: maxY - 25 })
         window.fixtures.captureWindowScrollToArgs()
         await window.fixtures.scroll(50)
 
@@ -237,7 +232,7 @@ test.describe("root: window", () => {
         await window.fixtures.scroll("[data-window-y-target-string]")
 
         return {
-          actual: window.fixtures.getWindowX(),
+          actual: window.scrollX,
           expected: x,
         }
       })
@@ -502,7 +497,7 @@ test.describe("a11y", () => {
 
             // Small tolerance in case the browser ignores fractional scroll values. Can't check captured
             // `scrollTo` calls here, because browsers might not use it when `focus` is called.
-            didScroll: Math.abs(window.fixtures.getWindowY() - expected) >= 1,
+            didScroll: Math.abs(window.scrollY - expected) >= 1,
           }
         }),
       ).toEqual({
