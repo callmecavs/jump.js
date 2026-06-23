@@ -103,10 +103,11 @@ test.describe("root: window", () => {
 
     test("doesn't mutate other axis", async ({ page }) => {
       const { actual, expected } = await page.evaluate(async () => {
+        const target = window.fixtures.getElement("[data-window-x-target-string]")
         const y = 24
 
         window.scrollTo({ top: y })
-        await window.fixtures.scroll("[data-window-x-target-string]", { axis: "x" })
+        await window.fixtures.scroll(target, { axis: "x" })
 
         return {
           actual: window.scrollY,
@@ -226,10 +227,11 @@ test.describe("root: window", () => {
 
     test("doesn't mutate other axis", async ({ page }) => {
       const { actual, expected } = await page.evaluate(async () => {
+        const target = window.fixtures.getElement("[data-window-y-target-string]")
         const x = 24
 
         window.scrollTo({ left: x })
-        await window.fixtures.scroll("[data-window-y-target-string]")
+        await window.fixtures.scroll(target)
 
         return {
           actual: window.scrollX,
@@ -315,10 +317,11 @@ test.describe("root: element", () => {
     test("doesn't mutate other axis", async ({ page }) => {
       const { actual, expected } = await page.evaluate(async () => {
         const root = window.fixtures.getElement("[data-root]")
+        const target = window.fixtures.getElement("[data-root-x-string]")
         const y = 24
 
         root.scrollTo({ top: y })
-        await window.fixtures.scroll("[data-root-x-string]", { axis: "x", root })
+        await window.fixtures.scroll(target, { axis: "x", root })
 
         return {
           actual: root.scrollTop,
@@ -402,10 +405,11 @@ test.describe("root: element", () => {
     test("doesn't mutate other axis", async ({ page }) => {
       const { actual, expected } = await page.evaluate(async () => {
         const root = window.fixtures.getElement("[data-root]")
+        const target = window.fixtures.getElement("[data-root-y-string]")
         const x = 24
 
         root.scrollTo({ left: x })
-        await window.fixtures.scroll("[data-root-y-string]", { root })
+        await window.fixtures.scroll(target, { root })
 
         return {
           actual: root.scrollLeft,
