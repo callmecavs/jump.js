@@ -103,7 +103,7 @@ test.describe("root: window", () => {
 
     test("doesn't mutate other axis", async ({ page }) => {
       const { actual, expected } = await page.evaluate(async () => {
-        const target = window.fixtures.getElement("[data-window-x-target-string]")
+        const target = window.fixtures.getElement("[data-window-x-target-element]")
         const y = 24
 
         window.scrollTo({ top: y })
@@ -227,7 +227,7 @@ test.describe("root: window", () => {
 
     test("doesn't mutate other axis", async ({ page }) => {
       const { actual, expected } = await page.evaluate(async () => {
-        const target = window.fixtures.getElement("[data-window-y-target-string]")
+        const target = window.fixtures.getElement("[data-window-y-target-element")
         const x = 24
 
         window.scrollTo({ left: x })
@@ -317,7 +317,7 @@ test.describe("root: element", () => {
     test("doesn't mutate other axis", async ({ page }) => {
       const { actual, expected } = await page.evaluate(async () => {
         const root = window.fixtures.getElement("[data-root]")
-        const target = window.fixtures.getElement("[data-root-x-string]")
+        const target = window.fixtures.getElement("[data-root-x-element]")
         const y = 24
 
         root.scrollTo({ top: y })
@@ -405,7 +405,7 @@ test.describe("root: element", () => {
     test("doesn't mutate other axis", async ({ page }) => {
       const { actual, expected } = await page.evaluate(async () => {
         const root = window.fixtures.getElement("[data-root]")
-        const target = window.fixtures.getElement("[data-root-y-string]")
+        const target = window.fixtures.getElement("[data-root-y-element]")
         const x = 24
 
         root.scrollTo({ left: x })
