@@ -428,8 +428,9 @@ test.describe("a11y", () => {
       expect(
         await page.evaluate(async () => {
           const sentinel = window.fixtures.getElement("[data-focus-button]")
+          const target = window.fixtures.getElement("[data-focus]")
           sentinel.focus({ preventScroll: true })
-          await window.fixtures.scroll("[data-focus]", { a11y: false })
+          await window.fixtures.scroll(target, { a11y: false })
           return sentinel === document.activeElement
         }),
       ).toEqual(true)
@@ -439,8 +440,9 @@ test.describe("a11y", () => {
       expect(
         await page.evaluate(async () => {
           const sentinel = window.fixtures.getElement("[data-focus-button]")
+          const target = window.fixtures.getElement("[data-focus]")
           sentinel.focus({ preventScroll: true })
-          await window.fixtures.scroll("[data-focus]", { a11y: undefined })
+          await window.fixtures.scroll(target, { a11y: undefined })
           return sentinel === document.activeElement
         }),
       ).toEqual(true)
