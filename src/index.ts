@@ -50,8 +50,8 @@ const jump: Jump = (rawTarget, options = {}) => {
   const complete = () => {
     // If the jump is `instant`, this completes it immediately.
     // If the jump isn't `instant`, this makes sure the final position is perfect.
-    if (axis === "x") root.scrollTo({ left: end })
-    if (axis === "y") root.scrollTo({ top: end })
+    if (axis === "x") root.scrollTo({ behavior: "instant", left: end })
+    if (axis === "y") root.scrollTo({ behavior: "instant", top: end })
 
     if (a11y && isFocusable(target)) {
       // Add the `tabindex` attribute temporarily, to ensure calling `focus` works, unless:
@@ -82,8 +82,8 @@ const jump: Jump = (rawTarget, options = {}) => {
     const progress = elapsedTime / duration
     const next = start + distance * easing(progress)
 
-    if (axis === "x") root.scrollTo({ left: next })
-    if (axis === "y") root.scrollTo({ top: next })
+    if (axis === "x") root.scrollTo({ behavior: "instant", left: next })
+    if (axis === "y") root.scrollTo({ behavior: "instant", top: next })
 
     if (elapsedTime < duration) {
       rafId = window.requestAnimationFrame(loop)

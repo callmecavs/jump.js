@@ -70,7 +70,7 @@ test.describe("root: window", () => {
         }
       })
 
-      expect(actual).toEqual([{ left: expected }])
+      expect(actual).toEqual([{ behavior: "instant", left: expected }])
     })
 
     test("is clamped (start)", async ({ page }) => {
@@ -81,7 +81,7 @@ test.describe("root: window", () => {
           await window.fixtures.scroll(-50, { axis: "x" })
           return window.fixtures.getLatestWindowScrollToArgs()
         }),
-      ).toEqual([{ left: 0 }])
+      ).toEqual([{ behavior: "instant", left: 0 }])
     })
 
     test("is clamped (end)", async ({ page }) => {
@@ -98,7 +98,7 @@ test.describe("root: window", () => {
         }
       })
 
-      expect(actual).toEqual([{ left: expected }])
+      expect(actual).toEqual([{ behavior: "instant", left: expected }])
     })
 
     test("doesn't mutate other axis", async ({ page }) => {
@@ -163,7 +163,7 @@ test.describe("root: window", () => {
         }
       })
 
-      expect(actual).toEqual([{ top: expected }])
+      expect(actual).toEqual([{ behavior: "instant", top: expected }])
     })
 
     test("target: element with offset", async ({ page }) => {
@@ -180,7 +180,7 @@ test.describe("root: window", () => {
         }
       })
 
-      expect(actual).toEqual([{ top: expected }])
+      expect(actual).toEqual([{ behavior: "instant", top: expected }])
     })
 
     test("target: string", async ({ page }) => {
@@ -194,7 +194,7 @@ test.describe("root: window", () => {
         }
       })
 
-      expect(actual).toEqual([{ top: expected }])
+      expect(actual).toEqual([{ behavior: "instant", top: expected }])
     })
 
     test("is clamped (start)", async ({ page }) => {
@@ -205,7 +205,7 @@ test.describe("root: window", () => {
           await window.fixtures.scroll(-50)
           return window.fixtures.getLatestWindowScrollToArgs()
         }),
-      ).toEqual([{ top: 0 }])
+      ).toEqual([{ behavior: "instant", top: 0 }])
     })
 
     test("is clamped (end)", async ({ page }) => {
@@ -222,7 +222,7 @@ test.describe("root: window", () => {
         }
       })
 
-      expect(actual).toEqual([{ top: expected }])
+      expect(actual).toEqual([{ behavior: "instant", top: expected }])
     })
 
     test("doesn't mutate other axis", async ({ page }) => {
@@ -293,7 +293,7 @@ test.describe("root: element", () => {
           await window.fixtures.scroll(-50, { axis: "x", root })
           return window.fixtures.getLatestElementScrollToArgs()
         }),
-      ).toEqual([{ left: 0 }])
+      ).toEqual([{ behavior: "instant", left: 0 }])
     })
 
     test("is clamped (end)", async ({ page }) => {
@@ -311,7 +311,7 @@ test.describe("root: element", () => {
         }
       })
 
-      expect(actual).toEqual([{ left: expected }])
+      expect(actual).toEqual([{ behavior: "instant", left: expected }])
     })
 
     test("doesn't mutate other axis", async ({ page }) => {
@@ -381,7 +381,7 @@ test.describe("root: element", () => {
           await window.fixtures.scroll(-50, { root })
           return window.fixtures.getLatestElementScrollToArgs()
         }),
-      ).toEqual([{ top: 0 }])
+      ).toEqual([{ behavior: "instant", top: 0 }])
     })
 
     test("is clamped (end)", async ({ page }) => {
@@ -399,7 +399,7 @@ test.describe("root: element", () => {
         }
       })
 
-      expect(actual).toEqual([{ top: expected }])
+      expect(actual).toEqual([{ behavior: "instant", top: expected }])
     })
 
     test("doesn't mutate other axis", async ({ page }) => {
