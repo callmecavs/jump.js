@@ -355,15 +355,16 @@ jump(".no-match")
 
 ## Browser Support
 
-Limiting ECMAScript feature: [Error `cause`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error/cause).
-
 Jump supports the following natively:
 
-- Chrome 93+
-- Edge 93+
-- Firefox 91+
-- Opera 79+
-- Safari 15+
+| Browser      | Version | Limiting ECMAScript Feature                                                                                               |
+| ------------ | ------- | ------------------------------------------------------------------------------------------------------------------------- |
+| Chrome       | 93+     | [`Error("...", { cause })`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error/cause) |
+| Edge         | 93+     | [`Error("...", { cause })`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error/cause) |
+| Firefox      | 91+     | [`Error("...", { cause })`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error/cause) |
+| Opera        | 79+     | [`Error("...", { cause })`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error/cause) |
+| Safari       | 15+     | [`Error("...", { cause })`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error/cause) |
+| Safari (iOS) | 15.5+   | [`focus({ preventScroll })`](https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/focus#preventscroll)            |
 
 ## License
 
