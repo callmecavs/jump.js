@@ -1,4 +1,4 @@
-import type { Jump, JumpEasing } from "./types"
+import type { Jump, JumpAxis, JumpEasing, JumpRoot } from "./types"
 import { isFocusable } from "./dom"
 import { resolveAccessibility, resolveDuration, resolveTarget } from "./options"
 import { calculateDistance, calculateEnd, calculateStart } from "./scroll"
@@ -19,6 +19,11 @@ export type {
 
 const easeInOutQuad: JumpEasing = p => {
   return p < 0.5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2
+}
+
+const scrollTo = (axis: JumpAxis, position: number, root: JumpRoot) => {
+  if (axis === "x") root.scrollTo({ behavior: "instant", left: position })
+  if (axis === "y") root.scrollTo({ behavior: "instant", top: position })
 }
 
 const jump: Jump = (rawTarget, options = {}) => {
@@ -50,8 +55,7 @@ const jump: Jump = (rawTarget, options = {}) => {
   const complete = () => {
     // If the jump is `instant`, this completes it immediately.
     // If the jump isn't `instant`, this makes sure the final position is perfect.
-    if (axis === "x") root.scrollTo({ behavior: "instant", left: end })
-    if (axis === "y") root.scrollTo({ behavior: "instant", top: end })
+    scrollTo(axis, end, root)
 
     if (a11y && isFocusable(target)) {
       // Add the `tabindex` attribute temporarily, to ensure calling `focus` works, unless:
@@ -91,9 +95,7 @@ const jump: Jump = (rawTarget, options = {}) => {
     const next = start + distance * easing(progress)
 
     if (elapsedTime < duration) {
-      if (axis === "x") root.scrollTo({ behavior: "instant", left: next })
-      if (axis === "y") root.scrollTo({ behavior: "instant", top: next })
-
+      scrollTo(axis, next, root)
       rafId = window.requestAnimationFrame(loop)
       return
     }
