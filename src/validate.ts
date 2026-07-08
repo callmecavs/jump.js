@@ -39,7 +39,7 @@ export const validateOptions: (options: unknown) => asserts options is JumpOptio
       throw new TypeError(`Expected "offset" to be a number.`)
     }
 
-    if (typeof offset === "number" && !isFinite(offset)) {
+    if (!isFinite(offset)) {
       throw new TypeError(`Expected "offset" to be a finite number.`)
     }
   }
