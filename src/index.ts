@@ -63,8 +63,16 @@ const jump: Jump = (rawTarget, options = {}) => {
 
       target.focus({ preventScroll: true })
 
-      // Removing `tabindex` also removes `focus`. Wait until until the user changes the `focus` to do it.
-      if (needTabIndex) target.addEventListener("blur", () => target.removeAttribute("tabindex"), { once: true })
+      if (needTabIndex) {
+        const didFocus = document.activeElement === target
+
+        // If `focus` failed, remove `tabindex` immediately.
+        if (!didFocus) target.removeAttribute("tabindex")
+
+        // If `focus` worked, keep the `tabindex` until the `target` is `blur`red, because
+        // removing it will also remove the `focus`.
+        if (didFocus) target.addEventListener("blur", () => target.removeAttribute("tabindex"), { once: true })
+      }
     }
 
     // If we made it here, and the `callback` exists:
