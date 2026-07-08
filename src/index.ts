@@ -90,10 +90,10 @@ const jump: Jump = (rawTarget, options = {}) => {
     const progress = elapsedTime / duration
     const next = start + distance * easing(progress)
 
-    if (axis === "x") root.scrollTo({ behavior: "instant", left: next })
-    if (axis === "y") root.scrollTo({ behavior: "instant", top: next })
-
     if (elapsedTime < duration) {
+      if (axis === "x") root.scrollTo({ behavior: "instant", left: next })
+      if (axis === "y") root.scrollTo({ behavior: "instant", top: next })
+
       rafId = window.requestAnimationFrame(loop)
       return
     }
