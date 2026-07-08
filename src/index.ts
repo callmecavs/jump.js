@@ -45,7 +45,7 @@ const jump: Jump = (rawTarget, options = {}) => {
   const duration = resolveDuration(distance, rawDuration)
 
   let rafId: number
-  let startTime: number
+  let startTime: number | undefined
 
   const complete = () => {
     // If the jump is `instant`, this completes it immediately.
