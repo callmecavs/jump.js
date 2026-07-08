@@ -35,7 +35,7 @@ const jump: Jump = (rawTarget, options = {}) => {
     root = window,
   } = options
 
-  const target = resolveTarget(rawTarget)
+  const target = resolveTarget(rawTarget, root)
 
   const start = calculateStart(axis, root)
   const end = calculateEnd(axis, offset, root, start, target)
