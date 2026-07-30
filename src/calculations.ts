@@ -1,5 +1,5 @@
 import type { JumpAxis, JumpResolvedTarget, JumpRoot } from "./types"
-import { isElement } from "./guards"
+import { isElement, isWindow } from "./guards"
 import { clamp } from "./utilities"
 
 export const calculateDistance = (end: number, start: number) => {
@@ -21,14 +21,14 @@ export const calculateEnd = (
   // Calculate the max amount `root` can be scrolled.
   let max: number
 
-  const scroller = isElement(root) ? root : (root.document.scrollingElement ?? root.document.documentElement)
+  const scrollingElement = isWindow(root) ? root.document.documentElement : root
 
   switch (axis) {
     case "x":
-      max = scroller.scrollWidth - scroller.clientWidth
+      max = scrollingElement.scrollWidth - scrollingElement.clientWidth
       break
     case "y":
-      max = scroller.scrollHeight - scroller.clientHeight
+      max = scrollingElement.scrollHeight - scrollingElement.clientHeight
       break
   }
 
