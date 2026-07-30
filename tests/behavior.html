@@ -175,9 +175,11 @@
         const original = window.requestAnimationFrame.bind(window)
 
         const wrapped = (...args) => {
-          latestFrameArgs = args
-          original(...args)
+          latestRequestAnimationFrameArgs = args
+          return original(...args)
         }
+
+        window.requestAnimationFrame = wrapped
       }
 
       let latestElementFocusArgs

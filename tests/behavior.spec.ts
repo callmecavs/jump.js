@@ -5,6 +5,9 @@ import type { Jump } from "../src/types"
 declare global {
   interface Window {
     fixtures: {
+      captureRequestAnimationFrameArgs: () => void
+      getLatestRequestAnimationFrameArgs: () => Parameters<Window["requestAnimationFrame"]> | undefined
+
       captureElementFocusArgs: (element: HTMLElement) => void
       getLatestElementFocusArgs: () => Array<FocusOptions> | undefined
 
@@ -242,6 +245,62 @@ test.describe("root: window", () => {
       })
 
       expect(actual).toEqual(expected)
+    })
+
+    test("instant: duration", async ({ page }) => {
+      expect(
+        await page.evaluate(() => {
+          const distance = 100
+
+          window.fixtures.captureRequestAnimationFrameArgs()
+          window.fixtures.captureWindowScrollToArgs()
+          window.fixtures.jump(distance, { duration: 0 })
+
+          return {
+            argsFrame: window.fixtures.getLatestRequestAnimationFrameArgs(),
+            argsScroll: window.fixtures.getLatestWindowScrollToArgs(),
+          }
+        }),
+      ).toEqual({
+        argsFrame: undefined,
+        argsScroll: [{ behavior: "instant", top: 100 }],
+      })
+    })
+
+    test("instant: distance", async ({ page }) => {
+      expect(
+        await page.evaluate(() => {
+          window.fixtures.captureRequestAnimationFrameArgs()
+          window.fixtures.captureWindowScrollToArgs()
+          window.fixtures.jump(0)
+
+          return {
+            argsFrame: window.fixtures.getLatestRequestAnimationFrameArgs(),
+            argsScroll: window.fixtures.getLatestWindowScrollToArgs(),
+          }
+        }),
+      ).toEqual({
+        argsFrame: undefined,
+        argsScroll: [{ behavior: "instant", top: 0 }],
+      })
+    })
+
+    test("instant: distance, sub-pixel", async ({ page }) => {
+      expect(
+        await page.evaluate(() => {
+          window.fixtures.captureRequestAnimationFrameArgs()
+          window.fixtures.captureWindowScrollToArgs()
+          window.fixtures.jump(0.5)
+
+          return {
+            argsFrame: window.fixtures.getLatestRequestAnimationFrameArgs(),
+            argsScroll: window.fixtures.getLatestWindowScrollToArgs(),
+          }
+        }),
+      ).toEqual({
+        argsFrame: undefined,
+        argsScroll: [{ behavior: "instant", top: 0.5 }],
+      })
     })
   })
 })
