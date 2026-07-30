@@ -167,6 +167,17 @@
     <script type="module">
       import jump from "../dist/index.js"
 
+      const jumpAsync = (target, options = {}) =>
+        new Promise(resolve => {
+          jump(target, {
+            ...options,
+            callback: () => {
+              options.callback?.()
+              resolve()
+            },
+          })
+        })
+
       const jumpInstant = (target, options = {}) => jump(target, { ...options, duration: 0 })
 
       let latestRequestAnimationFrameArgs
@@ -251,6 +262,7 @@
         getWindowScrollYMax: () => document.documentElement.scrollHeight - document.documentElement.clientHeight,
 
         jump,
+        jumpAsync,
         jumpInstant,
 
         wait: time => new Promise(resolve => setTimeout(resolve, time)),
