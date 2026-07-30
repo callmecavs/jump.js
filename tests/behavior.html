@@ -169,6 +169,17 @@
 
       const jumpInstant = (target, options = {}) => jump(target, { ...options, duration: 0 })
 
+      let latestRequestAnimationFrameArgs
+
+      const captureRequestAnimationFrameArgs = () => {
+        const original = window.requestAnimationFrame.bind(window)
+
+        const wrapped = (...args) => {
+          latestFrameArgs = args
+          original(...args)
+        }
+      }
+
       let latestElementFocusArgs
 
       const captureElementFocusArgs = element => {
@@ -212,6 +223,9 @@
       }
 
       window.fixtures = {
+        captureRequestAnimationFrameArgs,
+        getLatestRequestAnimationFrameArgs: () => latestRequestAnimationFrameArgs,
+
         captureElementFocusArgs,
         getLatestElementFocusArgs: () => latestElementFocusArgs,
 
@@ -227,6 +241,7 @@
           if (!(match instanceof HTMLElement)) throw new Error("`getElement` failed: match isn't an `HTMLElement`.")
           return match
         },
+
         getElementX: element => element.getBoundingClientRect().left + window.scrollX,
         getElementY: element => element.getBoundingClientRect().top + window.scrollY,
 
