@@ -1,8 +1,9 @@
-import type { Jump, JumpAxis, JumpEasing, JumpRoot } from "./types"
-import { isFocusable } from "./dom"
-import { resolveAccessibility, resolveDuration, resolveTarget } from "./options"
-import { calculateDistance, calculateEnd, calculateStart } from "./scroll"
-import { validateOptions, validateTarget } from "./validate"
+import type { Jump } from "./types"
+import { calculateDistance, calculateEnd, calculateStart } from "./calculations"
+import { isFocusable } from "./guards"
+import { resolveAccessibility, resolveDuration, resolveTarget } from "./resolvers"
+import { easeInOutQuad, noop, scroll } from "./utilities"
+import { validateOptions, validateTarget } from "./validators"
 
 // Export the types, excluding `JumpResolvedTarget` (internal only).
 export type {
@@ -16,15 +17,6 @@ export type {
   JumpRoot,
   JumpTarget,
 } from "./types"
-
-const easeInOutQuad: JumpEasing = p => {
-  return p < 0.5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2
-}
-
-const scrollTo = (axis: JumpAxis, position: number, root: JumpRoot) => {
-  if (axis === "x") root.scrollTo({ behavior: "instant", left: position })
-  if (axis === "y") root.scrollTo({ behavior: "instant", top: position })
-}
 
 const jump: Jump = (rawTarget, options = {}) => {
   validateTarget(rawTarget)
@@ -49,13 +41,15 @@ const jump: Jump = (rawTarget, options = {}) => {
   const distance = calculateDistance(end, start)
   const duration = resolveDuration(distance, rawDuration)
 
-  let rafId: number
+  const isInstant = distance === 0 || duration === 0
+
+  let frameId: number
   let startTime: number | undefined
 
   const complete = () => {
     // If the jump is `instant`, this completes it immediately.
     // If the jump isn't `instant`, this makes sure the final position is perfect.
-    scrollTo(axis, end, root)
+    scroll(axis, end, root)
 
     if (a11y && isFocusable(target)) {
       // Add the `tabindex` attribute temporarily, to ensure calling `focus` works, unless:
@@ -88,15 +82,15 @@ const jump: Jump = (rawTarget, options = {}) => {
   const loop = (currentTime: DOMHighResTimeStamp) => {
     if (startTime === undefined) startTime = currentTime
 
-    // Limit `elapsedTime` to `duration` to prevent going "past the end" of the jump.
+    // Limit `elapsedTime` to `duration` to prevent going past the end.
     const elapsedTime = Math.min(currentTime - startTime, duration)
 
     const progress = elapsedTime / duration
     const next = start + distance * easing(progress)
 
     if (elapsedTime < duration) {
-      scrollTo(axis, next, root)
-      rafId = window.requestAnimationFrame(loop)
+      scroll(axis, next, root)
+      frameId = window.requestAnimationFrame(loop)
       return
     }
 
@@ -104,16 +98,14 @@ const jump: Jump = (rawTarget, options = {}) => {
   }
 
   // Instant jumps complete immediately. No `rAF` loop to `cancel` here.
-  const instant = distance === 0 || duration === 0
-
-  if (instant) {
+  if (isInstant) {
     complete()
-    return () => {}
+    return noop
   }
 
   // Kick off the `rAF` loop, and return the `cancel` function.
-  rafId = window.requestAnimationFrame(loop)
-  return () => window.cancelAnimationFrame(rafId)
+  frameId = window.requestAnimationFrame(loop)
+  return () => window.cancelAnimationFrame(frameId)
 }
 
 export default jump

@@ -1,11 +1,6 @@
 import type { JumpAxis, JumpResolvedTarget, JumpRoot } from "./types"
-import { isElement } from "./dom"
-
-const clamp = (number: number, min: number, max: number): number => {
-  if (number < min) return min
-  if (number > max) return max
-  return number
-}
+import { isElement } from "./guards"
+import { clamp } from "./utilities"
 
 export const calculateDistance = (end: number, start: number) => {
   const delta = end - start

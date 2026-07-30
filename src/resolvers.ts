@@ -1,5 +1,5 @@
 import type { JumpDuration, JumpResolvedTarget, JumpRoot, JumpTarget } from "./types"
-import { isElement, isWindow } from "./dom"
+import { isElement, isWindow } from "./guards"
 
 export const resolveAccessibility = (a11y: boolean, target: JumpResolvedTarget) => {
   // The `a11y` option requires that the `target` be a node.

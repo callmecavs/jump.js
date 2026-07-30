@@ -1,5 +1,5 @@
 import type { JumpOptions, JumpTarget } from "./types"
-import { isElement, isWindow } from "./dom"
+import { isElement, isWindow } from "./guards"
 
 export const validateOptions: (options: unknown) => asserts options is JumpOptions = options => {
   if (typeof options !== "object" || Array.isArray(options) || options === null) {
