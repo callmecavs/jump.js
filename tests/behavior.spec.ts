@@ -456,6 +456,30 @@ test.describe("cancel", () => {
       didntComplete: true,
     })
   })
+
+  test("doesn't run callback", async ({ page }) => {
+    expect(
+      await page.evaluate(async () => {
+        const distance = 500
+        const duration = 1000
+        const step = duration / 2
+
+        let didRun = false
+
+        const callback = () => {
+          didRun = true
+        }
+
+        const cancel = window.fixtures.jump(distance, { callback, duration })
+
+        await window.fixtures.wait(step)
+        cancel()
+        await window.fixtures.wait(duration)
+
+        return didRun
+      }),
+    ).toEqual(false)
+  })
 })
 
 test.describe("a11y", () => {
