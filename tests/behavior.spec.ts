@@ -3,19 +3,21 @@ import { expect, test } from "@playwright/test"
 import type { Jump } from "../src/types"
 
 declare global {
+  type ScrollToArgs = [options?: ScrollToOptions] | [x: number, y: number]
+
   interface Window {
     fixtures: {
       captureRequestAnimationFrameArgs: () => void
       getLatestRequestAnimationFrameArgs: () => Parameters<Window["requestAnimationFrame"]> | undefined
 
       captureElementFocusArgs: (element: HTMLElement) => void
-      getLatestElementFocusArgs: () => Array<FocusOptions> | undefined
+      getLatestElementFocusArgs: () => Parameters<HTMLElement["focus"]> | undefined
 
       captureElementScrollToArgs: (element: HTMLElement) => void
-      getLatestElementScrollToArgs: () => Array<ScrollToOptions> | undefined
+      getLatestElementScrollToArgs: () => ScrollToArgs | undefined
 
       captureWindowScrollToArgs: () => void
-      getLatestWindowScrollToArgs: () => Array<ScrollToOptions> | undefined
+      getLatestWindowScrollToArgs: () => ScrollToArgs | undefined
 
       getElement: (selector: string) => HTMLElement
       getElementX: (element: HTMLElement) => number
