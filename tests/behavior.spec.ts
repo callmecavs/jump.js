@@ -25,7 +25,8 @@ declare global {
       getWindowScrollYMax: () => number
 
       jump: Jump
-      scroll: (target: JumpTarget, options?: JumpOptions) => Promise<void>
+      jumpAsync: (target: JumpTarget, options?: JumpOptions) => Promise<void>
+      jumpInstant: Jump
 
       wait: (time: number) => Promise<void>
     }
@@ -43,7 +44,7 @@ test.describe("root: window", () => {
       expect(
         await page.evaluate(async () => {
           window.scrollTo({ left: 50 })
-          await window.fixtures.scroll(100, { axis: "x" })
+          await window.fixtures.jumpAsync(100, { axis: "x" })
           return window.scrollX
         }),
       ).toEqual(150)
@@ -53,7 +54,7 @@ test.describe("root: window", () => {
       expect(
         await page.evaluate(async () => {
           window.scrollTo({ left: 150 })
-          await window.fixtures.scroll(-100, { axis: "x" })
+          await window.fixtures.jumpAsync(-100, { axis: "x" })
           return window.scrollX
         }),
       ).toEqual(50)
@@ -64,7 +65,7 @@ test.describe("root: window", () => {
         const target = window.fixtures.getElement("[data-window-x-target-element]")
 
         window.fixtures.captureWindowScrollToArgs()
-        await window.fixtures.scroll(target, { axis: "x" })
+        await window.fixtures.jumpAsync(target, { axis: "x" })
 
         return {
           actual: window.fixtures.getLatestWindowScrollToArgs(),
@@ -80,7 +81,7 @@ test.describe("root: window", () => {
         await page.evaluate(async () => {
           window.scrollTo({ left: 25 })
           window.fixtures.captureWindowScrollToArgs()
-          await window.fixtures.scroll(-50, { axis: "x" })
+          await window.fixtures.jumpAsync(-50, { axis: "x" })
           return window.fixtures.getLatestWindowScrollToArgs()
         }),
       ).toEqual([{ behavior: "instant", left: 0 }])
@@ -92,7 +93,7 @@ test.describe("root: window", () => {
 
         window.scrollTo({ left: maxX - 25 })
         window.fixtures.captureWindowScrollToArgs()
-        await window.fixtures.scroll(50, { axis: "x" })
+        await window.fixtures.jumpAsync(50, { axis: "x" })
 
         return {
           actual: window.fixtures.getLatestWindowScrollToArgs(),
@@ -109,7 +110,7 @@ test.describe("root: window", () => {
         const y = 24
 
         window.scrollTo({ top: y })
-        await window.fixtures.scroll(target, { axis: "x" })
+        await window.fixtures.jumpAsync(target, { axis: "x" })
 
         return {
           actual: window.scrollY,
@@ -126,7 +127,7 @@ test.describe("root: window", () => {
       expect(
         await page.evaluate(async () => {
           window.scrollTo({ top: 50 })
-          await window.fixtures.scroll(100)
+          await window.fixtures.jumpAsync(100)
           return window.scrollY
         }),
       ).toEqual(150)
@@ -136,7 +137,7 @@ test.describe("root: window", () => {
       expect(
         await page.evaluate(async () => {
           window.scrollTo({ top: 150 })
-          await window.fixtures.scroll(-100)
+          await window.fixtures.jumpAsync(-100)
           return window.scrollY
         }),
       ).toEqual(50)
@@ -146,7 +147,7 @@ test.describe("root: window", () => {
       expect(
         await page.evaluate(async () => {
           window.scrollTo({ top: 50 })
-          await window.fixtures.scroll(100, { offset: -50 })
+          await window.fixtures.jumpAsync(100, { offset: -50 })
           return window.scrollY
         }),
       ).toEqual(150)
@@ -157,7 +158,7 @@ test.describe("root: window", () => {
         const target = window.fixtures.getElement("[data-window-y-target-element]")
 
         window.fixtures.captureWindowScrollToArgs()
-        await window.fixtures.scroll(target)
+        await window.fixtures.jumpAsync(target)
 
         return {
           actual: window.fixtures.getLatestWindowScrollToArgs(),
@@ -174,7 +175,7 @@ test.describe("root: window", () => {
         const target = window.fixtures.getElement("[data-window-y-target-element]")
 
         window.fixtures.captureWindowScrollToArgs()
-        await window.fixtures.scroll(target, { offset })
+        await window.fixtures.jumpAsync(target, { offset })
 
         return {
           actual: window.fixtures.getLatestWindowScrollToArgs(),
@@ -188,7 +189,7 @@ test.describe("root: window", () => {
     test("target: string", async ({ page }) => {
       const { actual, expected } = await page.evaluate(async () => {
         window.fixtures.captureWindowScrollToArgs()
-        await window.fixtures.scroll("[data-window-y-target-string]")
+        await window.fixtures.jumpAsync("[data-window-y-target-string]")
 
         return {
           actual: window.fixtures.getLatestWindowScrollToArgs(),
@@ -204,7 +205,7 @@ test.describe("root: window", () => {
         await page.evaluate(async () => {
           window.scrollTo({ top: 25 })
           window.fixtures.captureWindowScrollToArgs()
-          await window.fixtures.scroll(-50)
+          await window.fixtures.jumpAsync(-50)
           return window.fixtures.getLatestWindowScrollToArgs()
         }),
       ).toEqual([{ behavior: "instant", top: 0 }])
@@ -216,7 +217,7 @@ test.describe("root: window", () => {
 
         window.scrollTo({ top: maxY - 25 })
         window.fixtures.captureWindowScrollToArgs()
-        await window.fixtures.scroll(50)
+        await window.fixtures.jumpAsync(50)
 
         return {
           actual: window.fixtures.getLatestWindowScrollToArgs(),
@@ -233,7 +234,7 @@ test.describe("root: window", () => {
         const x = 24
 
         window.scrollTo({ left: x })
-        await window.fixtures.scroll(target)
+        await window.fixtures.jumpAsync(target)
 
         return {
           actual: window.scrollX,
@@ -253,7 +254,7 @@ test.describe("root: element", () => {
         await page.evaluate(async () => {
           const root = window.fixtures.getElement("[data-root]")
           root.scrollLeft = 50
-          await window.fixtures.scroll(100, { axis: "x", root })
+          await window.fixtures.jumpAsync(100, { axis: "x", root })
           return root.scrollLeft
         }),
       ).toEqual(150)
@@ -264,7 +265,7 @@ test.describe("root: element", () => {
         await page.evaluate(async () => {
           const root = window.fixtures.getElement("[data-root]")
           root.scrollLeft = 150
-          await window.fixtures.scroll(-100, { axis: "x", root })
+          await window.fixtures.jumpAsync(-100, { axis: "x", root })
           return root.scrollLeft
         }),
       ).toEqual(50)
@@ -275,7 +276,7 @@ test.describe("root: element", () => {
         const root = window.fixtures.getElement("[data-root]")
         const target = window.fixtures.getElement("[data-root-x-element]")
 
-        await window.fixtures.scroll(target, { axis: "x", root })
+        await window.fixtures.jumpAsync(target, { axis: "x", root })
 
         return {
           actual: root.scrollLeft,
@@ -292,7 +293,7 @@ test.describe("root: element", () => {
           const root = window.fixtures.getElement("[data-root]")
           root.scrollLeft = 25
           window.fixtures.captureElementScrollToArgs(root)
-          await window.fixtures.scroll(-50, { axis: "x", root })
+          await window.fixtures.jumpAsync(-50, { axis: "x", root })
           return window.fixtures.getLatestElementScrollToArgs()
         }),
       ).toEqual([{ behavior: "instant", left: 0 }])
@@ -305,7 +306,7 @@ test.describe("root: element", () => {
 
         root.scrollLeft = maxX - 25
         window.fixtures.captureElementScrollToArgs(root)
-        await window.fixtures.scroll(50, { axis: "x", root })
+        await window.fixtures.jumpAsync(50, { axis: "x", root })
 
         return {
           actual: window.fixtures.getLatestElementScrollToArgs(),
@@ -323,7 +324,7 @@ test.describe("root: element", () => {
         const y = 24
 
         root.scrollTo({ top: y })
-        await window.fixtures.scroll(target, { axis: "x", root })
+        await window.fixtures.jumpAsync(target, { axis: "x", root })
 
         return {
           actual: root.scrollTop,
@@ -341,7 +342,7 @@ test.describe("root: element", () => {
         await page.evaluate(async () => {
           const root = window.fixtures.getElement("[data-root]")
           root.scrollTop = 50
-          await window.fixtures.scroll(100, { root })
+          await window.fixtures.jumpAsync(100, { root })
           return root.scrollTop
         }),
       ).toEqual(150)
@@ -352,7 +353,7 @@ test.describe("root: element", () => {
         await page.evaluate(async () => {
           const root = window.fixtures.getElement("[data-root]")
           root.scrollTop = 150
-          await window.fixtures.scroll(-100, { root })
+          await window.fixtures.jumpAsync(-100, { root })
           return root.scrollTop
         }),
       ).toEqual(50)
@@ -363,7 +364,7 @@ test.describe("root: element", () => {
         const root = window.fixtures.getElement("[data-root]")
         const target = window.fixtures.getElement("[data-root-y-element]")
 
-        await window.fixtures.scroll(target, { root })
+        await window.fixtures.jumpAsync(target, { root })
 
         return {
           actual: root.scrollTop,
@@ -380,7 +381,7 @@ test.describe("root: element", () => {
           const root = window.fixtures.getElement("[data-root]")
           root.scrollTop = 25
           window.fixtures.captureElementScrollToArgs(root)
-          await window.fixtures.scroll(-50, { root })
+          await window.fixtures.jumpAsync(-50, { root })
           return window.fixtures.getLatestElementScrollToArgs()
         }),
       ).toEqual([{ behavior: "instant", top: 0 }])
@@ -393,7 +394,7 @@ test.describe("root: element", () => {
 
         root.scrollTop = maxY - 25
         window.fixtures.captureElementScrollToArgs(root)
-        await window.fixtures.scroll(50, { root })
+        await window.fixtures.jumpAsync(50, { root })
 
         return {
           actual: window.fixtures.getLatestElementScrollToArgs(),
@@ -411,7 +412,7 @@ test.describe("root: element", () => {
         const x = 24
 
         root.scrollTo({ left: x })
-        await window.fixtures.scroll(target, { root })
+        await window.fixtures.jumpAsync(target, { root })
 
         return {
           actual: root.scrollLeft,
@@ -490,7 +491,7 @@ test.describe("a11y", () => {
           const sentinel = window.fixtures.getElement("[data-focus-button]")
           const target = window.fixtures.getElement("[data-focus]")
           sentinel.focus({ preventScroll: true })
-          await window.fixtures.scroll(target, { a11y: false })
+          await window.fixtures.jumpAsync(target, { a11y: false })
           return sentinel === document.activeElement
         }),
       ).toEqual(true)
@@ -502,7 +503,7 @@ test.describe("a11y", () => {
           const sentinel = window.fixtures.getElement("[data-focus-button]")
           const target = window.fixtures.getElement("[data-focus]")
           sentinel.focus({ preventScroll: true })
-          await window.fixtures.scroll(target, { a11y: undefined })
+          await window.fixtures.jumpAsync(target, { a11y: undefined })
           return sentinel === document.activeElement
         }),
       ).toEqual(true)
@@ -515,7 +516,7 @@ test.describe("a11y", () => {
         await page.evaluate(async () => {
           const root = window.fixtures.getElement("[data-focus]")
           const target = window.fixtures.getElement("[data-focus-element]")
-          await window.fixtures.scroll(target, { a11y: true, root })
+          await window.fixtures.jumpAsync(target, { a11y: true, root })
           return target === document.activeElement
         }),
       ).toEqual(true)
@@ -528,7 +529,7 @@ test.describe("a11y", () => {
           sentinel.focus({ preventScroll: true })
 
           const root = window.fixtures.getElement("[data-focus]")
-          await window.fixtures.scroll(100, { a11y: true, root })
+          await window.fixtures.jumpAsync(100, { a11y: true, root })
 
           return sentinel === document.activeElement
         }),
@@ -541,7 +542,7 @@ test.describe("a11y", () => {
           const root = window.fixtures.getElement("[data-focus]")
           const target = window.fixtures.getElement("[data-focus-element]")
           window.fixtures.captureElementFocusArgs(target)
-          await window.fixtures.scroll(target, { a11y: true, root })
+          await window.fixtures.jumpAsync(target, { a11y: true, root })
           return window.fixtures.getLatestElementFocusArgs()
         }),
       ).toEqual([{ preventScroll: true }])
@@ -556,7 +557,7 @@ test.describe("a11y", () => {
           const target = window.fixtures.getElement("[data-focus]")
           const expected = window.fixtures.getElementY(target) + offset
 
-          await window.fixtures.scroll(target, { a11y: true, offset })
+          await window.fixtures.jumpAsync(target, { a11y: true, offset })
 
           return {
             didFocus: target === document.activeElement,
@@ -580,7 +581,7 @@ test.describe("a11y", () => {
           const sentinel = window.fixtures.getElement("[data-focus-button]")
 
           sentinel.setAttribute("tabindex", `${expected}`)
-          await window.fixtures.scroll(sentinel, { a11y: true, root })
+          await window.fixtures.jumpAsync(sentinel, { a11y: true, root })
           sentinel.blur()
 
           return sentinel.hasAttribute("tabindex") && Number(sentinel.getAttribute("tabindex")) === expected
@@ -593,7 +594,7 @@ test.describe("a11y", () => {
         await page.evaluate(async () => {
           const sentinel = window.fixtures.getElement("[data-focus]")
 
-          await window.fixtures.scroll(sentinel, { a11y: true })
+          await window.fixtures.jumpAsync(sentinel, { a11y: true })
           const wasAdded = sentinel.getAttribute("tabindex") === "-1"
 
           sentinel.blur()
