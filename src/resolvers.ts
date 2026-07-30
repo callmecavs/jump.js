@@ -12,6 +12,16 @@ export const resolveDuration = (distance: number, duration: JumpDuration) => {
   return duration
 }
 
+export const resolveRoot = (root: JumpRoot): JumpRoot => {
+  // Catch the `scrollingElement` being passed as the `root`. Use the `window`
+  // instead because, like other elements, it has a stationary bounding box.
+  if (isElement(root) && root === root.ownerDocument.scrollingElement) {
+    return root.ownerDocument.defaultView ?? root
+  }
+
+  return root
+}
+
 export const resolveTarget = (target: JumpTarget, root: JumpRoot): JumpResolvedTarget => {
   if (typeof target === "number") return target
 

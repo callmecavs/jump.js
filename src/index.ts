@@ -1,7 +1,7 @@
 import type { Jump } from "./types"
 import { calculateDistance, calculateEnd, calculateStart } from "./calculations"
 import { isFocusable } from "./guards"
-import { resolveAccessibility, resolveDuration, resolveTarget } from "./resolvers"
+import { resolveAccessibility, resolveDuration, resolveRoot, resolveTarget } from "./resolvers"
 import { easeInOutQuad, noop, scroll } from "./utilities"
 import { validateOptions, validateTarget } from "./validators"
 
@@ -29,9 +29,10 @@ const jump: Jump = (rawTarget, options = {}) => {
     duration: rawDuration = 1000,
     easing = easeInOutQuad,
     offset = 0,
-    root = window,
+    root: rawRoot = window,
   } = options
 
+  const root = resolveRoot(rawRoot)
   const target = resolveTarget(rawTarget, root)
 
   const start = calculateStart(axis, root)
