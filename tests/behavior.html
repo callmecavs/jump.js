@@ -18,9 +18,6 @@
         width: 200dvw;
       }
 
-      .page {
-      }
-
       .page-target {
         width: 24px;
         height: 24px;
@@ -141,33 +138,31 @@
   </head>
 
   <body>
-    <div class="page">
-      <div class="page-target page-target-x page-target-element" data-window-x-target-element></div>
+    <div class="page-target page-target-x page-target-element" data-window-x-target-element></div>
 
-      <div class="sandbox" data-root>
-        <div class="sandbox-content sandbox-content-x sandbox-content-y">
-          <div class="sandbox-target root-target-x root-target-element" data-root-x-element></div>
-          <div class="sandbox-target root-target-y root-target-element" data-root-y-element></div>
-        </div>
+    <div class="sandbox" data-root>
+      <div class="sandbox-content sandbox-content-x sandbox-content-y">
+        <div class="sandbox-target root-target-x root-target-element" data-root-x-element></div>
+        <div class="sandbox-target root-target-y root-target-element" data-root-y-element></div>
       </div>
-
-      <div class="spacer small"></div>
-
-      <div class="page-target page-target-y page-target-element" data-window-y-target-element></div>
-
-      <div class="sandbox" data-focus>
-        <div class="sandbox-content sandbox-content-y">
-          <div class="sandbox-target focus-target-y focus-target-element" data-focus-element></div>
-          <button class="focus-button" type="button" data-focus-button>Focus Button</button>
-        </div>
-      </div>
-
-      <div class="spacer medium"></div>
-
-      <div class="page-target page-target-y page-target-string" data-window-y-target-string></div>
-
-      <div class="spacer large"></div>
     </div>
+
+    <div class="spacer small"></div>
+
+    <div class="page-target page-target-y page-target-element" data-window-y-target-element></div>
+
+    <div class="sandbox" data-focus>
+      <div class="sandbox-content sandbox-content-y">
+        <div class="sandbox-target focus-target-y focus-target-element" data-focus-element></div>
+        <button class="focus-button" type="button" data-focus-button>Focus Button</button>
+      </div>
+    </div>
+
+    <div class="spacer medium"></div>
+
+    <div class="page-target page-target-y page-target-string" data-window-y-target-string></div>
+
+    <div class="spacer large"></div>
 
     <script type="module">
       import jump from "../dist/index.js"
