@@ -1,12 +1,12 @@
 .DS_Store
-.playwright-mcp
 *.log
 dist
 node_modules
 
 # Playwright
-/test-results/
-/playwright-report/
+.playwright-mcp
 /blob-report/
-/playwright/.cache/
+/playwright-report/
 /playwright/.auth/
+/playwright/.cache/
+/test-results/
