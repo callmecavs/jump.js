@@ -26,6 +26,8 @@ declare global {
 
       jump: Jump
       scroll: (target: JumpTarget, options?: JumpOptions) => Promise<void>
+
+      wait: (time: number) => Promise<void>
     }
   }
 }
@@ -418,6 +420,40 @@ test.describe("root: element", () => {
       })
 
       expect(actual).toEqual(expected)
+    })
+  })
+})
+
+test.describe("cancel", () => {
+  test("stops an in-progress scroll", async ({ page }) => {
+    expect(
+      await page.evaluate(async () => {
+        const distance = 500
+        const duration = 2000
+        const step = duration / 4
+
+        const yStart = window.scrollY
+
+        const cancel = window.fixtures.jump(distance, { duration })
+
+        await window.fixtures.wait(step)
+        const yBeforeCancel = window.scrollY
+
+        cancel()
+
+        await window.fixtures.wait(step)
+        const yAfterCancel = window.scrollY
+
+        return {
+          didStart: yBeforeCancel > yStart,
+          didStop: yBeforeCancel === yAfterCancel,
+          didntComplete: yAfterCancel < yStart + distance,
+        }
+      }),
+    ).toEqual({
+      didStart: true,
+      didStop: true,
+      didntComplete: true,
     })
   })
 })

@@ -258,6 +258,8 @@
 
         jump,
         scroll,
+
+        wait: time => new Promise(resolve => setTimeout(resolve, time)),
       }
     </script>
   </body>
