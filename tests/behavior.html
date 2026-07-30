@@ -188,7 +188,6 @@
         const original = element.focus.bind(element)
 
         const wrapped = (...args) => {
-          // `[{ preventScroll: true }]`
           latestElementFocusArgs = args
           original(...args)
         }
@@ -202,7 +201,6 @@
         const original = element.scrollTo.bind(element)
 
         const wrapped = (...args) => {
-          // `[{ left: ... }]` or `[{ top: ... }]` based on `axis`
           latestElementScrollToArgs = args
           original(...args)
         }
@@ -216,7 +214,6 @@
         const original = window.scrollTo.bind(window)
 
         const wrapped = (...args) => {
-          // `[{ left: ... }]` or `[{ top: ... }]` based on `axis`
           latestWindowScrollToArgs = args
           original(...args)
         }
