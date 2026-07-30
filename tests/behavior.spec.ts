@@ -3,10 +3,14 @@ import { expect, test } from "@playwright/test"
 import type { Jump } from "../src/types"
 
 declare global {
+  type EventName = "callback" | "element-focus" | "element-scroll" | "window-scroll"
   type ScrollToArgs = [options?: ScrollToOptions] | [x: number, y: number]
 
   interface Window {
     fixtures: {
+      captureEvent: (name: EventName) => void
+      getEvents: () => Array<EventName>
+
       captureRequestAnimationFrameArgs: () => void
       getLatestRequestAnimationFrameArgs: () => Parameters<Window["requestAnimationFrame"]> | undefined
 
@@ -622,7 +626,7 @@ test.describe("cancel", () => {
       await page.evaluate(async () => {
         const distance = 500
         const duration = 2000
-        const step = duration / 4
+        const step = duration / 3
 
         const yStart = window.scrollY
 
@@ -878,5 +882,42 @@ test.describe("error", () => {
         return false
       }),
     ).toEqual(true)
+  })
+})
+
+test.describe("sequencing", () => {
+  test("order: final scroll -> callback", async ({ page }) => {
+    expect(
+      await page.evaluate(async () => {
+        const root = window.fixtures.getElement("[data-focus]")
+        const target = window.fixtures.getElement("[data-focus-element]")
+
+        const callback = () => window.fixtures.captureEvent("callback")
+
+        window.fixtures.captureElementScrollToArgs(root)
+
+        await window.fixtures.jumpAsync(target, { callback, root })
+
+        return window.fixtures.getEvents().slice(-2)
+      }),
+    ).toEqual(["element-scroll", "callback"])
+  })
+
+  test("order: final scroll -> focus -> callback", async ({ page }) => {
+    expect(
+      await page.evaluate(async () => {
+        const root = window.fixtures.getElement("[data-focus]")
+        const target = window.fixtures.getElement("[data-focus-element]")
+
+        const callback = () => window.fixtures.captureEvent("callback")
+
+        window.fixtures.captureElementFocusArgs(target)
+        window.fixtures.captureElementScrollToArgs(root)
+
+        await window.fixtures.jumpAsync(target, { a11y: true, callback, root })
+
+        return window.fixtures.getEvents().slice(-3)
+      }),
+    ).toEqual(["element-scroll", "element-focus", "callback"])
   })
 })

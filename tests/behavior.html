@@ -180,6 +180,10 @@
 
       const jumpInstant = (target, options = {}) => jump(target, { ...options, duration: 0 })
 
+      const events = []
+
+      const captureEvent = name => events.push(name)
+
       let latestRequestAnimationFrameArgs
 
       const captureRequestAnimationFrameArgs = () => {
@@ -200,6 +204,7 @@
 
         const wrapped = (...args) => {
           latestElementFocusArgs = args
+          captureEvent("element-focus")
           original(...args)
         }
 
@@ -213,6 +218,7 @@
 
         const wrapped = (...args) => {
           latestElementScrollToArgs = args
+          captureEvent("element-scroll")
           original(...args)
         }
 
@@ -226,6 +232,7 @@
 
         const wrapped = (...args) => {
           latestWindowScrollToArgs = args
+          captureEvent("window-scroll")
           original(...args)
         }
 
@@ -233,6 +240,9 @@
       }
 
       window.fixtures = {
+        captureEvent,
+        getEvents: () => events,
+
         captureRequestAnimationFrameArgs,
         getLatestRequestAnimationFrameArgs: () => latestRequestAnimationFrameArgs,
 
