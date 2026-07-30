@@ -198,22 +198,18 @@ setTimeout(cancel, 500)
 It enables scrolling with `Promise`s, and `async` / `await`:
 
 ```ts
-const scroll = (target: JumpTarget, options: JumpOptions = {}): Promise<void> =>
-  new Promise((resolve, reject) => {
-    try {
-      jump(target, {
-        ...options,
-        callback: () => {
-          options?.callback?.()
-          resolve()
-        },
-      })
-    } catch (error) {
-      reject(error)
-    }
+const jumpAsync = (target, options = {}) =>
+  new Promise(resolve => {
+    jump(target, {
+      ...options,
+      callback: () => {
+        options.callback?.()
+        resolve()
+      },
+    })
   })
 
-await scroll(".target")
+await jumpAsync(".target")
 ```
 
 It runs in the frame after:
