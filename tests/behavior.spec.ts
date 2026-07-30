@@ -485,64 +485,6 @@ test.describe("root: element", () => {
   })
 })
 
-test.describe("cancel", () => {
-  test("stops an in-progress scroll", async ({ page }) => {
-    expect(
-      await page.evaluate(async () => {
-        const distance = 500
-        const duration = 2000
-        const step = duration / 4
-
-        const yStart = window.scrollY
-
-        const cancel = window.fixtures.jump(distance, { duration })
-
-        await window.fixtures.wait(step)
-        const yBeforeCancel = window.scrollY
-
-        cancel()
-
-        await window.fixtures.wait(step)
-        const yAfterCancel = window.scrollY
-
-        return {
-          didStart: yBeforeCancel > yStart,
-          didStop: yBeforeCancel === yAfterCancel,
-          didntComplete: yAfterCancel < yStart + distance,
-        }
-      }),
-    ).toEqual({
-      didStart: true,
-      didStop: true,
-      didntComplete: true,
-    })
-  })
-
-  test("doesn't run callback", async ({ page }) => {
-    expect(
-      await page.evaluate(async () => {
-        const distance = 500
-        const duration = 1000
-        const step = duration / 2
-
-        let didRun = false
-
-        const callback = () => {
-          didRun = true
-        }
-
-        const cancel = window.fixtures.jump(distance, { callback, duration })
-
-        await window.fixtures.wait(step)
-        cancel()
-        await window.fixtures.wait(duration)
-
-        return didRun
-      }),
-    ).toEqual(false)
-  })
-})
-
 test.describe("a11y", () => {
   test.describe("disabled", () => {
     test("false", async ({ page }) => {
@@ -670,6 +612,64 @@ test.describe("a11y", () => {
         wasRemoved: true,
       })
     })
+  })
+})
+
+test.describe("cancel", () => {
+  test("stops an in-progress scroll", async ({ page }) => {
+    expect(
+      await page.evaluate(async () => {
+        const distance = 500
+        const duration = 2000
+        const step = duration / 4
+
+        const yStart = window.scrollY
+
+        const cancel = window.fixtures.jump(distance, { duration })
+
+        await window.fixtures.wait(step)
+        const yBeforeCancel = window.scrollY
+
+        cancel()
+
+        await window.fixtures.wait(step)
+        const yAfterCancel = window.scrollY
+
+        return {
+          didStart: yBeforeCancel > yStart,
+          didStop: yBeforeCancel === yAfterCancel,
+          didntComplete: yAfterCancel < yStart + distance,
+        }
+      }),
+    ).toEqual({
+      didStart: true,
+      didStop: true,
+      didntComplete: true,
+    })
+  })
+
+  test("doesn't run callback", async ({ page }) => {
+    expect(
+      await page.evaluate(async () => {
+        const distance = 500
+        const duration = 1000
+        const step = duration / 2
+
+        let didRun = false
+
+        const callback = () => {
+          didRun = true
+        }
+
+        const cancel = window.fixtures.jump(distance, { callback, duration })
+
+        await window.fixtures.wait(step)
+        cancel()
+        await window.fixtures.wait(duration)
+
+        return didRun
+      }),
+    ).toEqual(false)
   })
 })
 
