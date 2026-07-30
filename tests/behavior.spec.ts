@@ -30,6 +30,7 @@ declare global {
       getWindowScrollYMax: () => number
 
       jump: Jump
+      jumpAsync: (...args: Parameters<Jump>) => Promise<void>
       jumpInstant: Jump
 
       wait: (time: number) => Promise<void>
