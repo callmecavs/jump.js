@@ -2,10 +2,10 @@ export type Jump = (target: JumpTarget, options?: JumpOptions) => JumpCancel
 export type JumpAxis = "x" | "y"
 export type JumpCallback = () => void
 export type JumpCancel = () => void
-export type JumpDirection = "ltr" | "rtl"
+export type JumpDirection = "ltr" | "rtl" // internal only
 export type JumpDuration = number | ((distance: number) => number)
 export type JumpEasing = (progress: number) => number
-export type JumpResolvedTarget = Element | number
+export type JumpResolvedTarget = Element | number // internal only
 export type JumpRoot = Window | Element
 export type JumpTarget = Element | number | string
 

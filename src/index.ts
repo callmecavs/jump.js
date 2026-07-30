@@ -5,7 +5,7 @@ import { resolveAccessibility, resolveDuration, resolveRoot, resolveTarget } fro
 import { easeInOutQuad, noop, scroll } from "./utilities"
 import { validateOptions, validateTarget } from "./validators"
 
-// Export the types. `JumpDirection` and `JumpResolvedTarget` are intentionally excluded (internal only).
+// Export the types. `JumpDirection` and `JumpResolvedTarget` are intentionally omitted (internal only).
 export type {
   Jump,
   JumpAxis,
