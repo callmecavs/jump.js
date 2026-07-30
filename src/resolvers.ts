@@ -1,10 +1,16 @@
-import type { JumpDuration, JumpResolvedTarget, JumpRoot, JumpTarget } from "./types"
+import type { JumpDirection, JumpDuration, JumpResolvedTarget, JumpRoot, JumpTarget } from "./types"
 import { isElement, isWindow } from "./guards"
 
 export const resolveAccessibility = (a11y: boolean, target: JumpResolvedTarget) => {
   // The `a11y` option requires that the `target` be a node.
   if (typeof target === "number") return false
   return a11y
+}
+
+export const resolveDirection = (root: JumpRoot): JumpDirection => {
+  const scrollingElement = isWindow(root) ? root.document.documentElement : root
+  const computedDirection = scrollingElement.ownerDocument.defaultView?.getComputedStyle(scrollingElement).direction
+  return computedDirection === "rtl" ? "rtl" : "ltr"
 }
 
 export const resolveDuration = (distance: number, duration: JumpDuration) => {

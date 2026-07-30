@@ -1,5 +1,6 @@
 import type { JumpAxis, JumpResolvedTarget, JumpRoot } from "./types"
 import { isElement, isWindow } from "./guards"
+import { resolveDirection } from "./resolvers"
 import { clamp } from "./utilities"
 
 export const calculateDistance = (end: number, start: number) => {
@@ -55,6 +56,10 @@ export const calculateEnd = (
   }
 
   // Clamp the ideal `end` to the real scroll range.
+  if (axis === "x" && resolveDirection(root) === "rtl") {
+    return clamp(ideal, -max, 0)
+  }
+
   return clamp(ideal, 0, max)
 }
 
