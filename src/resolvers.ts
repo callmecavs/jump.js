@@ -8,8 +8,8 @@ export const resolveAccessibility = (a11y: boolean, target: JumpResolvedTarget) 
 }
 
 export const resolveDirection = (root: JumpRoot): JumpDirection => {
-  const scrollingElement = isWindow(root) ? root.document.documentElement : root
-  const computedDirection = scrollingElement.ownerDocument.defaultView?.getComputedStyle(scrollingElement).direction
+  const scrollRoot = isWindow(root) ? root.document.documentElement : root
+  const computedDirection = scrollRoot.ownerDocument.defaultView?.getComputedStyle(scrollRoot).direction
   return computedDirection === "rtl" ? "rtl" : "ltr"
 }
 
@@ -19,9 +19,9 @@ export const resolveDuration = (distance: number, duration: JumpDuration) => {
 }
 
 export const resolveRoot = (root: JumpRoot): JumpRoot => {
-  // Catch the `scrollingElement` being passed as the `root`. Use the `window`
+  // Catch the `documentElement` being passed as the `root`. Use the `window`
   // instead because, like other elements, it has a stationary bounding box.
-  if (isElement(root) && root === root.ownerDocument.scrollingElement) {
+  if (isElement(root) && root === root.ownerDocument.documentElement) {
     return root.ownerDocument.defaultView ?? root
   }
 

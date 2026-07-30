@@ -22,14 +22,14 @@ export const calculateEnd = (
   // Calculate the max amount `root` can be scrolled.
   let max: number
 
-  const scrollingElement = isWindow(root) ? root.document.documentElement : root
+  const scrollRoot = isWindow(root) ? root.document.documentElement : root
 
   switch (axis) {
     case "x":
-      max = scrollingElement.scrollWidth - scrollingElement.clientWidth
+      max = scrollRoot.scrollWidth - scrollRoot.clientWidth
       break
     case "y":
-      max = scrollingElement.scrollHeight - scrollingElement.clientHeight
+      max = scrollRoot.scrollHeight - scrollRoot.clientHeight
       break
   }
 

@@ -229,8 +229,6 @@
         window.scrollTo = wrapped
       }
 
-      const windowElement = document.scrollingElement ?? document.documentElement
-
       window.fixtures = {
         captureElementFocusArgs,
         getLatestElementFocusArgs: () => latestElementFocusArgs,
@@ -253,8 +251,8 @@
         getElementScrollXMax: element => element.scrollWidth - element.clientWidth,
         getElementScrollYMax: element => element.scrollHeight - element.clientHeight,
 
-        getWindowScrollXMax: () => windowElement.scrollWidth - windowElement.clientWidth,
-        getWindowScrollYMax: () => windowElement.scrollHeight - windowElement.clientHeight,
+        getWindowScrollXMax: () => document.documentElement.scrollWidth - document.documentElement.clientWidth,
+        getWindowScrollYMax: () => document.documentElement.scrollHeight - document.documentElement.clientHeight,
 
         jump,
         scroll,
