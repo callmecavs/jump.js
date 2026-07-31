@@ -17,6 +17,16 @@
     "typescript": "^6.0.3",
     "typescript-eslint": "^8.65.0"
   },
+  "devEngines": {
+    "runtime": {
+      "name": "node",
+      "version": "24.x"
+    },
+    "packageManager": {
+      "name": "pnpm",
+      "version": "11.x"
+    }
+  },
   "exports": {
     ".": "./dist/index.js",
     "./package.json": "./package.json"
