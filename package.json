@@ -53,7 +53,7 @@
     "lint:check": "eslint . && prettier --check .",
     "lint:fix": "eslint --fix . && prettier --write .",
     "prepublishOnly": "pnpm test",
-    "test": "pnpm lint:check && pnpm typecheck && pnpm build && pnpm exec playwright test --project chromium",
+    "test": "pnpm lint:check && pnpm typecheck && pnpm build && pnpm exec playwright test",
     "test:report": "pnpm exec playwright show-report",
     "test:server": "python3 -m http.server 3000",
     "typecheck": "tsc --noEmit"
