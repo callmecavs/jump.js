@@ -239,7 +239,7 @@ test.describe("root: window", () => {
 
     test("doesn't mutate other axis", async ({ page }) => {
       const { actual, expected } = await page.evaluate(() => {
-        const target = window.fixtures.getElement("[data-window-y-target-element")
+        const target = window.fixtures.getElement("[data-window-y-target-element]")
         const x = 24
 
         window.scrollTo({ left: x })
