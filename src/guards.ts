@@ -1,5 +1,5 @@
 export const isElement = (value: unknown): value is Element => {
-  return typeof value === "object" && value !== null && (value as Node).nodeType === 1
+  return typeof value === "object" && value !== null && (value as Element).nodeType === 1
 }
 
 export const isFocusable = (value: unknown): value is HTMLElement | SVGElement => {
