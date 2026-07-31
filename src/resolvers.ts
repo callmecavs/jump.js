@@ -9,8 +9,8 @@ export const resolveAccessibility = (a11y: boolean, target: JumpResolvedTarget) 
 
 export const resolveDirection = (root: JumpRoot): JumpDirection => {
   const scrollRoot = isWindow(root) ? root.document.documentElement : root
-  const computed = scrollRoot.ownerDocument.defaultView?.getComputedStyle(scrollRoot).direction
-  return computed === "rtl" ? "rtl" : "ltr"
+  const scrollView = scrollRoot.ownerDocument.defaultView
+  return scrollView?.getComputedStyle(scrollRoot).direction === "rtl" ? "rtl" : "ltr"
 }
 
 export const resolveDuration = (distance: number, duration: JumpDuration) => {
@@ -28,7 +28,7 @@ export const resolveRoot = (root: JumpRoot): JumpRoot => {
   return root
 }
 
-export const resolveTarget = (target: JumpTarget, root: JumpRoot): JumpResolvedTarget => {
+export const resolveTarget = (root: JumpRoot, target: JumpTarget): JumpResolvedTarget => {
   if (typeof target === "number") return target
 
   let node: Element | null

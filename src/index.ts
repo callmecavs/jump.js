@@ -33,7 +33,7 @@ const jump: Jump = (rawTarget, options = {}) => {
   } = options
 
   const root = resolveRoot(rawRoot)
-  const target = resolveTarget(rawTarget, root)
+  const target = resolveTarget(root, rawTarget)
 
   const start = calculateStart(axis, root)
   const end = calculateEnd(axis, offset, root, start, target)
