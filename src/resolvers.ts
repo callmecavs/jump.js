@@ -31,31 +31,25 @@ export const resolveRoot = (root: JumpRoot): JumpRoot => {
 export const resolveTarget = (root: JumpRoot, target: JumpTarget): JumpResolvedTarget => {
   if (typeof target === "number") return target
 
-  let node: Element | null
+  let element: Element | null
 
   if (isElement(target)) {
-    node = target
+    element = target
   } else {
     try {
       const scope = isWindow(root) ? root.document : root
-      node = scope.querySelector(target)
+      element = scope.querySelector(target)
     } catch (error) {
-      throw new Error(`Failed to resolve "target" string: CSS selector is invalid.`, { cause: error })
+      throw new Error(`Error resolving "target" string: CSS selector is invalid.`, { cause: error })
     }
 
-    if (node === null) {
-      throw new Error(`Failed to resolve "target" string: CSS selector didn't match.`)
-    }
+    if (element === null) throw new Error(`Error resolving "target" string: CSS selector didn't match.`)
   }
 
-  if (!node.isConnected) throw new Error(`Failed to resolve "target": resolved element is not connected to a document.`)
+  const isContained = isWindow(root) ? root.document === element.ownerDocument : root.contains(element)
 
-  const outsideElement = isElement(root) && !root.contains(node)
-  const outsideWindow = isWindow(root) && root.document !== node.ownerDocument
+  if (!isContained) throw new Error(`Error resolving "target" element: Not contained by the "root".`)
+  if (!element.isConnected) throw new Error(`Error resolving "target" element: Not connected to a document.`)
 
-  if (outsideElement || outsideWindow) {
-    throw new Error(`Failed to resolve "target": resolved element is not contained by the root.`)
-  }
-
-  return node
+  return element
 }
