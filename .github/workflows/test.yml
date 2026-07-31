@@ -34,3 +34,14 @@ jobs:
 
       - name: 'run "pnpm test"'
         run: pnpm test
+
+      - name: upload playwright artifacts
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-artifacts
+          path: |
+            playwright-report/
+            test-results/
+          if-no-files-found: ignore
+          retention-days: 7
