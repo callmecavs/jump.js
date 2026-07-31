@@ -1,15 +1,15 @@
 import type { JumpAxis, JumpResolvedTarget, JumpRoot } from "./types"
-import { isElement, isWindow } from "./guards"
+import { isWindow } from "./guards"
 import { resolveDirection } from "./resolvers"
 import { clamp } from "./utilities"
 
 export const calculateDistance = (end: number, start: number) => {
-  const delta = end - start
+  const distance = end - start
 
   // Catch sub-pixel distances. These should be `instant`.
-  if (Math.abs(delta) < 1) return 0
+  if (Math.abs(distance) < 1) return 0
 
-  return delta
+  return distance
 }
 
 export const calculateEnd = (
