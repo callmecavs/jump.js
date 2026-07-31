@@ -2,7 +2,7 @@ import type { JumpDirection, JumpDuration, JumpResolvedTarget, JumpRoot, JumpTar
 import { isElement, isWindow } from "./guards"
 
 export const resolveAccessibility = (a11y: boolean, target: JumpResolvedTarget) => {
-  // The `a11y` option requires that the `target` be a node.
+  // Catch number `target`s.
   if (typeof target === "number") return false
   return a11y
 }
@@ -19,8 +19,8 @@ export const resolveDuration = (distance: number, duration: JumpDuration) => {
 }
 
 export const resolveRoot = (root: JumpRoot): JumpRoot => {
-  // Catch the `documentElement` being passed as the `root`. Use the `window`
-  // instead because, like other elements, it has a stationary bounding box.
+  // Catch the `root` being the `documentElement`. Use the `window` instead
+  // because, like `Element`s, it has a stationary bounding box.
   if (isElement(root) && root === root.ownerDocument.documentElement) {
     return root.ownerDocument.defaultView ?? root
   }
