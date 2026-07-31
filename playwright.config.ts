@@ -19,7 +19,7 @@ const config = defineConfig({
       use: { ...devices["Desktop Safari"] },
     },
   ],
-  reporter: process.env.CI ? [["github"], ["html"]] : "html",
+  reporter: process.env.CI ? [["github"], ["html"]] : [["line"], ["html", { open: "never" }]],
   retries: process.env.CI ? 1 : 0,
   testDir: "./tests",
   use: {
@@ -29,6 +29,7 @@ const config = defineConfig({
   webServer: {
     command: "pnpm test:server",
     reuseExistingServer: !process.env.CI,
+    stderr: "ignore",
     url: "http://localhost:3000/tests/behavior.html",
   },
 })
