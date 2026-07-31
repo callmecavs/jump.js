@@ -34,25 +34,25 @@ export const calculateEnd = (
   }
 
   // Calculate the ideal `end` position.
-  let ideal: number
+  let ideal = start
 
   if (typeof target === "number") {
-    // Ignore the `offset` when `target` is a number.
-    ideal = start + target
+    // Ignore `offset` when `target` is a number.
+    ideal += target
   } else {
-    ideal = start + offset
-
     const targetBounds = target.getBoundingClientRect()
 
-    if (isElement(root)) {
+    if (isWindow(root)) {
+      if (axis === "x") ideal += targetBounds.left
+      if (axis === "y") ideal += targetBounds.top
+    } else {
       const rootBounds = root.getBoundingClientRect()
 
       if (axis === "x") ideal += targetBounds.left - rootBounds.left - root.clientLeft
       if (axis === "y") ideal += targetBounds.top - rootBounds.top - root.clientTop
-    } else {
-      if (axis === "x") ideal += targetBounds.left
-      if (axis === "y") ideal += targetBounds.top
     }
+
+    ideal += offset
   }
 
   // Clamp the ideal `end` to the real scroll range.
@@ -66,8 +66,8 @@ export const calculateEnd = (
 export const calculateStart = (axis: JumpAxis, root: JumpRoot): number => {
   switch (axis) {
     case "x":
-      return isElement(root) ? root.scrollLeft : root.scrollX
+      return isWindow(root) ? root.scrollX : root.scrollLeft
     case "y":
-      return isElement(root) ? root.scrollTop : root.scrollY
+      return isWindow(root) ? root.scrollY : root.scrollTop
   }
 }
