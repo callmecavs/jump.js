@@ -1,6 +1,6 @@
 import type { Jump } from "./types"
 import { calculateDistance, calculateEnd, calculateStart } from "./calculations"
-import { isFocusable } from "./guards"
+import { hasFocusMethod } from "./guards"
 import { resolveAccessibility, resolveDuration, resolveRoot, resolveTarget } from "./resolvers"
 import { easeInOutQuad, noop, scroll } from "./utilities"
 import { validateOptions, validateTarget } from "./validators"
@@ -52,10 +52,10 @@ const jump: Jump = (rawTarget, options = {}) => {
     // If the jump isn't `instant`, this makes sure the final position is perfect.
     scroll(axis, end, root)
 
-    if (a11y && isFocusable(target)) {
-      // Add the `tabindex` attribute temporarily, to ensure calling `focus` works, unless:
-      // 1. The node already has the `tabindex` attribute.
-      // 2. The node is in the tab order by default (example: <a>, <button>, etc).
+    if (a11y && hasFocusMethod(target)) {
+      // Add a temporary `tabindex` unless:
+      // 1. The element already has a `tabindex`.
+      // 2. The element is natively interactive (<a>, <button>, etc).
       const needTabIndex = !target.hasAttribute("tabindex") && target.tabIndex < 0
 
       if (needTabIndex) target.setAttribute("tabindex", "-1")
@@ -63,14 +63,15 @@ const jump: Jump = (rawTarget, options = {}) => {
       target.focus({ preventScroll: true })
 
       if (needTabIndex) {
-        const didFocus = document.activeElement === target
+        // Avoid using `document.activeElement` to preserve Shadow DOM and <iframe> compatibility.
+        const didFocus = target.matches(":focus")
 
-        // If `focus` failed, remove `tabindex` immediately.
-        if (!didFocus) target.removeAttribute("tabindex")
-
-        // If `focus` worked, keep the `tabindex` until the `target` is `blur`red, because
-        // removing it will also remove the `focus`.
+        // If `focus` succeeeded, keep the `tabindex` until `blur`.
+        // Removing it will also remove the `focus` in some browsers.
         if (didFocus) target.addEventListener("blur", () => target.removeAttribute("tabindex"), { once: true })
+
+        // If `focus` failed, remove the `tabindex` immediately.
+        if (!didFocus) target.removeAttribute("tabindex")
       }
     }
 
