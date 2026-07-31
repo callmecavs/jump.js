@@ -16,5 +16,5 @@
     "types": [],
     "verbatimModuleSyntax": true
   },
-  "include": ["src"]
+  "include": ["playwright.config.ts", "src", "tests", "tsdown.config.ts"]
 }

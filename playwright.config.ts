@@ -28,8 +28,8 @@ const config = defineConfig({
   },
   webServer: {
     command: "pnpm test:server",
-    url: "http://localhost:3000/tests/behavior.html",
     reuseExistingServer: !process.env.CI,
+    url: "http://localhost:3000/tests/behavior.html",
   },
 })
 
