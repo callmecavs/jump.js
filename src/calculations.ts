@@ -19,7 +19,7 @@ export const calculateEnd = (
   start: number,
   target: JumpResolvedTarget,
 ): number => {
-  // Calculate the max amount `root` can be scrolled.
+  // Calculate the `root`s maximum scroll position.
   let max: number
 
   const scrollRoot = isWindow(root) ? root.document.documentElement : root
@@ -33,7 +33,7 @@ export const calculateEnd = (
       break
   }
 
-  // Calculate the ideal `end` position.
+  // Calculate the `root`s ideal scroll position.
   let ideal = start
 
   if (typeof target === "number") {
@@ -55,7 +55,8 @@ export const calculateEnd = (
     ideal += offset
   }
 
-  // Clamp the ideal `end` to the real scroll range.
+  // Clamp the `ideal` scroll position to the `root`s real scroll range.
+  // Determine text direction only if necessary. No languages read "bottom to top".
   if (axis === "x" && resolveDirection(root) === "rtl") {
     return clamp(ideal, -max, 0)
   }

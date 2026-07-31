@@ -49,7 +49,7 @@ const jump: Jump = (rawTarget, options = {}) => {
 
   const complete = () => {
     // If the jump is `instant`, this completes it immediately.
-    // If the jump isn't `instant`, this makes sure the final position is perfect.
+    // If not, this ensures the final position is perfect.
     scroll(axis, end, root)
 
     if (a11y && hasFocusMethod(target)) {
@@ -75,16 +75,15 @@ const jump: Jump = (rawTarget, options = {}) => {
       }
     }
 
-    // If we made it here, and the `callback` exists:
-    // 1. Run it no matter what. Disregard the frame ID, it's not intended to be `cancel`-able.
-    // 2. Make sure it runs after the final `scrollTo` call.
+    // If the `callback` exists, run it after the final `scrollTo` call. Prevent it from
+    // being `cancel`led by dropping the `frameId`.
     if (callback) window.requestAnimationFrame(() => callback())
   }
 
   const loop = (currentTime: DOMHighResTimeStamp) => {
     if (startTime === undefined) startTime = currentTime
 
-    // Limit `elapsedTime` to `duration` to prevent going past the end.
+    // Limit `elapsedTime` to `duration` to prevent going "past the end".
     const elapsedTime = Math.min(currentTime - startTime, duration)
 
     const progress = elapsedTime / duration
