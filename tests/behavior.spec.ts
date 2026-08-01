@@ -288,7 +288,7 @@ test.describe("root: window", () => {
         }),
       ).toEqual({
         argsFrame: undefined,
-        argsScroll: [{ behavior: "instant", top: 0 }],
+        argsScroll: undefined,
       })
     })
 

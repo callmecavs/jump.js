@@ -47,9 +47,9 @@ const jump: Jump = (rawTarget, options = {}) => {
   let startTime: number | undefined
 
   const complete = () => {
-    // If the jump is `instant`, this completes it immediately.
-    // If not, this ensures the final position is perfect.
-    scroll(axis, end, root)
+    // For `instant` jumps, avoid calling `scrollTo` if not necessary. It's not safe to (re)write the `start` position
+    // because browser behavior differs re: fractional `scrollTo` coordinates.
+    if (start !== end) scroll(axis, end, root)
 
     if (a11y && hasFocusMethod(target)) {
       // Add a temporary `tabindex` unless the element already has a `tabindex`, or is natively interactive.
