@@ -353,14 +353,14 @@ jump(".no-match")
 
 Jump supports the following natively:
 
-| Browser      | Version | Limiting ECMAScript Feature                                                                                               |
+| Browser      | Version | Limiting Feature                                                                                                          |
 | ------------ | ------- | ------------------------------------------------------------------------------------------------------------------------- |
-| Chrome       | 93+     | [`Error("...", { cause })`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error/cause) |
-| Edge         | 93+     | [`Error("...", { cause })`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error/cause) |
-| Firefox      | 91+     | [`Error("...", { cause })`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error/cause) |
-| Opera        | 79+     | [`Error("...", { cause })`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error/cause) |
-| Safari       | 15+     | [`Error("...", { cause })`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error/cause) |
-| Safari (iOS) | 15.5+   | [`focus({ preventScroll })`](https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/focus#preventscroll)            |
+| Chrome       | 80+     | [`?.` (optional chaining)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Optional_chaining) |
+| Edge         | 80+     | [`?.` (optional chaining)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Optional_chaining) |
+| Firefox      | 74+     | [`?.` (optional chaining)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Optional_chaining) |
+| Opera        | 67+     | [`?.` (optional chaining)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Optional_chaining) |
+| Safari       | 15+     | [`preventScroll` (focus option)](https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/focus#preventscroll)        |
+| Safari (iOS) | 15.5+   | [`preventScroll` (focus option)](https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/focus#preventscroll)        |
 
 ## License
 
