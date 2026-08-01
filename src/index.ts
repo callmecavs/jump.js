@@ -52,24 +52,22 @@ const jump: Jump = (rawTarget, options = {}) => {
     scroll(axis, end, root)
 
     if (a11y && hasFocusMethod(target)) {
-      // Add a temporary `tabindex` unless:
-      // 1. The element already has a `tabindex`.
-      // 2. The element is natively interactive.
-      const needTabIndex = !target.hasAttribute("tabindex") && target.tabIndex < 0
+      // Add a temporary `tabindex` unless the element already has a `tabindex`, or is natively interactive.
+      const needsIndex = !target.hasAttribute("tabindex") && target.tabIndex < 0
 
-      if (needTabIndex) target.setAttribute("tabindex", "-1")
+      if (needsIndex) target.setAttribute("tabindex", "-1")
 
       target.focus({ preventScroll: true })
 
-      if (needTabIndex) {
+      if (needsIndex) {
         // Avoid using `document.activeElement` to preserve Shadow DOM and <iframe> compatibility.
-        const didFocus = target.matches(":focus")
+        const recievedFocus = target.matches(":focus")
 
-        // If `focus` worked, keep the `tabindex` until `blur`. Removing it can also remove `focus` in some browsers.
-        if (didFocus) target.addEventListener("blur", () => target.removeAttribute("tabindex"), { once: true })
+        // If `focus` worked, keep the `tabindex` until `blur`. Removing it will also remove `focus` in some browsers.
+        if (recievedFocus) target.addEventListener("blur", () => target.removeAttribute("tabindex"), { once: true })
 
         // If `focus` failed, remove the `tabindex` immediately.
-        if (!didFocus) target.removeAttribute("tabindex")
+        if (!recievedFocus) target.removeAttribute("tabindex")
       }
     }
 
