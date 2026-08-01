@@ -61,13 +61,13 @@ const jump: Jump = (rawTarget, options = {}) => {
 
       if (needsIndex) {
         // Avoid using `document.activeElement` to preserve Shadow DOM and <iframe> compatibility.
-        const recievedFocus = target.matches(":focus")
+        const receivedFocus = target.matches(":focus")
 
         // If `focus` worked, keep the `tabindex` until `blur`. Removing it will also remove `focus` in some browsers.
-        if (recievedFocus) target.addEventListener("blur", () => target.removeAttribute("tabindex"), { once: true })
+        if (receivedFocus) target.addEventListener("blur", () => target.removeAttribute("tabindex"), { once: true })
 
         // If `focus` failed, remove the `tabindex` immediately.
-        if (!recievedFocus) target.removeAttribute("tabindex")
+        if (!receivedFocus) target.removeAttribute("tabindex")
       }
     }
 
