@@ -46,13 +46,15 @@ export const calculateEnd = (
     ideal += offset
   }
 
-  // Clamp the `ideal` scroll position to the `root`s real scroll range.
-  // Determine text direction only if necessary. No languages read "bottom to top".
+  // Clamp the `ideal` scroll position to the `root`s real scroll range. `max` is inherently less precise than `start`
+  // because `.client` / `.scroll` properties are integers, whereas `getBoundingClientRect` properties are floats. As
+  // such, make sure `max` never exceeds `start` (in either direction). Determine text direction only if `axis === "x"`
+  // because no languages read "bottom to top".
   if (axis === "x" && resolveDirection(root) === "rtl") {
-    return clamp(ideal, -max, 0)
+    return clamp(ideal, Math.min(start, -max), 0)
   }
 
-  return clamp(ideal, 0, max)
+  return clamp(ideal, 0, Math.max(start, max))
 }
 
 export const calculateStart = (axis: JumpAxis, root: JumpRoot): number => {
