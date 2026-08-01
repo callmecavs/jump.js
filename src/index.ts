@@ -98,7 +98,7 @@ const jump: Jump = (rawTarget, options = {}) => {
     frameId = window.requestAnimationFrame(loop)
   }
 
-  // Instant jumps complete immediately. No `rAF` loop to `cancel` here.
+  // Complete `instant` jumps immediately. No `rAF` loop to `cancel` here.
   if (instant) {
     complete()
     return noop
