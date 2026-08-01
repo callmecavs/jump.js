@@ -3,15 +3,6 @@ import { isWindow } from "./guards"
 import { resolveDirection } from "./resolvers"
 import { clamp } from "./utilities"
 
-export const calculateDistance = (end: number, start: number) => {
-  const distance = end - start
-
-  // Catch sub-pixel distances. These should be `instant`.
-  if (Math.abs(distance) < 1) return 0
-
-  return distance
-}
-
 export const calculateEnd = (
   axis: JumpAxis,
   offset: number,

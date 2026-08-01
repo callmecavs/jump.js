@@ -1,5 +1,5 @@
 import type { Jump } from "./types"
-import { calculateDistance, calculateEnd, calculateStart } from "./calculations"
+import { calculateEnd, calculateStart } from "./calculations"
 import { hasFocusMethod } from "./guards"
 import { resolveAccessibility, resolveDuration, resolveRoot, resolveTarget } from "./resolvers"
 import { easeInOutQuad, noop, scroll } from "./utilities"
@@ -39,10 +39,9 @@ const jump: Jump = (rawTarget, options = {}) => {
   const end = calculateEnd(axis, offset, root, start, target)
 
   const a11y = resolveAccessibility(rawA11y, target)
-  const distance = calculateDistance(end, start)
+  const distance = end - start
   const duration = resolveDuration(distance, rawDuration)
-
-  const isInstant = distance === 0 || duration === 0
+  const isInstant = Math.abs(end - start) < 1 || duration === 0
 
   let frameId: number
   let startTime: number | undefined
