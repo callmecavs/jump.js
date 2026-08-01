@@ -45,8 +45,8 @@ export const resolveTarget = (root: JumpRoot, target: JumpTarget): JumpResolvedT
     try {
       const scope = isWindow(root) ? root.document : root
       element = scope.querySelector(target)
-    } catch (error) {
-      throw new Error(`"target": CSS selector is invalid.`, { cause: error })
+    } catch {
+      throw new Error(`"target": CSS selector is invalid.`)
     }
 
     if (element === null) throw new Error(`"target": CSS selector did not match an Element.`)
