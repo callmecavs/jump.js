@@ -77,21 +77,25 @@ const jump: Jump = (rawTarget, options = {}) => {
   }
 
   const loop = (currentTime: DOMHighResTimeStamp) => {
-    if (startTime === undefined) startTime = currentTime
+    // Catch the 1st frame in a `loop`. Can't make `progress` without a `startTime`.
+    if (startTime === undefined) {
+      startTime = currentTime
+    } else {
+      // Limit `elapsedTime` to `duration` to prevent going "past the end".
+      const elapsedTime = Math.min(currentTime - startTime, duration)
 
-    // Limit `elapsedTime` to `duration` to prevent going "past the end".
-    const elapsedTime = Math.min(currentTime - startTime, duration)
+      const progress = elapsedTime / duration
+      const next = start + distance * easing(progress)
 
-    const progress = elapsedTime / duration
-    const next = start + distance * easing(progress)
+      if (elapsedTime >= duration) {
+        complete()
+        return
+      }
 
-    if (elapsedTime < duration) {
       scroll(axis, next, root)
-      frameId = window.requestAnimationFrame(loop)
-      return
     }
 
-    complete()
+    frameId = window.requestAnimationFrame(loop)
   }
 
   // Instant jumps complete immediately. No `rAF` loop to `cancel` here.
