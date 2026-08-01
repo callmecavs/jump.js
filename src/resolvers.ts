@@ -18,7 +18,7 @@ export const resolveDuration = (distance: number, duration: JumpDuration) => {
 
   // Catch invalid `duration` number.
   if (!Number.isFinite(resolved) || resolved < 0) {
-    throw new TypeError(`Error resolving "duration": expected a finite, non-negative number.`)
+    throw new Error(`"duration": expected a finite, non-negative number.`)
   }
 
   return resolved
@@ -46,16 +46,16 @@ export const resolveTarget = (root: JumpRoot, target: JumpTarget): JumpResolvedT
       const scope = isWindow(root) ? root.document : root
       element = scope.querySelector(target)
     } catch (error) {
-      throw new Error(`Error resolving "target" string: CSS selector is invalid.`, { cause: error })
+      throw new Error(`"target": CSS selector is invalid.`, { cause: error })
     }
 
-    if (element === null) throw new Error(`Error resolving "target" string: CSS selector didn't match.`)
+    if (element === null) throw new Error(`"target": CSS selector did not match an Element.`)
   }
 
   const isContained = isWindow(root) ? root.document === element.ownerDocument : root.contains(element)
 
-  if (!isContained) throw new Error(`Error resolving "target" element: not contained by the "root".`)
-  if (!element.isConnected) throw new Error(`Error resolving "target" element: not connected to a document.`)
+  if (!isContained) throw new Error(`"target": Element is not contained by "root".`)
+  if (!element.isConnected) throw new Error(`"target": Element is not connected to a document.`)
 
   return element
 }
