@@ -71,8 +71,8 @@ const jump: Jump = (rawTarget, options = {}) => {
       }
     }
 
-    // If the `callback` exists, run it after the final `scrollTo` call. Prevent it from
-    // being `cancel`led by dropping the `frameId`.
+    // If the `callback` exists, run it in the frame after the final `scrollTo` call.
+    // Prevent it from being `cancel`led by dropping the `frameId`.
     if (callback) window.requestAnimationFrame(() => callback())
   }
 
