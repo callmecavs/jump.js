@@ -41,7 +41,7 @@ const jump: Jump = (rawTarget, options = {}) => {
   const a11y = resolveAccessibility(rawA11y, target)
   const distance = end - start
   const duration = resolveDuration(distance, rawDuration)
-  const isInstant = Math.abs(end - start) < 1 || duration === 0
+  const instant = Math.abs(end - start) < 1 || duration === 0
 
   let frameId: number
   let startTime: number | undefined
@@ -65,8 +65,7 @@ const jump: Jump = (rawTarget, options = {}) => {
         // Avoid using `document.activeElement` to preserve Shadow DOM and <iframe> compatibility.
         const didFocus = target.matches(":focus")
 
-        // If `focus` succeeded, keep the `tabindex` until `blur`.
-        // Removing it will also remove the `focus` in some browsers.
+        // If `focus` worked, keep the `tabindex` until `blur`. Removing it can also remove `focus` in some browsers.
         if (didFocus) target.addEventListener("blur", () => target.removeAttribute("tabindex"), { once: true })
 
         // If `focus` failed, remove the `tabindex` immediately.
@@ -98,7 +97,7 @@ const jump: Jump = (rawTarget, options = {}) => {
   }
 
   // Instant jumps complete immediately. No `rAF` loop to `cancel` here.
-  if (isInstant) {
+  if (instant) {
     complete()
     return noop
   }
