@@ -41,14 +41,17 @@ const jump: Jump = (rawTarget, options = {}) => {
   const a11y = resolveAccessibility(rawA11y, target)
   const distance = end - start
   const duration = resolveDuration(distance, rawDuration)
-  const instant = Math.abs(end - start) < 1 || duration === 0
+
+  // Flag `instant` jumps. A small tolerance is included when checking `distance` because browsers behave
+  // inconsistently when handling fractional `scrollTo` coordinates.
+  const instant = Math.abs(distance) < 1 || duration === 0
 
   let frameId: number
   let startTime: number | undefined
 
   const complete = () => {
-    // For `instant` jumps, avoid calling `scrollTo` if not necessary. It's not safe to (re)write the `start` position
-    // because browser behavior differs re: fractional `scrollTo` coordinates.
+    // Again, because of potentially fractional `scrollTo` coordinates, avoid calling `scrollTo` if it's not necessary.
+    // It's not always safe to "(re)write" the `start` position, especially if the jump is `instant`.
     if (start !== end) scroll(axis, end, root)
 
     if (a11y && hasFocusMethod(target)) {
@@ -81,7 +84,7 @@ const jump: Jump = (rawTarget, options = {}) => {
     if (startTime === undefined) {
       startTime = currentTime
     } else {
-      // Limit `elapsedTime` to `duration` to prevent going "past the end".
+      // Limit `elapsedTime` to `duration` to prevent going "past the end" of the jump.
       const elapsedTime = Math.min(currentTime - startTime, duration)
 
       const progress = elapsedTime / duration
@@ -98,7 +101,7 @@ const jump: Jump = (rawTarget, options = {}) => {
     frameId = window.requestAnimationFrame(loop)
   }
 
-  // Complete `instant` jumps immediately. No `rAF` loop to `cancel` here.
+  // If the jump is `instant`, `complete` it immediately. There's no `loop` to `cancel` here.
   if (instant) {
     complete()
     return noop
