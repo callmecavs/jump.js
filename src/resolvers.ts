@@ -14,8 +14,14 @@ export const resolveDirection = (root: JumpRoot): JumpDirection => {
 }
 
 export const resolveDuration = (distance: number, duration: JumpDuration) => {
-  if (typeof duration === "function") return duration(distance)
-  return duration
+  const resolved = typeof duration === "function" ? duration(distance) : duration
+
+  // Catch invalid `duration` number.
+  if (!Number.isFinite(resolved) || resolved < 0) {
+    throw new TypeError(`Error resolving "duration": expected a finite, non-negative number.`)
+  }
+
+  return resolved
 }
 
 export const resolveRoot = (root: JumpRoot): JumpRoot => {
@@ -48,8 +54,8 @@ export const resolveTarget = (root: JumpRoot, target: JumpTarget): JumpResolvedT
 
   const isContained = isWindow(root) ? root.document === element.ownerDocument : root.contains(element)
 
-  if (!isContained) throw new Error(`Error resolving "target" element: Not contained by the "root".`)
-  if (!element.isConnected) throw new Error(`Error resolving "target" element: Not connected to a document.`)
+  if (!isContained) throw new Error(`Error resolving "target" element: not contained by the "root".`)
+  if (!element.isConnected) throw new Error(`Error resolving "target" element: not connected to a document.`)
 
   return element
 }

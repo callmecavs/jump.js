@@ -23,10 +23,6 @@ const validateDuration: (value: unknown) => asserts value is JumpOptions["durati
   if (value !== undefined && typeof value !== "number" && typeof value !== "function") {
     throw new TypeError(`Expected "duration" to be a number, or function.`)
   }
-
-  if (typeof value === "number" && (!Number.isFinite(value) || value < 0)) {
-    throw new TypeError(`Expected "duration" to be a finite, non-negative number.`)
-  }
 }
 
 const validateEasing: (value: unknown) => asserts value is JumpOptions["easing"] = value => {
@@ -68,5 +64,5 @@ export const validateTarget = (target: unknown) => {
     return
   }
 
-  throw new TypeError(`Expected "target" to be an Element, number, or string.`)
+  throw new TypeError(`Expected "target" to be an element, number, or string.`)
 }
