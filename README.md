@@ -20,8 +20,9 @@ Modern smooth scrolling for humans and agents.
       7. [root](#root)
    3. [cancel](#cancel)
 4. [Error Handling](#error-handling)
-5. [Browser Support](#browser-support)
-6. [License](#license)
+5. [FAQs](#faqs)
+6. [Browser Support](#browser-support)
+7. [License](#license)
 
 ## Install
 
@@ -53,7 +54,7 @@ Each `type` is detailed in the relevant section of this documentation.
 
 Jump is **simply a function**.
 
-- **Required**: Import it and call it, passing in a [target](#target).
+- **Required**: Import it and call it, passing it a [target](#target).
 - Optional: Pass it a [configuration](#options) object.
 - Optional: Store the returned [cancel](#cancel) function.
 
@@ -79,20 +80,20 @@ type Jump = (target: JumpTarget, options?: JumpOptions) => JumpCancel
 type JumpTarget = Element | number | string
 ```
 
-Scroll a number of pixels:
+Scroll a number of pixels by passing a number:
 
 ```ts
-// scroll down `100px`
+// scroll down 100px
 jump(100)
 
-// scroll up `100px`
+// scroll up 100px
 jump(-100)
 ```
 
-Scroll to an element by passing in:
+Scroll to an element by passing an:
 
-- An element, or
-- A CSS selector (resolved against the `root`, via `querySelector`)
+- Element, or
+- CSS selector string (resolved against the `root`, via `querySelector`)
 
 ```ts
 // pass in an element
@@ -144,7 +145,7 @@ If enabled, and the `target` resolves to an element, the `target` will be focuse
 jump(".target", { a11y: true })
 ```
 
-Beware of visual changes caused by CSS `:focus` / `:focus-*` styling.
+Focus can have a visual impact. Be mindful of your CSS `:focus` / `:focus-*` styling.
 
 #### axis
 
@@ -152,11 +153,11 @@ Beware of visual changes caused by CSS `:focus` / `:focus-*` styling.
 type JumpAxis = "x" | "y"
 ```
 
-The direction the `root` is scrolled:
+The `axis` along which the `root` will be scrolled:
 
 ```ts
-jump(".target", { axis: "x" }) // horizontal
-jump(".target", { axis: "y" }) // vertical (default)
+jump(".target", { axis: "x" }) // horizontal scroll
+jump(".target", { axis: "y" }) // vertical scroll (default)
 ```
 
 #### callback
@@ -173,7 +174,7 @@ const callback = () => console.log("Jump completed.")
 jump(".target", { callback })
 ```
 
-It won't be called if the jump is cancelled:
+It doesn't run if the jump is [cancel](#cancel)led:
 
 ```ts
 const callback = () => console.log("Jump completed.")
@@ -184,11 +185,11 @@ const cancel = jump(".target", {
   duration,
 })
 
-// cancelled, `callback` never runs
+// cancelled, `callback` doesn't run
 window.setTimeout(cancel, duration / 2)
 ```
 
-For usage with `async` / `await`, make a `Promise` wrapper:
+It enables scrolling with `async` / `await`:
 
 ```ts
 const jumpAsync = (target, options = {}) =>
@@ -208,7 +209,7 @@ await jumpAsync(".target")
 It **runs in the frame after**:
 
 1. The final scroll call, and
-2. The focus call (when `a11y` is enabled)
+2. The focus call (if `a11y` is enabled)
 
 #### duration
 
@@ -216,19 +217,19 @@ It **runs in the frame after**:
 type JumpDuration = number | ((distance: number) => number)
 ```
 
-Scroll over a fixed amount of time by passing in a number of milliseconds (`ms`):
+To scroll over a fixed amount of time, pass in a number (`ms`):
 
 ```ts
 jump(".target", { duration: 1000 })
 ```
 
-Scroll over an amount of time relative to the distance by passing in a function that:
+To scroll over an amount of time relative to the scroll distance, pass in a function:
 
-- Receives the signed scroll distance as a number of pixels, and
-- Returns the scroll duration in milliseconds (`ms`)
+- It will recieve the signed scroll distance as a number (`px`), and
+- It should return the scroll duration as a number (`ms`)
 
 ```ts
-// scroll at 1px / ms
+// scroll rate: 1px / ms
 const duration = (distance: number) => Math.abs(distance)
 
 jump(".target", { duration })
@@ -240,13 +241,13 @@ jump(".target", { duration })
 type JumpEasing = (progress: number) => number
 ```
 
-The easing function used for the scroll animation. It must:
+The easing function used for the scroll animation. It should:
 
-1. Accept the progress (`0` to `1`), and
+1. Accept the linear progress (`0` to `1`), and
 2. Return the eased progress.
 
 ```ts
-// custom linear easing function
+// linear easing
 const easing = (progress: number) => progress
 
 jump(".target", { easing })
@@ -254,28 +255,34 @@ jump(".target", { easing })
 
 #### offset
 
-If the `target` resolves to an element, adjust the scroll by a number of pixels.
+```ts
+number
+```
+
+It adjusts the scroll by a number of `px`:
 
 ```ts
-// stop 100px before the leading edge of the target
+// scroll stops 100px BEFORE the target's top edge
 jump(".target", {
   offset: -100,
 })
 
-// stop 50px after the leading edge of the target
+// scroll stops 50px AFTER the target's top edge
 jump(".target", {
   offset: 50,
 })
-
-// scroll down `150px` (ignored)
-jump(150, {
-  offset: -150,
-})
 ```
 
-Useful for:
+It's ignored if the `target` is a number:
 
-- Aligning the `target`
+```ts
+// scrolls down 150px
+jump(150, { offset: -150 })
+```
+
+It's useful for:
+
+- Aligning the `target` within the `root`
 - Accommodating `sticky` / `fixed` elements
 
 #### root
@@ -291,9 +298,7 @@ const parent = document.querySelector(".parent")
 const children = Array.from(parent.children)
 
 // scroll `parent` to 1st `child`
-jump(children[0], {
-  root: parent,
-})
+jump(children[0], { root: parent })
 ```
 
 ### cancel
@@ -302,41 +307,36 @@ jump(children[0], {
 type JumpCancel = () => void
 ```
 
-A function that, when called, stops a scroll-in-progress.
+A function that stops the in-progress scroll.
 
 ```ts
-// start scrolling (default `duration` of 1000ms)
-const cancel = jump(".target")
+// start
+const cancel = jump(".target", { duration: 1000 })
 
-// cancel scrolling halfway through
-setTimeout(cancel, 500)
+// stop
+window.setTimeout(cancel, 500)
 ```
-
-Conflicting scrolls are not handled by the library. Use this `cancel` function to prevent / manage them.
 
 ## Error Handling
 
 Jump will throw:
 
-- `TypeError`s if invalid parameters are passed:
+1. `TypeError`s when invalid parameters are passed:
 
 ```ts
 // TypeError: Expected "target" to be an Element, number, or string.
 jump(null)
-
-// TypeError: Expected "axis" to be "x" or "y".
-jump(".target", {
-  axis: "z",
-})
 ```
 
-- Generic `Error`s if the `target` can't be resolved:
+2. `Error`s when:
+
+The `target` can't be resolved:
 
 ```ts
-// Error: Failed to resolve "target" string: CSS selector is invalid.
+// Error: "target" string: CSS selector is invalid.
 jump("1337")
 
-// Error: Failed to resolve "target" string: CSS selector didn't match.
+// Error: "target" string: CSS selector didn't match.
 jump(".no-match")
 ```
 
