@@ -325,7 +325,7 @@ jump(".no-match")
 
 <summary>Is Jump compatible with <code>async</code> / <code>await</code>?</summary>
 
-Not by default. It's easy to add by leveraing the `callback`:
+Not by default, but it's easy to add by leveraging the `callback`:
 
 ```ts
 import type { JumpOptions, JumpTarget } from "jump.js"
@@ -351,7 +351,7 @@ await jumpAsync(".target")
 
 <summary>Does Jump respect <code>prefers-reduced-motion</code>?</summary>
 
-Not by default. It's easily handled externally:
+Not by default, but it's easily handled externally:
 
 ```ts
 const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches
@@ -368,9 +368,7 @@ jump(".target", { duration })
 
 <summary>Will an in-progress scroll stop on user input?</summary>
 
-Not by default. Jump itself triggers `scroll` events, and they cannot be reliably distinguished from those caused by user input.
-
-The code below approximates this behavior:
+Not by default, but the code below approximates this behavior:
 
 ```ts
 const SCROLL_KEYS = [
