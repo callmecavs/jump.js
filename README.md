@@ -424,6 +424,18 @@ window.addEventListener("wheel", handleWheel, { passive: true })
 
 </details>
 
+<details>
+
+<summary>Is Jump compatible with <a href="https://github.com/darkroomengineering/lenis"><code>lenis</code></a>?</summary>
+
+<br>
+
+No, but you probably don't need both.
+
+If you're already using `lenis`, see the [`scrollTo`](https://github.com/darkroomengineering/lenis#methods) method. It handles much of what Jump can do, and has a similar API.
+
+</details>
+
 ## Browser Support
 
 Jump supports the following natively:
