@@ -325,7 +325,7 @@ jump(".no-match")
 
 <summary>Is Jump compatible with <code>async</code> / <code>await</code>?</summary>
 
----
+<br>
 
 Not by default, but it's easy to add by leveraging the `callback`:
 
@@ -353,7 +353,7 @@ await jumpAsync(".target")
 
 <summary>Does Jump respect <code>prefers-reduced-motion</code>?</summary>
 
----
+<br>
 
 Not by default, but it's easily handled externally:
 
@@ -372,7 +372,7 @@ jump(".target", { duration })
 
 <summary>Will an in-progress scroll stop on user input?</summary>
 
----
+<br>
 
 Not by default, but the code below approximates this behavior:
 
