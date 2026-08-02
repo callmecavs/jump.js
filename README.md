@@ -7,9 +7,8 @@ Modern smooth scrolling for humans and agents.
 ## Contents
 
 1. [Install](#install)
-2. [TypeScript](#typescript)
-3. [Basic Usage](#basic-usage)
-4. [API](#api)
+2. [Basic Usage](#basic-usage)
+3. [API](#api)
    1. [target](#target)
    2. [options](#options)
       1. [a11y](#a11y)
@@ -19,22 +18,20 @@ Modern smooth scrolling for humans and agents.
       5. [easing](#easing)
       6. [offset](#offset)
       7. [root](#root)
-   3. [Return Value](#return-value)
-5. [Error Handling](#error-handling)
-6. [Browser Support](#browser-support)
-7. [License](#license)
+   3. [cancel](#cancel)
+4. [Error Handling](#error-handling)
+5. [Browser Support](#browser-support)
+6. [License](#license)
 
 ## Install
 
-Jump requires ESM-compatible tooling.
+Jump was developed with modern workflows in mind, and **requires ESM-compatible tooling**. Install it using your package manager:
 
 ```bash
 $ npm install jump.js
 ```
 
-## TypeScript
-
-Jump ships with the following `type` definitions (`.d.ts`):
+Though not required, it's recommended to use Jump with TypeScript. Jump ships with the following `type` definitions (`.d.ts`):
 
 ```ts
 import type {
@@ -50,13 +47,17 @@ import type {
 } from "jump.js"
 ```
 
-Each `type` is shown again in the relevant portion of this documentation.
+Each `type` is detailed in the relevant section of this documentation.
 
 ## Basic Usage
 
-Jump is a function that scrolls to a [target](#target) in a [configurable](#options) and [cancellable](#return-value) way.
+Jump is **simply a function**.
 
-```js
+- **Required**: Import it and call it, passing in a [target](#target).
+- Optional: Pass it a [configuration](#options) object.
+- Optional: Store the returned [cancel](#cancel) function.
+
+```ts
 import jump from "jump.js"
 
 const options = {
@@ -78,27 +79,27 @@ type Jump = (target: JumpTarget, options?: JumpOptions) => JumpCancel
 type JumpTarget = Element | number | string
 ```
 
-Scroll to an element by passing in:
+Scroll a number of pixels:
 
-- An element, or
-- A CSS selector (matched using `document.querySelector`)
-
-```js
-// pass in an element
-jump(document.querySelector(".target"))
-
-// pass in a CSS selector
-jump(".target")
-```
-
-Scroll a fixed amount by passing in a number of pixels:
-
-```js
+```ts
 // scroll down `100px`
 jump(100)
 
 // scroll up `100px`
 jump(-100)
+```
+
+Scroll to an element by passing in:
+
+- An element, or
+- A CSS selector (resolved against the `root`, via `querySelector`)
+
+```ts
+// pass in an element
+jump(document.querySelector(".target"))
+
+// pass in a CSS selector string
+jump(".target")
 ```
 
 ### options
@@ -113,12 +114,6 @@ type JumpOptions = {
   offset?: number // px
   root?: JumpRoot
 }
-
-type JumpAxis = "x" | "y"
-type JumpCallback = () => void
-type JumpDuration = number | ((distance: number) => number)
-type JumpEasing = (progress: number) => number
-type JumpRoot = Window | Element
 ```
 
 Customize the scroll behavior by passing in an `options` object.
@@ -139,15 +134,17 @@ const defaults: JumpOptions = {
 
 #### a11y
 
-If enabled, and the `target` resolves to an element, the `target` will be focused when the scroll completes:
-
-```js
-jump(".target", {
-  a11y: true,
-})
+```ts
+boolean
 ```
 
-Beware of visual changes caused by CSS `:focus` / `:focus-*` styles.
+If enabled, and the `target` resolves to an element, the `target` will be focused when the scroll completes:
+
+```ts
+jump(".target", { a11y: true })
+```
+
+Beware of visual changes caused by CSS `:focus` / `:focus-*` styling.
 
 #### axis
 
@@ -157,16 +154,9 @@ type JumpAxis = "x" | "y"
 
 The direction the `root` is scrolled:
 
-```js
-// horizontal
-jump(".target", {
-  axis: "x",
-})
-
-// vertical (default)
-jump(".target", {
-  axis: "y",
-})
+```ts
+jump(".target", { axis: "x" }) // horizontal
+jump(".target", { axis: "y" }) // vertical (default)
 ```
 
 #### callback
@@ -177,25 +167,28 @@ type JumpCallback = () => void
 
 A function called after the scroll has completed:
 
-```js
-jump(".target", {
-  callback: () => console.log("Jump completed."),
-})
+```ts
+const callback = () => console.log("Jump completed.")
+
+jump(".target", { callback })
 ```
 
-It won't be called if the scroll is cancelled:
+It won't be called if the jump is cancelled:
 
-```js
+```ts
+const callback = () => console.log("Jump completed.")
+const duration = 1000 // default
+
 const cancel = jump(".target", {
-  callback: () => console.log("Jump completed."),
-  duration: 1000,
+  callback,
+  duration,
 })
 
-// scroll cancelled, `callback` never runs
-setTimeout(cancel, 500)
+// cancelled, `callback` never runs
+window.setTimeout(cancel, duration / 2)
 ```
 
-It enables scrolling with `Promise`s, and `async` / `await`:
+For usage with `async` / `await`, make a `Promise` wrapper:
 
 ```ts
 const jumpAsync = (target, options = {}) =>
@@ -212,10 +205,10 @@ const jumpAsync = (target, options = {}) =>
 await jumpAsync(".target")
 ```
 
-It runs in the frame after:
+It **runs in the frame after**:
 
-- The final `scroll` call
-- The `focus` call, if `a11y` is enabled
+1. The final scroll call, and
+2. The focus call (when `a11y` is enabled)
 
 #### duration
 
@@ -225,10 +218,8 @@ type JumpDuration = number | ((distance: number) => number)
 
 Scroll over a fixed amount of time by passing in a number of milliseconds (`ms`):
 
-```js
-jump(".target", {
-  duration: 1000,
-})
+```ts
+jump(".target", { duration: 1000 })
 ```
 
 Scroll over an amount of time relative to the distance by passing in a function that:
@@ -236,11 +227,11 @@ Scroll over an amount of time relative to the distance by passing in a function 
 - Receives the signed scroll distance as a number of pixels, and
 - Returns the scroll duration in milliseconds (`ms`)
 
-```js
-// scroll speed = 1 px / ms
-jump(".target", {
-  duration: distance => Math.abs(distance),
-})
+```ts
+// scroll at 1px / ms
+const duration = (distance: number) => Math.abs(distance)
+
+jump(".target", { duration })
 ```
 
 #### easing
@@ -254,18 +245,18 @@ The easing function used for the scroll animation. It must:
 1. Accept the progress (`0` to `1`), and
 2. Return the eased progress.
 
-```js
-// linear easing
-jump(".target", {
-  easing: progress => progress,
-})
+```ts
+// custom linear easing function
+const easing = (progress: number) => progress
+
+jump(".target", { easing })
 ```
 
 #### offset
 
 If the `target` resolves to an element, adjust the scroll by a number of pixels.
 
-```js
+```ts
 // stop 100px before the leading edge of the target
 jump(".target", {
   offset: -100,
@@ -295,7 +286,7 @@ type JumpRoot = Window | Element
 
 The `window`, or element, that is scrolled.
 
-```js
+```ts
 const parent = document.querySelector(".parent")
 const children = Array.from(parent.children)
 
@@ -305,7 +296,7 @@ jump(children[0], {
 })
 ```
 
-### Return Value
+### cancel
 
 ```ts
 type JumpCancel = () => void
@@ -313,7 +304,7 @@ type JumpCancel = () => void
 
 A function that, when called, stops a scroll-in-progress.
 
-```js
+```ts
 // start scrolling (default `duration` of 1000ms)
 const cancel = jump(".target")
 
@@ -329,7 +320,7 @@ Jump will throw:
 
 - `TypeError`s if invalid parameters are passed:
 
-```js
+```ts
 // TypeError: Expected "target" to be an Element, number, or string.
 jump(null)
 
@@ -341,7 +332,7 @@ jump(".target", {
 
 - Generic `Error`s if the `target` can't be resolved:
 
-```js
+```ts
 // Error: Failed to resolve "target" string: CSS selector is invalid.
 jump("1337")
 
