@@ -811,7 +811,7 @@ test.describe("error", () => {
     ).toEqual(true)
   })
 
-  test("duration: invalid number", async ({ page }) => {
+  test("duration: number is invalid", async ({ page }) => {
     expect(
       await page.evaluate(() => {
         try {
@@ -825,7 +825,21 @@ test.describe("error", () => {
     ).toEqual(true)
   })
 
-  test("easing is wrong type", async ({ page }) => {
+  test("duration: function returns number that is invalid", async ({ page }) => {
+    expect(
+      await page.evaluate(() => {
+        try {
+          window.fixtures.jump(".target", { duration: distance => -1 * distance })
+        } catch (error) {
+          return error instanceof Error
+        }
+
+        return false
+      }),
+    ).toEqual(true)
+  })
+
+  test("easing: is wrong type", async ({ page }) => {
     expect(
       await page.evaluate(() => {
         try {
