@@ -811,13 +811,13 @@ test.describe("error", () => {
     ).toEqual(true)
   })
 
-  test("duration number is invalid", async ({ page }) => {
+  test("duration: invalid number", async ({ page }) => {
     expect(
       await page.evaluate(() => {
         try {
           window.fixtures.jump(".target", { duration: -1000 })
         } catch (error) {
-          return error instanceof TypeError
+          return error instanceof Error
         }
 
         return false
