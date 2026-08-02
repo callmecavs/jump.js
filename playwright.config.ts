@@ -28,9 +28,8 @@ const config = defineConfig({
   },
   webServer: {
     command: "pnpm test:server",
-    reuseExistingServer: !process.env.CI,
-    stderr: "ignore",
-    url: "http://localhost:3000/tests/behavior.html",
+    env: { NO_UPDATE_CHECK: "1" },
+    wait: { stdout: /Accepting connections/ },
   },
 })
 

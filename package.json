@@ -11,8 +11,10 @@
     "@typescript/native-preview": "7.0.0-dev.20260509.2",
     "eslint": "^10.8.0",
     "eslint-config-prettier": "^10.1.8",
+    "fkill-cli": "^9.0.0",
     "prettier": "^3.9.6",
     "publint": "^0.3.22",
+    "serve": "^14.2.6",
     "tsdown": "^0.22.14",
     "typescript": "^6.0.3",
     "typescript-eslint": "^8.65.0"
@@ -55,7 +57,7 @@
     "prepublishOnly": "pnpm test",
     "test": "pnpm lint:check && pnpm typecheck && pnpm build && pnpm exec playwright test",
     "test:report": "pnpm exec playwright show-report",
-    "test:server": "python3 -m http.server 3000",
+    "test:server": "fkill :3000 --force --silent && serve --listen 3000 --no-clipboard --no-request-logging .",
     "typecheck": "tsc --noEmit"
   },
   "sideEffects": false,
