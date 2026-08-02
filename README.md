@@ -145,7 +145,7 @@ If enabled, and the `target` resolves to an element, the `target` will be focuse
 jump(".target", { a11y: true })
 ```
 
-Focus can have a visual impact. Be mindful of your CSS `:focus` / `:focus-*` styling.
+Focus can have a visual impact. Be mindful of your CSS (`:focus` / `:focus-*`).
 
 #### axis
 
@@ -174,7 +174,7 @@ const callback = () => console.log("Jump completed.")
 jump(".target", { callback })
 ```
 
-It doesn't run if the jump is [cancel](#cancel)led:
+It doesn't run if the jump is cancelled:
 
 ```ts
 const callback = () => console.log("Jump completed.")
@@ -189,24 +189,7 @@ const cancel = jump(".target", {
 window.setTimeout(cancel, duration / 2)
 ```
 
-It enables scrolling with `async` / `await`:
-
-```ts
-const jumpAsync = (target, options = {}) =>
-  new Promise(resolve => {
-    jump(target, {
-      ...options,
-      callback: () => {
-        options.callback?.()
-        resolve()
-      },
-    })
-  })
-
-await jumpAsync(".target")
-```
-
-It **runs in the frame after**:
+It runs **in the frame after**:
 
 1. The final scroll call, and
 2. The focus call (if `a11y` is enabled)
@@ -263,14 +246,10 @@ It adjusts the scroll by a number of `px`:
 
 ```ts
 // scroll stops 100px BEFORE the target's top edge
-jump(".target", {
-  offset: -100,
-})
+jump(".target", { offset: -100 })
 
 // scroll stops 50px AFTER the target's top edge
-jump(".target", {
-  offset: 50,
-})
+jump(".target", { offset: 50 })
 ```
 
 It's ignored if the `target` is a number:
@@ -310,10 +289,10 @@ type JumpCancel = () => void
 A function that stops the in-progress scroll.
 
 ```ts
-// start
+// start scroll
 const cancel = jump(".target", { duration: 1000 })
 
-// stop
+// cancel it
 window.setTimeout(cancel, 500)
 ```
 
@@ -342,9 +321,37 @@ jump(".no-match")
 
 ## FAQs
 
-1. Does Jump respect `prefers-reduced-motion`?
+<details>
 
-No, because it's best handled externally:
+<summary>Is Jump compatible with `async` / `await`?</summary>
+
+Yes. Use the `callback` option to make a `Promise` wrapper:
+
+```ts
+import type { JumpOptions, JumpTarget } from "jump.js"
+import jump from "jump.js"
+
+const jumpAsync = (target: JumpTarget, options: JumpOptions = {}): Promise<void> =>
+  new Promise(resolve => {
+    jump(target, {
+      ...options,
+      callback: () => {
+        options.callback?.()
+        resolve()
+      },
+    })
+  })
+
+await jumpAsync(".target")
+```
+
+</details>
+
+<details>
+
+<summary>Does Jump respect `prefers-reduced-motion`?</summary>
+
+No, because it can be handled externally:
 
 ```ts
 const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches
@@ -355,9 +362,13 @@ const duration = prefersReducedMotion ? 0 : 1000
 jump(".target", { duration })
 ```
 
-2. Will an in-progress scroll stop on user input?
+</details>
 
-No. This is rather difficult because Jump itself triggers `scroll` events, and they cannot be reliably distinguished from those caused by user input.
+<details>
+
+<summary>Will an in-progress scroll stop on user input?</summary>
+
+No. Jump itself triggers `scroll` events, and they cannot be reliably distinguished from those caused by user input.
 
 The code below approximates this behavior:
 
@@ -375,7 +386,7 @@ const SCROLL_KEYS = [
   "Tab", // can cause indirect scroll via focus change
 ]
 
-// call Jump first so that, if it throws, no event listeners are registered
+// call Jump first so that, if it throws, event listeners don't register
 const cancel = jump(".target", { callback: () => cleanup() })
 
 const cleanup = () => {
@@ -389,20 +400,25 @@ const handleUserInput = () => {
   cancel()
 }
 
+// keyboard input
 const handleKeyDown = ({ key }: KeyboardEvent) => {
   if (SCROLL_KEYS.includes(key)) handleUserInput()
 }
 
+// touch or pen input
 const handlePointerDown = ({ pointerType }: PointerEvent) => {
   if (pointerType !== "mouse") handleUserInput()
 }
 
+// mouse wheel or trackpad input
 const handleWheel = () => handleUserInput()
 
-window.addEventListener("keydown", handleKeyDown) // keyboard input
-window.addEventListener("pointerdown", handlePointerDown, { passive: true }) // touch or pen input
-window.addEventListener("wheel", handleWheel, { passive: true }) // mouse wheel or trackpad input
+window.addEventListener("keydown", handleKeyDown)
+window.addEventListener("pointerdown", handlePointerDown, { passive: true })
+window.addEventListener("wheel", handleWheel, { passive: true })
 ```
+
+<details>
 
 ## Browser Support
 
