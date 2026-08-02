@@ -323,9 +323,9 @@ jump(".no-match")
 
 <details>
 
-<summary>Is Jump compatible with `async` / `await`?</summary>
+<summary>Is Jump compatible with <code>async</code> / <code>await</code>?</summary>
 
-Yes. Use the `callback` option to make a `Promise` wrapper:
+Not by default. It's easy to add by leveraing the `callback`:
 
 ```ts
 import type { JumpOptions, JumpTarget } from "jump.js"
@@ -349,9 +349,9 @@ await jumpAsync(".target")
 
 <details>
 
-<summary>Does Jump respect `prefers-reduced-motion`?</summary>
+<summary>Does Jump respect <code>prefers-reduced-motion</code>?</summary>
 
-No, because it can be handled externally:
+Not by default. It's easily handled externally:
 
 ```ts
 const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches
@@ -368,7 +368,7 @@ jump(".target", { duration })
 
 <summary>Will an in-progress scroll stop on user input?</summary>
 
-No. Jump itself triggers `scroll` events, and they cannot be reliably distinguished from those caused by user input.
+Not by default. Jump itself triggers `scroll` events, and they cannot be reliably distinguished from those caused by user input.
 
 The code below approximates this behavior:
 
@@ -418,7 +418,7 @@ window.addEventListener("pointerdown", handlePointerDown, { passive: true })
 window.addEventListener("wheel", handleWheel, { passive: true })
 ```
 
-<details>
+</details>
 
 ## Browser Support
 
