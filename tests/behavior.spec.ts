@@ -543,7 +543,7 @@ test.describe("a11y", () => {
       ).toEqual(true)
     })
 
-    test("does call focus({ preventScroll: true })", async ({ page }) => {
+    test("calls focus with `preventScroll: true` option", async ({ page }) => {
       expect(
         await page.evaluate(() => {
           const root = window.fixtures.getElement("[data-focus]")
@@ -679,7 +679,7 @@ test.describe("cancel", () => {
 })
 
 test.describe("error", () => {
-  test("target is wrong type", async ({ page }) => {
+  test("target: is wrong type", async ({ page }) => {
     expect(
       await page.evaluate(() => {
         try {
@@ -694,7 +694,7 @@ test.describe("error", () => {
     ).toEqual(true)
   })
 
-  test("target number is invalid", async ({ page }) => {
+  test("target: number is invalid", async ({ page }) => {
     expect(
       await page.evaluate(() => {
         try {
@@ -708,7 +708,7 @@ test.describe("error", () => {
     ).toEqual(true)
   })
 
-  test("target selector is invalid", async ({ page }) => {
+  test("target: selector is invalid", async ({ page }) => {
     expect(
       await page.evaluate(() => {
         try {
@@ -722,7 +722,7 @@ test.describe("error", () => {
     ).toEqual(true)
   })
 
-  test("target selector didn't match", async ({ page }) => {
+  test("target: selector didn't match", async ({ page }) => {
     expect(
       await page.evaluate(() => {
         try {
@@ -736,7 +736,7 @@ test.describe("error", () => {
     ).toEqual(true)
   })
 
-  test("options is wrong type", async ({ page }) => {
+  test("options: is wrong type", async ({ page }) => {
     expect(
       await page.evaluate(() => {
         try {
@@ -751,7 +751,7 @@ test.describe("error", () => {
     ).toEqual(true)
   })
 
-  test("a11y is wrong type", async ({ page }) => {
+  test("a11y: is wrong type", async ({ page }) => {
     expect(
       await page.evaluate(() => {
         try {
@@ -766,7 +766,7 @@ test.describe("error", () => {
     ).toEqual(true)
   })
 
-  test("axis is invalid", async ({ page }) => {
+  test("axis: is invalid", async ({ page }) => {
     expect(
       await page.evaluate(() => {
         try {
@@ -781,7 +781,7 @@ test.describe("error", () => {
     ).toEqual(true)
   })
 
-  test("callback is wrong type", async ({ page }) => {
+  test("callback: is wrong type", async ({ page }) => {
     expect(
       await page.evaluate(() => {
         try {
@@ -796,7 +796,7 @@ test.describe("error", () => {
     ).toEqual(true)
   })
 
-  test("duration is wrong type", async ({ page }) => {
+  test("duration: is wrong type", async ({ page }) => {
     expect(
       await page.evaluate(() => {
         try {
@@ -840,7 +840,7 @@ test.describe("error", () => {
     ).toEqual(true)
   })
 
-  test("offset is wrong type", async ({ page }) => {
+  test("offset: is wrong type", async ({ page }) => {
     expect(
       await page.evaluate(() => {
         try {
@@ -855,7 +855,7 @@ test.describe("error", () => {
     ).toEqual(true)
   })
 
-  test("offset number is invalid", async ({ page }) => {
+  test("offset: number is invalid", async ({ page }) => {
     expect(
       await page.evaluate(() => {
         try {
@@ -869,7 +869,7 @@ test.describe("error", () => {
     ).toEqual(true)
   })
 
-  test("root is wrong type", async ({ page }) => {
+  test("root: is wrong type", async ({ page }) => {
     expect(
       await page.evaluate(() => {
         try {
