@@ -340,6 +340,70 @@ jump("1337")
 jump(".no-match")
 ```
 
+## FAQs
+
+1. Does Jump respect `prefers-reduced-motion`?
+
+No, because it's best handled externally:
+
+```ts
+const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches
+
+// set duration based on user's motion preference
+const duration = prefersReducedMotion ? 0 : 1000
+
+jump(".target", { duration })
+```
+
+2. Will an in-progress scroll stop on user input?
+
+No. This is rather difficult because Jump itself triggers `scroll` events, and they cannot be reliably distinguished from those caused by user input.
+
+The code below approximates this behavior:
+
+```ts
+const SCROLL_KEYS = [
+  " ", // Spacebar
+  "ArrowDown",
+  "ArrowLeft",
+  "ArrowRight",
+  "ArrowUp",
+  "End",
+  "Home",
+  "PageDown",
+  "PageUp",
+  "Tab", // can cause indirect scroll via focus change
+]
+
+// call Jump first so that, if it throws, no event listeners are registered
+const cancel = jump(".target", { callback: () => cleanup() })
+
+const cleanup = () => {
+  window.removeEventListener("keydown", handleKeyDown)
+  window.removeEventListener("pointerdown", handlePointerDown)
+  window.removeEventListener("wheel", handleWheel)
+}
+
+const handleUserInput = () => {
+  cleanup()
+  cancel()
+}
+
+const handleKeyDown = ({ key }: KeyboardEvent) => {
+  if (SCROLL_KEYS.includes(key)) handleUserInput()
+}
+
+const handlePointerDown = ({ pointerType }: PointerEvent) => {
+  if (pointerType !== "mouse") handleUserInput()
+}
+
+const handleWheel = () => handleUserInput()
+
+window.addEventListener("keydown", handleKeyDown) // keyboard input
+window.addEventListener("pointerdown", handlePointerDown, { passive: true }) // touch or pen input
+window.addEventListener("wheel", handleWheel, { passive: true }) // mouse wheel or trackpad input
+```
+
 ## Browser Support
 
 Jump supports the following natively:
