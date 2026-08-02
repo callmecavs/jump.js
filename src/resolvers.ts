@@ -16,7 +16,8 @@ export const resolveDirection = (root: JumpRoot): JumpDirection => {
 export const resolveDuration = (distance: number, duration: JumpDuration) => {
   const resolved = typeof duration === "function" ? duration(distance) : duration
 
-  // Catch invalid `duration` number.
+  // Catch invalid `duration`. Can't include this as part of the validator because `duration` functions require
+  // `distance` to be calculated first.
   if (!Number.isFinite(resolved) || resolved < 0) {
     throw new Error(`"duration": expected a finite, non-negative number.`)
   }
