@@ -97,10 +97,10 @@ jump(100)
 jump(-100)
 ```
 
-Scroll to an element by passing an:
+Scroll to an element by passing either:
 
-- Element, or
-- CSS selector string (resolved via `querySelector`, scoped to the [`root`](#root))
+- an Element, or
+- a CSS selector string (resolved via `querySelector`, scoped to the [`root`](#root))
 
 ```ts
 // pass in an element
@@ -146,7 +146,7 @@ const defaults: JumpOptions = {
 boolean
 ```
 
-If enabled, and the [`target`](#target) resolves to an element, the [`target`](#target) will be focused when the scroll completes:
+If enabled and the [`target`](#target) resolves to an element, the [`target`](#target) will be focused when the scroll completes:
 
 ```ts
 jump(".target", { a11y: true })
@@ -277,7 +277,7 @@ It's useful for:
 type JumpRoot = Window | Element
 ```
 
-The `window`, or element, that is scrolled.
+The `window` or element that is scrolled.
 
 ```ts
 const container = document.querySelector(".container")
@@ -304,7 +304,7 @@ window.setTimeout(cancel, 500)
 
 ## Error Handling
 
-Jump does runtime validation that can result in a `TypeError` or `Error` being thrown. All validation is done synchronously, before the scrolling begins.
+Jump performs runtime validation that can result in a `TypeError` or `Error` being thrown. All validation is done synchronously, before the scrolling begins.
 
 ### `TypeError`
 
@@ -560,7 +560,7 @@ If you're already using `lenis`, see the [`scrollTo`](https://github.com/darkroo
 
 ## Browser Support
 
-Jump supports the following natively:
+Jump natively supports the following browsers:
 
 | Browser      | Version | Limiting Feature                                                                                                          |
 | :----------- | :------ | :------------------------------------------------------------------------------------------------------------------------ |
