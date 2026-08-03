@@ -330,19 +330,46 @@ jump(".no-match")
 No, because this can be implemented externally:
 
 ```ts
-import type { JumpOptions, JumpTarget } from "jump.js"
+import type { JumpCancel, JumpOptions, JumpTarget } from "jump.js"
 import jump from "jump.js"
 
-const jumpPromise = (target: JumpTarget, options: JumpOptions = {}): Promise<void> =>
-  new Promise(resolve => {
-    jump(target, {
-      ...options,
-      callback: () => {
-        options.callback?.()
-        resolve()
-      },
-    })
+type JumpPromiseResult = {
+  promise: Promise<void>
+  cancel: JumpCancel
+}
+
+const jumpPromise = (target: JumpTarget, options: JumpOptions = {}): JumpPromiseResult => {
+  let resolve: (value: void | PromiseLike<void>) => void
+  let reject: (reason?: any) => void // eslint-disable-line @typescript-eslint/no-explicit-any
+
+  const promise = new Promise<void>((res, rej) => {
+    resolve = res
+    reject = rej
   })
+
+  let isSettled = false
+
+  const callback = () => {
+    if (isSettled) return
+
+    isSettled = true
+    options.callback?.()
+    resolve()
+  }
+
+  const cancel = jump(target, { ...options, callback })
+
+  return {
+    promise,
+    cancel: () => {
+      if (isSettled) return
+
+      isSettled = true
+      cancel()
+      reject()
+    },
+  }
+}
 
 export default jumpPromise
 ```
@@ -368,7 +395,7 @@ const jumpGuard = (target: JumpTarget, options: JumpOptions = {}): JumpCancel | 
 
   isIdle = false
 
-  let isStale
+  let isStale = false
 
   const finish = () => {
     if (isStale) return
@@ -378,8 +405,8 @@ const jumpGuard = (target: JumpTarget, options: JumpOptions = {}): JumpCancel | 
   }
 
   const callback = () => {
-    finish()
     options.callback?.()
+    finish()
   }
 
   try {
