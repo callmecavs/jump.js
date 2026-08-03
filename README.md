@@ -52,11 +52,16 @@ Each `type` is detailed in the relevant section of this documentation.
 
 ## Basic Usage
 
-Jump is **simply a function**.
+Jump is a **function**.
 
-- **Required**: Import it and call it, passing it a [target](#target).
-- Optional: Pass it a [configuration](#options) object.
-- Optional: Store the returned [cancel](#cancel) function.
+It accepts two arguments:
+
+1. A required [`target`](#target).
+2. An optional [`options`](#options) object.
+
+It returns:
+
+1. A function that, when called, will [`cancel`](#cancel) the in-progress scroll.
 
 ```ts
 import jump from "jump.js"
@@ -93,7 +98,7 @@ jump(-100)
 Scroll to an element by passing an:
 
 - Element, or
-- CSS selector string (resolved via `querySelector`, scoped to the `root`)
+- CSS selector string (resolved via `querySelector`, scoped to the [`root`](#root))
 
 ```ts
 // pass in an element
@@ -117,9 +122,9 @@ type JumpOptions = {
 }
 ```
 
-Customize the scroll behavior by passing in an `options` object.
+Customize the scroll behavior by passing in a configuration object.
 
-All `options` have sensible defaults:
+All options have sensible defaults:
 
 ```ts
 const defaults: JumpOptions = {
@@ -139,13 +144,13 @@ const defaults: JumpOptions = {
 boolean
 ```
 
-If enabled, and the `target` resolves to an element, the `target` will be focused when the scroll completes:
+If enabled, and the [`target`](#target) resolves to an element, the [`target`](#target) will be focused when the scroll completes:
 
 ```ts
 jump(".target", { a11y: true })
 ```
 
-Focus may have a visual impact. Remember to check your `:focus` / `:focus-*` styling.
+Focus may have a visual impact. Remember to check your `:focus` / `:focus-*` styles.
 
 #### axis
 
@@ -153,10 +158,10 @@ Focus may have a visual impact. Remember to check your `:focus` / `:focus-*` sty
 type JumpAxis = "x" | "y"
 ```
 
-The `axis` along which the `root` will be scrolled:
+Used to change the direction that the [`root`](#root) scrolls:
 
 ```ts
-// scroll the "x" axis (horizontal)
+// scroll along the "x" axis (horizontal)
 jump(".target", { axis: "x" })
 ```
 
@@ -189,10 +194,10 @@ const cancel = jump(".target", {
 window.setTimeout(cancel, duration / 2)
 ```
 
-It runs **in the frame after**:
+It runs in **the frame after**:
 
 1. The final scroll call, and
-2. The focus call (if using the `a11y` option)
+2. The focus call (if using the [`a11y`](#a11y) option)
 
 #### duration
 
@@ -252,7 +257,7 @@ jump(".target", { offset: -100 })
 jump(".target", { offset: 50 })
 ```
 
-It's ignored if the `target` is a number:
+It's ignored if the [`target`](#target) is a number:
 
 ```ts
 // scroll down 150px (offset ignored)
@@ -261,7 +266,7 @@ jump(150, { offset: -150 })
 
 It's useful for:
 
-- Aligning the `target` within the `root`
+- Aligning the [`target`](#target) within the [`root`](#root)
 - Accommodating `sticky` / `fixed` elements
 
 #### root
@@ -299,7 +304,7 @@ window.setTimeout(cancel, 500)
 
 Jump will throw:
 
-1. `TypeError`s when invalid parameters are passed:
+1. `TypeError`s when invalid arguments are passed:
 
 ```ts
 // TypeError: "target": expected an Element, a number, or a string.
@@ -316,6 +321,14 @@ jump("1337")
 
 // Error: "target" string: CSS selector didn't match.
 jump(".no-match")
+```
+
+The `duration` can't be resolved:
+
+```ts
+// Error: "duration": expected a finite, non-negative number.
+jump(100, { duration: Infinity })
+jump(100, { duration: (distance: number) => -1 * distance })
 ```
 
 ## FAQs
