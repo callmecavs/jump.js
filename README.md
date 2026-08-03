@@ -208,7 +208,7 @@ jump(".target", { duration: 1000 })
 
 To scroll over an amount of time relative to the scroll distance, pass in a function:
 
-- It will recieve the signed scroll distance as a number (`px`), and
+- It will receive the signed scroll distance as a number (`px`), and
 - It should return the scroll duration as a number (`ms`)
 
 ```ts
@@ -426,13 +426,32 @@ window.addEventListener("wheel", handleWheel, { passive: true })
 
 <details>
 
+<summary>Is Jump compatible with CSS scroll snap?</summary>
+
+<br>
+
+No, but much of what scroll snap provides can be mimicked with Jump (and custom code):
+
+| CSS Property              | Alternative Approach             |
+| ------------------------- | -------------------------------- |
+| `scroll-snap-type`        | `scrollend` event, `axis` option |
+| `scroll-snap-align`       | `offset` option                  |
+| `scroll-padding`          | `offset` option                  |
+| `scroll-margin`           | `offset` option                  |
+| `scroll-behavior: auto`   | `duration` option                |
+| `scroll-behavior: smooth` | `duration` and `easing` options  |
+
+</details>
+
+<details>
+
 <summary>Is Jump compatible with <a href="https://github.com/darkroomengineering/lenis"><code>lenis</code></a>?</summary>
 
 <br>
 
 No, but you probably don't need both.
 
-If you're already using `lenis`, see the [`scrollTo`](https://github.com/darkroomengineering/lenis#methods) method. It handles much of what Jump can do, and has a similar API.
+If you're already using `lenis`, see the [`scrollTo`](https://github.com/darkroomengineering/lenis#methods) method. It handles much of what Jump can do, and has a very similar API.
 
 </details>
 
