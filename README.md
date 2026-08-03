@@ -403,7 +403,7 @@ import jump from "jump.js"
 let isIdle = true
 
 const jumpGuard = (target: JumpTarget, options: JumpOptions = {}): JumpCancel | undefined => {
-  if (isIdle) return
+  if (!isIdle) return
 
   isIdle = false
 
