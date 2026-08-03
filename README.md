@@ -327,13 +327,13 @@ jump(".no-match")
 
 <br>
 
-Not by default, but it's easy to add by leveraging the `callback`:
+No, because this can be implemented externally:
 
 ```ts
 import type { JumpOptions, JumpTarget } from "jump.js"
 import jump from "jump.js"
 
-const jumpAsync = (target: JumpTarget, options: JumpOptions = {}): Promise<void> =>
+const jumpPromise = (target: JumpTarget, options: JumpOptions = {}): Promise<void> =>
   new Promise(resolve => {
     jump(target, {
       ...options,
@@ -344,26 +344,60 @@ const jumpAsync = (target: JumpTarget, options: JumpOptions = {}): Promise<void>
     })
   })
 
-await jumpAsync(".target")
+export default jumpPromise
 ```
 
 </details>
 
 <details>
 
-<summary>Does Jump respect <code>prefers-reduced-motion</code>?</summary>
+<summary>Does Jump handle duplicate / overlapping / conflicting scrolls?</summary>
 
 <br>
 
-Not by default, but it's easily handled externally:
+No, because this can be implemented externally:
 
 ```ts
-const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches
+import type { JumpCancel, JumpOptions, JumpTarget } from "jump.js"
+import jump from "jump.js"
 
-// set duration based on user's motion preference
-const duration = prefersReducedMotion ? 0 : 1000
+let isIdle = true
 
-jump(".target", { duration })
+const jumpGuard = (target: JumpTarget, options: JumpOptions = {}): JumpCancel | undefined => {
+  if (isIdle) return
+
+  isIdle = false
+
+  let isStale
+
+  const finish = () => {
+    if (isStale) return
+
+    isIdle = true
+    isStale = true
+  }
+
+  const callback = () => {
+    finish()
+    options.callback?.()
+  }
+
+  try {
+    const cancel = jump(target, { ...options, callback })
+
+    return () => {
+      if (isStale) return
+
+      cancel()
+      finish()
+    }
+  } catch (error) {
+    finish()
+    throw error
+  }
+}
+
+export default jumpGuard
 ```
 
 </details>
@@ -374,9 +408,11 @@ jump(".target", { duration })
 
 <br>
 
-Not by default, but the code below approximates this behavior:
+No, because this can be implemented externally:
 
 ```ts
+import jump from "jump.js"
+
 const SCROLL_KEYS = [
   " ", // Spacebar
   "ArrowDown",
@@ -426,11 +462,31 @@ window.addEventListener("wheel", handleWheel, { passive: true })
 
 <details>
 
+<summary>Does Jump respect <code>prefers-reduced-motion</code>?</summary>
+
+<br>
+
+No, because this can be implemented externally:
+
+```ts
+import jump from "jump.js"
+
+// set duration based on motion preference
+const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches
+const duration = prefersReducedMotion ? 0 : 1000
+
+jump(".target", { duration })
+```
+
+</details>
+
+<details>
+
 <summary>Is Jump compatible with CSS scroll snap?</summary>
 
 <br>
 
-No, but much of what scroll snap provides can be mimicked with Jump (and custom code):
+No, but scroll snap behavior can be mimicked with Jump and custom code:
 
 | CSS Property              | Alternative Approach             |
 | :------------------------ | :------------------------------- |
