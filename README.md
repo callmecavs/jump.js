@@ -188,7 +188,7 @@ const callback = () => console.log("Jump completed.")
 jump(".target", { callback })
 ```
 
-It doesn't run if the scroll is cancelled:
+It doesn't run if the scroll is canceled:
 
 ```ts
 const callback = () => console.log("Jump completed.")
@@ -199,14 +199,14 @@ const cancel = jump(".target", {
   duration,
 })
 
-// cancelled, `callback` doesn't run
+// canceled, `callback` doesn't run
 window.setTimeout(cancel, duration / 2)
 ```
 
-It runs in **the frame after**:
+Note that:
 
-1. The final scroll call, and
-2. The focus call (if using the [`a11y`](#a11y) option)
+1. It runs **in the frame after** the scroll completes, and after the `focus` call (when [`a11y`](#a11y) is enabled).
+2. If the scroll completes, calling the [`cancel`](#cancel) function will not prevent the [`callback`](#callback) from running.
 
 #### duration
 
@@ -214,13 +214,13 @@ It runs in **the frame after**:
 type JumpDuration = number | ((distance: number) => number)
 ```
 
-To scroll over a fixed amount of time, pass in a number (`ms`):
+To scroll for a fixed amount of time, pass in a number (`ms`):
 
 ```ts
 jump(".target", { duration: 1000 })
 ```
 
-To scroll over an amount of time relative to the scroll distance, pass in a function:
+To scroll for an amount of time relative to the scroll distance, pass in a function:
 
 - It will receive the signed scroll distance as a number (`px`), and
 - It should return the scroll duration as a number (`ms`)
@@ -295,7 +295,7 @@ jump(100, { root: container })
 
 Note that:
 
-1. Jump clamps all scrolls to the [`root`](#root)'s actual scroll range.
+1. Jump clamps every scroll to the [`root`](#root)'s actual scroll range.
 2. Jump resolves [`target`](#target) CSS selector strings via `querySelector` scoped to the [`root`](#root).
 
 ### cancel
@@ -316,7 +316,7 @@ window.setTimeout(cancel, 500)
 
 ## Error Handling
 
-Jump performs runtime validation that can result in a `TypeError` or `Error` being thrown. All validation is done synchronously, before the scrolling begins.
+Jump performs runtime validation that can throw a `TypeError` or `Error`. All validation is done synchronously, before the scrolling begins.
 
 ### `TypeError`
 
@@ -359,7 +359,7 @@ jump(100, { duration: (distance: number) => -1 * distance })
 
 <br />
 
-No, but it was designed such that you can implement this externally:
+No, but it was designed so that you can implement this externally:
 
 ```ts
 import type { JumpCancel, JumpOptions, JumpTarget } from "jump.js"
@@ -414,7 +414,7 @@ export default jumpPromise
 
 <br />
 
-No, but it was designed such that you can implement this externally:
+No, but it was designed so that you can implement this externally:
 
 ```ts
 import type { JumpCancel, JumpOptions, JumpTarget } from "jump.js"
@@ -467,7 +467,7 @@ export default jumpGuard
 
 <br />
 
-No, but it was designed such that you can implement this externally:
+No, but it was designed so that you can implement this externally:
 
 ```ts
 import jump from "jump.js"
@@ -484,9 +484,6 @@ const SCROLL_KEYS = [
   "PageUp",
   "Tab", // can cause indirect scroll via focus change
 ]
-
-// call Jump first so that, if it throws, event listeners don't register
-const cancel = jump(".target", { callback: () => cleanup() })
 
 const cleanup = () => {
   window.removeEventListener("keydown", handleKeyDown)
@@ -512,6 +509,9 @@ const handlePointerDown = ({ pointerType }: PointerEvent) => {
 // mouse wheel or trackpad input
 const handleWheel = () => handleUserInput()
 
+// call Jump here so that, if it throws, event listeners aren't registered
+const cancel = jump(".target", { callback: cleanup })
+
 window.addEventListener("keydown", handleKeyDown)
 window.addEventListener("pointerdown", handlePointerDown, { passive: true })
 window.addEventListener("wheel", handleWheel, { passive: true })
@@ -525,7 +525,7 @@ window.addEventListener("wheel", handleWheel, { passive: true })
 
 <br />
 
-No, but it was designed such that you can implement this externally:
+No, but it was designed so that you can implement this externally:
 
 ```ts
 import jump from "jump.js"
