@@ -2,7 +2,7 @@ import type { JumpCancel, JumpOptions, JumpTarget } from "jump.js"
 import scroll from "jump.js" // NOTE: import renamed, reserving `jump` for the export
 
 const SCROLL_KEYS = [
-  " ", // Spacebar
+  " ",
   "ArrowDown",
   "ArrowLeft",
   "ArrowRight",
@@ -11,7 +11,7 @@ const SCROLL_KEYS = [
   "Home",
   "PageDown",
   "PageUp",
-  "Tab", // focus change can cause scrolling
+  "Tab", // focus change can cause indirect scrolling
 ]
 
 const jump = (target: JumpTarget, options: JumpOptions = {}): JumpCancel => {

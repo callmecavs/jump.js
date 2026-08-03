@@ -6,7 +6,7 @@ type JumpResult = {
   cancel: JumpCancel
 }
 
-// NOTE: `Promise.withResolvers` makes this cleaner, but exceeds the "Browser Support" noted on the README
+// NOTE: `Promise.withResolvers` makes this cleaner, but exceeds the "Browser Support" noted on the README.
 const jump = (target: JumpTarget, options: JumpOptions = {}): JumpResult => {
   let resolve: (value: void | PromiseLike<void>) => void
   let reject: (reason?: any) => void // eslint-disable-line @typescript-eslint/no-explicit-any

@@ -361,52 +361,7 @@ jump(100, { duration: (distance: number) => -1 * distance })
 
 <br />
 
-No, but it was designed so that you can implement this externally:
-
-```ts
-import type { JumpCancel, JumpOptions, JumpTarget } from "jump.js"
-import jump from "jump.js"
-
-type JumpPromiseResult = {
-  promise: Promise<void>
-  cancel: JumpCancel
-}
-
-const jumpPromise = (target: JumpTarget, options: JumpOptions = {}): JumpPromiseResult => {
-  let resolve: (value: void | PromiseLike<void>) => void
-  let reject: (reason?: any) => void // eslint-disable-line @typescript-eslint/no-explicit-any
-
-  const promise = new Promise<void>((res, rej) => {
-    resolve = res
-    reject = rej
-  })
-
-  let isSettled = false
-
-  const callback = () => {
-    if (isSettled) return
-
-    isSettled = true
-    resolve()
-    options.callback?.()
-  }
-
-  const cancel = jump(target, { ...options, callback })
-
-  return {
-    promise,
-    cancel: () => {
-      if (isSettled) return
-
-      isSettled = true
-      cancel()
-      reject()
-    },
-  }
-}
-
-export default jumpPromise
-```
+No, but it was designed such that you can implement this externally. Refer to the example implementation: [here](/examples/jump-promise.ts).
 
 </details>
 
@@ -416,50 +371,7 @@ export default jumpPromise
 
 <br />
 
-No, but it was designed so that you can implement this externally:
-
-```ts
-import type { JumpCancel, JumpOptions, JumpTarget } from "jump.js"
-import jump from "jump.js"
-
-let isIdle = true
-
-const jumpGuard = (target: JumpTarget, options: JumpOptions = {}): JumpCancel | undefined => {
-  if (!isIdle) return
-
-  isIdle = false
-
-  let isStale = false
-
-  const finish = () => {
-    if (isStale) return
-
-    isIdle = true
-    isStale = true
-  }
-
-  const callback = () => {
-    finish()
-    options.callback?.()
-  }
-
-  try {
-    const cancel = jump(target, { ...options, callback })
-
-    return () => {
-      if (isStale) return
-
-      cancel()
-      finish()
-    }
-  } catch (error) {
-    finish()
-    throw error
-  }
-}
-
-export default jumpGuard
-```
+No, but it was designed such that you can implement this externally. Refer to the example implementation: [here](/examples/jump-idle.ts).
 
 </details>
 
@@ -469,55 +381,7 @@ export default jumpGuard
 
 <br />
 
-No, but it was designed so that you can implement this externally:
-
-```ts
-import jump from "jump.js"
-
-const SCROLL_KEYS = [
-  " ", // Spacebar
-  "ArrowDown",
-  "ArrowLeft",
-  "ArrowRight",
-  "ArrowUp",
-  "End",
-  "Home",
-  "PageDown",
-  "PageUp",
-  "Tab", // can cause indirect scroll via focus change
-]
-
-const cleanup = () => {
-  window.removeEventListener("keydown", handleKeyDown)
-  window.removeEventListener("pointerdown", handlePointerDown)
-  window.removeEventListener("wheel", handleWheel)
-}
-
-const handleUserInput = () => {
-  cleanup()
-  cancel()
-}
-
-// keyboard input
-const handleKeyDown = ({ key }: KeyboardEvent) => {
-  if (SCROLL_KEYS.includes(key)) handleUserInput()
-}
-
-// touch or pen input
-const handlePointerDown = ({ pointerType }: PointerEvent) => {
-  if (pointerType !== "mouse") handleUserInput()
-}
-
-// mouse wheel or trackpad input
-const handleWheel = () => handleUserInput()
-
-// call Jump here so that, if it throws, event listeners aren't registered
-const cancel = jump(".target", { callback: cleanup })
-
-window.addEventListener("keydown", handleKeyDown)
-window.addEventListener("pointerdown", handlePointerDown, { passive: true })
-window.addEventListener("wheel", handleWheel, { passive: true })
-```
+No, but it was designed such that you can implement this externally. Refer to the example implementation: [here](/examples/jump-promise.ts).
 
 </details>
 
@@ -527,17 +391,7 @@ window.addEventListener("wheel", handleWheel, { passive: true })
 
 <br />
 
-No, but it was designed so that you can implement this externally:
-
-```ts
-import jump from "jump.js"
-
-// set duration based on motion preference
-const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches
-const duration = prefersReducedMotion ? 0 : 1000
-
-jump(".target", { duration })
-```
+No, but it was designed such that you can implement this externally. Refer to the example implementation: [here](/examples/prefers-reduced-motion.ts).
 
 </details>
 
