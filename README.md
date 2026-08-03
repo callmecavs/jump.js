@@ -365,8 +365,8 @@ const jumpPromise = (target: JumpTarget, options: JumpOptions = {}): JumpPromise
     if (isSettled) return
 
     isSettled = true
-    options.callback?.()
     resolve()
+    options.callback?.()
   }
 
   const cancel = jump(target, { ...options, callback })
@@ -417,8 +417,8 @@ const jumpGuard = (target: JumpTarget, options: JumpOptions = {}): JumpCancel | 
   }
 
   const callback = () => {
-    options.callback?.()
     finish()
+    options.callback?.()
   }
 
   try {
