@@ -433,7 +433,7 @@ window.addEventListener("wheel", handleWheel, { passive: true })
 No, but much of what scroll snap provides can be mimicked with Jump (and custom code):
 
 | CSS Property              | Alternative Approach             |
-| ------------------------- | -------------------------------- |
+| :------------------------ | :------------------------------- |
 | `scroll-snap-type`        | `scrollend` event, `axis` option |
 | `scroll-snap-align`       | `offset` option                  |
 | `scroll-padding`          | `offset` option                  |
@@ -460,7 +460,7 @@ If you're already using `lenis`, see the [`scrollTo`](https://github.com/darkroo
 Jump supports the following natively:
 
 | Browser      | Version | Limiting Feature                                                                                                          |
-| ------------ | ------- | ------------------------------------------------------------------------------------------------------------------------- |
+| :----------- | :------ | :------------------------------------------------------------------------------------------------------------------------ |
 | Chrome       | 80+     | [`?.` (optional chaining)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Optional_chaining) |
 | Edge         | 80+     | [`?.` (optional chaining)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Optional_chaining) |
 | Firefox      | 74+     | [`?.` (optional chaining)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Optional_chaining) |
