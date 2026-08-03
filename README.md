@@ -80,7 +80,7 @@ type Jump = (target: JumpTarget, options?: JumpOptions) => JumpCancel
 type JumpTarget = Element | number | string
 ```
 
-Scroll a number of pixels by passing a number:
+Scroll a fixed number of pixels by passing a number:
 
 ```ts
 // scroll down 100px
@@ -93,7 +93,7 @@ jump(-100)
 Scroll to an element by passing an:
 
 - Element, or
-- CSS selector string (resolved against the `root`, via `querySelector`)
+- CSS selector string (resolved via `querySelector`, scoped to the `root`)
 
 ```ts
 // pass in an element
@@ -145,7 +145,7 @@ If enabled, and the `target` resolves to an element, the `target` will be focuse
 jump(".target", { a11y: true })
 ```
 
-Focus can have a visual impact. Be mindful of your CSS (`:focus` / `:focus-*`).
+Focus may have a visual impact. Remember to check your `:focus` / `:focus-*` styling.
 
 #### axis
 
@@ -174,7 +174,7 @@ const callback = () => console.log("Jump completed.")
 jump(".target", { callback })
 ```
 
-It doesn't run if the jump is cancelled:
+It doesn't run if the scroll is cancelled:
 
 ```ts
 const callback = () => console.log("Jump completed.")
@@ -192,7 +192,7 @@ window.setTimeout(cancel, duration / 2)
 It runs **in the frame after**:
 
 1. The final scroll call, and
-2. The focus call (if `a11y` is enabled)
+2. The focus call (if using the `a11y` option)
 
 #### duration
 
@@ -245,17 +245,17 @@ number
 It adjusts the scroll by a number of `px`:
 
 ```ts
-// scroll stops 100px BEFORE the target's top edge
+// scroll stops 100px before the target's top edge
 jump(".target", { offset: -100 })
 
-// scroll stops 50px AFTER the target's top edge
+// scroll stops 50px after the target's top edge
 jump(".target", { offset: 50 })
 ```
 
 It's ignored if the `target` is a number:
 
 ```ts
-// scrolls down 150px
+// scroll down 150px (offset ignored)
 jump(150, { offset: -150 })
 ```
 
@@ -273,11 +273,10 @@ type JumpRoot = Window | Element
 The `window`, or element, that is scrolled.
 
 ```ts
-const parent = document.querySelector(".parent")
-const children = Array.from(parent.children)
+const container = document.querySelector(".container")
 
-// scroll `parent` to 1st `child`
-jump(children[0], { root: parent })
+// scroll `container` down 100px
+jump(100, { root: container })
 ```
 
 ### cancel
