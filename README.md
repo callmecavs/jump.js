@@ -232,6 +232,8 @@ const duration = (distance: number) => Math.abs(distance)
 jump(".target", { duration })
 ```
 
+Jump scrolls instantly, without starting a `requestAnimationFrame` loop, when the resolved [`duration`](#duration) is `0` or the absolute scroll distance is less than `1px`. Instant scrolls complete normally, with no change to [`a11y`](#a11y) or [`callback`](#callback) behavior.
+
 #### easing
 
 ```ts
