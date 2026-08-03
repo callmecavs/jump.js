@@ -355,11 +355,11 @@ jump(100, { duration: (distance: number) => -1 * distance })
 
 <details>
 
-<summary>Is Jump compatible with <code>async</code> / <code>await</code>?</summary>
+<summary>Does Jump support <code>async</code> / <code>await</code>?</summary>
 
 <br />
 
-No, because this can be implemented externally:
+No, but it was designed such that you can implement this externally:
 
 ```ts
 import type { JumpCancel, JumpOptions, JumpTarget } from "jump.js"
@@ -414,7 +414,7 @@ export default jumpPromise
 
 <br />
 
-No, because this can be implemented externally:
+No, but it was designed such that you can implement this externally:
 
 ```ts
 import type { JumpCancel, JumpOptions, JumpTarget } from "jump.js"
@@ -463,11 +463,11 @@ export default jumpGuard
 
 <details>
 
-<summary>Does Jump stop an in-progress scroll on user input?</summary>
+<summary>Does Jump stop an in-progress scroll in response to user input?</summary>
 
 <br />
 
-No, because this can be implemented externally:
+No, but it was designed such that you can implement this externally:
 
 ```ts
 import jump from "jump.js"
@@ -521,11 +521,11 @@ window.addEventListener("wheel", handleWheel, { passive: true })
 
 <details>
 
-<summary>Does Jump respect <code>prefers-reduced-motion</code>?</summary>
+<summary>Does Jump handle <code>prefers-reduced-motion</code>?</summary>
 
 <br />
 
-No, because this can be implemented externally:
+No, but it was designed such that you can implement this externally:
 
 ```ts
 import jump from "jump.js"
@@ -547,14 +547,14 @@ jump(".target", { duration })
 
 No, but scroll snap behavior can be mimicked with Jump and custom code:
 
-| CSS Property              | Alternative Approach             |
-| :------------------------ | :------------------------------- |
-| `scroll-snap-type`        | `scrollend` event, `axis` option |
-| `scroll-snap-align`       | `offset` option                  |
-| `scroll-padding`          | `offset` option                  |
-| `scroll-margin`           | `offset` option                  |
-| `scroll-behavior: auto`   | `duration` option                |
-| `scroll-behavior: smooth` | `duration` and `easing` options  |
+| CSS Property              | Alternative Approach                            |
+| :------------------------ | :---------------------------------------------- |
+| `scroll-snap-type`        | `scrollend` event, `axis` option, `root` option |
+| `scroll-snap-align`       | `offset` option                                 |
+| `scroll-padding`          | `offset` option                                 |
+| `scroll-margin`           | `offset` option                                 |
+| `scroll-behavior: auto`   | `duration` option                               |
+| `scroll-behavior: smooth` | `duration` and `easing` options                 |
 
 </details>
 
