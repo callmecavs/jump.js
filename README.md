@@ -20,6 +20,8 @@ Modern smooth scrolling for humans and agents.
       7. [root](#root)
    3. [cancel](#cancel)
 4. [Error Handling](#error-handling)
+   1. [`TypeError`](#typeerror)
+   2. [`Error`](#error)
 5. [FAQs](#faqs)
 6. [Browser Support](#browser-support)
 7. [License](#license)
@@ -302,28 +304,34 @@ window.setTimeout(cancel, 500)
 
 ## Error Handling
 
-Jump will throw:
+Jump does runtime validation that can result in a `TypeError` or `Error` being thrown. All validation is done synchronously, before the scrolling begins.
 
-1. `TypeError`s when invalid arguments are passed:
+### `TypeError`
+
+Thrown when:
+
+1. An argument doesn't match the expected type:
 
 ```ts
 // TypeError: "target": expected an Element, a number, or a string.
 jump(null)
 ```
 
-2. `Error`s when:
+### `Error`
 
-The `target` can't be resolved:
+Thrown when:
+
+1. The `target` can't be resolved:
 
 ```ts
-// Error: "target" string: CSS selector is invalid.
+// Error: "target": CSS selector is invalid.
 jump("1337")
 
-// Error: "target" string: CSS selector didn't match.
-jump(".no-match")
+// Error: "target": CSS selector did not match an Element.
+jump("#no-match")
 ```
 
-The `duration` can't be resolved:
+2. The `duration` can't be resolved:
 
 ```ts
 // Error: "duration": expected a finite, non-negative number.
