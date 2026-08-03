@@ -156,8 +156,8 @@ type JumpAxis = "x" | "y"
 The `axis` along which the `root` will be scrolled:
 
 ```ts
-jump(".target", { axis: "x" }) // horizontal scroll
-jump(".target", { axis: "y" }) // vertical scroll (default)
+// scroll the "x" axis (horizontal)
+jump(".target", { axis: "x" })
 ```
 
 #### callback
