@@ -100,7 +100,7 @@ jump(-100)
 Scroll to an element by passing either:
 
 - an Element, or
-- a CSS selector string (resolved via `querySelector`, scoped to the [`root`](#root))
+- a CSS selector string
 
 ```ts
 // pass in an element
@@ -109,6 +109,13 @@ jump(document.querySelector(".target"))
 // pass in a CSS selector string
 jump(".target")
 ```
+
+If the [`target`](#target) resolves to an element, Jump will attempt to scroll until its edge is aligned with the corresponding edge of the [`root`](#root). The scroll [`axis`](#axis) determines that edge:
+
+- `axis === "y"`: top edge
+- `axis === "x"`: left edge
+
+Use the [`offset`](#offset) option to adjust the intended alignment.
 
 ### options
 
@@ -285,6 +292,11 @@ const container = document.querySelector(".container")
 // scroll `container` down 100px
 jump(100, { root: container })
 ```
+
+Note that:
+
+1. Jump clamps all scrolls to the [`root`](#root)'s actual scroll range.
+2. Jump resolves [`target`](#target) CSS selector strings via `querySelector` scoped to the [`root`](#root).
 
 ### cancel
 
