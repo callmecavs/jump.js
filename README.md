@@ -345,7 +345,7 @@ jump(100, { duration: (distance: number) => -1 * distance })
 
 <summary>Is Jump compatible with <code>async</code> / <code>await</code>?</summary>
 
-<br>
+<br />
 
 No, because this can be implemented externally:
 
@@ -400,7 +400,7 @@ export default jumpPromise
 
 <summary>Does Jump handle duplicate / overlapping / conflicting scrolls?</summary>
 
-<br>
+<br />
 
 No, because this can be implemented externally:
 
@@ -451,9 +451,9 @@ export default jumpGuard
 
 <details>
 
-<summary>Will an in-progress scroll stop on user input?</summary>
+<summary>Does Jump stop an in-progress scroll on user input?</summary>
 
-<br>
+<br />
 
 No, because this can be implemented externally:
 
@@ -511,7 +511,7 @@ window.addEventListener("wheel", handleWheel, { passive: true })
 
 <summary>Does Jump respect <code>prefers-reduced-motion</code>?</summary>
 
-<br>
+<br />
 
 No, because this can be implemented externally:
 
@@ -531,7 +531,7 @@ jump(".target", { duration })
 
 <summary>Is Jump compatible with CSS scroll snap?</summary>
 
-<br>
+<br />
 
 No, but scroll snap behavior can be mimicked with Jump and custom code:
 
@@ -550,7 +550,7 @@ No, but scroll snap behavior can be mimicked with Jump and custom code:
 
 <summary>Is Jump compatible with <a href="https://github.com/darkroomengineering/lenis"><code>lenis</code></a>?</summary>
 
-<br>
+<br />
 
 No, but you probably don't need both.
 
