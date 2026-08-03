@@ -303,7 +303,7 @@ Jump will throw:
 1. `TypeError`s when invalid parameters are passed:
 
 ```ts
-// TypeError: Expected "target" to be an Element, number, or string.
+// TypeError: "target": expected an Element, a number, or a string.
 jump(null)
 ```
 
