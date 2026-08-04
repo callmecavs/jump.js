@@ -172,8 +172,8 @@
           jump(target, {
             ...options,
             callback: () => {
-              options.callback?.()
               resolve()
+              if (options.callback) options.callback()
             },
           })
         })
