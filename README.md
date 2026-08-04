@@ -336,17 +336,44 @@ jump(null)
 
 Thrown when:
 
-1. The `target` can't be resolved:
+1. The `target` CSS selector string can't be resolved:
 
 ```ts
 // Error: "target": CSS selector is invalid.
 jump("1337")
 
-// Error: "target": CSS selector did not match an Element.
+// Error: "target": CSS selector did not match an element.
 jump("#no-match")
 ```
 
-2. The `duration` can't be resolved:
+2. The `target` is not contained by the `root`:
+
+```html
+<div id="root">
+  <!-- ... -->
+</div>
+
+<div id="target">Target</div>
+```
+
+```ts
+const root = document.getElementById("root")
+const target = document.getElementById("target")
+
+// Error: "target": element is not contained by "root".
+jump(target, { root })
+```
+
+3. The `target` is not connected to a document.
+
+```ts
+const target = document.createElement("div")
+
+// Error: "target": element is not connected to a document.
+jump(target)
+```
+
+4. The `duration` can't be resolved:
 
 ```ts
 // Error: "duration": expected a finite, non-negative number.
