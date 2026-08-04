@@ -36,7 +36,7 @@ export const resolveRoot = (root: JumpRoot): JumpRoot => {
   // If the `root` is the `documentElement`, use the `window` instead.
   // Like elements, it has a stationary bounding box.
   if (isElement(root) && root === root.ownerDocument.documentElement) {
-    return root.ownerDocument.defaultView ?? root
+    return root.ownerDocument.defaultView || root
   }
 
   return root
