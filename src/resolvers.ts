@@ -16,8 +16,8 @@ export const resolveDirection = (root: JumpRoot): JumpDirection => {
 export const resolveDuration = (distance: number, duration: JumpDuration) => {
   const resolved = typeof duration === "function" ? duration(distance) : duration
 
-  // Catch invalid `duration`. Can't include this as part of the validator because `duration` functions require
-  // `distance` to be calculated first.
+  // Catch invalid `duration`s. This can't be included in the validator because
+  // `duration` functions require the scroll `distance` to be calculated first.
   if (!Number.isFinite(resolved) || resolved < 0) {
     throw new Error(`"duration": expected a finite, non-negative number.`)
   }
@@ -26,8 +26,8 @@ export const resolveDuration = (distance: number, duration: JumpDuration) => {
 }
 
 export const resolveRoot = (root: JumpRoot): JumpRoot => {
-  // Catch the `root` being the `documentElement`. Use the `window` instead
-  // because, like `Element`s, it has a stationary bounding box.
+  // If the `root` is the `documentElement`, use the `window` instead.
+  // Like elements, it has a stationary bounding box.
   if (isElement(root) && root === root.ownerDocument.documentElement) {
     return root.ownerDocument.defaultView ?? root
   }
@@ -50,13 +50,13 @@ export const resolveTarget = (root: JumpRoot, target: JumpTarget): JumpResolvedT
       throw new Error(`"target": CSS selector is invalid.`)
     }
 
-    if (element === null) throw new Error(`"target": CSS selector did not match an Element.`)
+    if (element === null) throw new Error(`"target": CSS selector did not match an element.`)
   }
 
   const isContained = isWindow(root) ? root.document === element.ownerDocument : root.contains(element)
 
-  if (!isContained) throw new Error(`"target": Element is not contained by "root".`)
-  if (!element.isConnected) throw new Error(`"target": Element is not connected to a document.`)
+  if (!isContained) throw new Error(`"target": element is not contained by "root".`)
+  if (!element.isConnected) throw new Error(`"target": element is not connected to a document.`)
 
   return element
 }

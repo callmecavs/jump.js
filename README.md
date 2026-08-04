@@ -100,7 +100,7 @@ jump(-100)
 
 Scroll to an element by passing either:
 
-- an Element, or
+- an element, or
 - a CSS selector string
 
 ```ts
