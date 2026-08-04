@@ -9,6 +9,7 @@
     "moduleDetection": "force",
     "moduleResolution": "bundler",
     "noUnusedLocals": true,
+    "paths": { "jump.js": ["./src/index.ts"] },
     "resolveJsonModule": true,
     "skipLibCheck": true,
     "strict": true,
@@ -16,5 +17,5 @@
     "types": [],
     "verbatimModuleSyntax": true
   },
-  "include": ["playwright.config.ts", "src", "tests", "tsdown.config.ts"]
+  "include": ["examples", "playwright.config.ts", "src", "tests", "tsdown.config.ts"]
 }
