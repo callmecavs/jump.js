@@ -134,7 +134,7 @@ type JumpOptions = {
 
 Customize the scroll behavior by passing in a configuration object.
 
-All options have sensible defaults:
+All [`options`](#options) have sensible defaults:
 
 ```ts
 const defaults: JumpOptions = {
@@ -443,7 +443,7 @@ If you're already using `lenis`, use its [`scrollTo`](https://github.com/darkroo
 
 <details>
 
-<summary>Is Jump compatible with GSAP's <code>ScrollSmoother</code> plugin?</summary>
+<summary>Is Jump compatible with GSAP's <a href="https://gsap.com/docs/v3/Plugins/ScrollSmoother/"><code>ScrollSmoother</code></a> plugin?</summary>
 
 <br />
 
