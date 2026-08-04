@@ -23,8 +23,9 @@ Modern smooth scrolling for humans and agents.
    1. [`TypeError`](#typeerror)
    2. [`Error`](#error)
 5. [FAQs](#faqs)
-6. [Browser Support](#browser-support)
-7. [License](#license)
+6. [Migrating](#migrating)
+7. [Browser Support](#browser-support)
+8. [License](#license)
 
 ## Install
 
@@ -451,6 +452,17 @@ No, but you probably don't need both.
 If you're already using `ScrollSmoother`, use its [`scrollTo`](<https://gsap.com/docs/v3/Plugins/ScrollSmoother/scrollTo()/>) method.
 
 </details>
+
+## Migrating
+
+From `v1.x` to `v2.x`:
+
+1. Ensure your project can consume ESM-only packages. CommonJS and UMD formats are no longer available.
+2. Ensure your project isn't dependent on `@types/jump.js`. Use the newly-exported `type`s instead.
+3. Review custom [`easing`](#easing) functions. These functions should now accept a single argument: linear progress, ranging from `0` to `1`.
+4. Review numeric [`target`](#target)s with an [`offset`](#offset). This combination of [`options`](#options) was bugged, and has since been fixed.
+5. Review [`a11y`](#a11y) enabled scrolls. A bug that resulted in existing `tabindex` attributes being overridden has since been fixed.
+6. Review the updated [Browser Support](#browser-support).
 
 ## Browser Support
 
