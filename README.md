@@ -31,8 +31,8 @@ Modern smooth scrolling for humans and agents.
 
 Jump was developed with modern workflows in mind, and **requires ESM-compatible tooling**. Install it using your package manager:
 
-```bash
-$ npm install jump.js
+```shell
+npm install jump.js
 ```
 
 Though not required, it's recommended to use Jump with TypeScript. Jump ships with the following `type` definitions (`.d.ts`):
