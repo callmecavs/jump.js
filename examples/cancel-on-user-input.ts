@@ -49,7 +49,8 @@ const jump = (target: JumpTarget, options: JumpOptions = {}): JumpCancel => {
 
   const mergedCallback = () => {
     cleanup()
-    options.callback?.()
+
+    if (options.callback) options.callback()
   }
 
   try {

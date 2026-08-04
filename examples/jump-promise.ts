@@ -23,7 +23,8 @@ const jump = (target: JumpTarget, options: JumpOptions = {}): JumpResult => {
 
     stale = true
     resolve()
-    options.callback?.()
+
+    if (options.callback) options.callback()
   }
 
   const cancel = scroll(target, { ...options, callback: mergedCallback })

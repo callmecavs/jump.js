@@ -21,7 +21,8 @@ const jump = (target: JumpTarget, options: JumpOptions = {}): JumpResult => {
 
   const mergedCallback = () => {
     reset()
-    options.callback?.()
+
+    if (options.callback) options.callback()
   }
 
   try {
