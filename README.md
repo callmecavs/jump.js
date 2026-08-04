@@ -436,7 +436,19 @@ No, but scroll snap behavior can be mimicked with Jump and custom code:
 
 No, but you probably don't need both.
 
-If you're already using `lenis`, see the [`scrollTo`](https://github.com/darkroomengineering/lenis#methods) method. It handles much of what Jump can do, and has a very similar API.
+If you're already using `lenis`, use its [`scrollTo`](https://github.com/darkroomengineering/lenis#methods) method.
+
+</details>
+
+<details>
+
+<summary>Is Jump compatible with GSAP's <code>ScrollSmoother</code> plugin?</summary>
+
+<br />
+
+No, but you probably don't need both.
+
+If you're already using `ScrollSmoother`, use its [`scrollTo`](<https://gsap.com/docs/v3/Plugins/ScrollSmoother/scrollTo()/>) method.
 
 </details>
 
