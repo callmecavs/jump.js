@@ -262,10 +262,10 @@ number
 It adjusts the scroll by a number of `px`:
 
 ```ts
-// scroll stops 100px before the target's top edge
+// scroll stops 100px before the target reaches the relevant edge
 jump(".target", { offset: -100 })
 
-// scroll stops 50px after the target's top edge
+// scroll stops 50px after the target reaches the relevant edge
 jump(".target", { offset: 50 })
 ```
 
@@ -457,12 +457,12 @@ If you're already using `ScrollSmoother`, use its [`scrollTo`](<https://gsap.com
 
 From `v1.x` to `v2.x`:
 
-1. Ensure your project can consume ESM-only packages. CommonJS and UMD formats are no longer available.
-2. Ensure your project isn't dependent on `@types/jump.js`. Use the newly-exported `type`s instead.
-3. Review custom [`easing`](#easing) functions. These functions should now accept a single argument: linear progress, ranging from `0` to `1`.
-4. Review numeric [`target`](#target)s with an [`offset`](#offset). This combination of [`options`](#options) was bugged, and has since been fixed.
-5. Review [`a11y`](#a11y) enabled scrolls. A bug that resulted in existing `tabindex` attributes being overridden has since been fixed.
-6. Review the updated [Browser Support](#browser-support).
+1. Ensure your project can consume ESM-only packages. CommonJS and UMD formats are no longer exported, or supported.
+2. Ensure your project doesn't depend on `@types/jump.js`. Use the exported types instead.
+3. Review custom [`easing`](#easing) functions. They should accept a single argument (the linear progress, ranging from `0` to `1`), and return the eased progress.
+4. Review numeric [`target`](#target)s with an [`offset`](#offset). This combination of [`options`](#options) was bugged, and has since been fixed. The [`offset`](#offset) is now ignored when the [`target`](#target) is a number, as was previously documented.
+5. Review [`a11y`](#a11y)-enabled scrolls. A bug that resulted in existing `tabindex` attributes being overridden has since been fixed.
+6. Ensure your proejct is compatible with the updated [Browser Support](#browser-support).
 
 ## Browser Support
 
