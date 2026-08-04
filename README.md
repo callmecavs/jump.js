@@ -405,7 +405,7 @@ Jump calculates the start position, end position, and [`root`](#root)'s scroll r
 
 For lazy-loaded images, reserve the necessary layout space with `width` / `height` attributes, or CSS `aspect-ratio`. Framework-specific image components, such as Next.js's [`Image`](https://nextjs.org/docs/app/api-reference/components/image#width-and-height), should handle this for you.
 
-Most other forms of dynamic content will likely require implementation-specific handling.
+Other forms of dynamic content will likely require implementation-specific handling.
 
 </details>
 
