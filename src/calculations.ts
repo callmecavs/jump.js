@@ -1,26 +1,28 @@
-import type { JumpAxis, JumpResolvedTarget, JumpRoot } from "./types"
+import type { JumpAxis, JumpDirection, JumpResolvedTarget, JumpRoot } from "./types"
 import { isWindow } from "./guards"
-import { resolveDirection } from "./resolvers"
 import { clamp } from "./utilities"
 
 export const calculateEnd = (
   axis: JumpAxis,
+  direction: JumpDirection,
   offset: number,
   root: JumpRoot,
   start: number,
   target: JumpResolvedTarget,
 ): number => {
+  const isRtl = direction === "rtl"
+
   // Calculate the `root`s maximum scroll position.
   let max: number
 
-  const scrollRoot = isWindow(root) ? root.document.documentElement : root
+  const rootElement = isWindow(root) ? root.document.documentElement : root
 
   switch (axis) {
     case "x":
-      max = scrollRoot.scrollWidth - scrollRoot.clientWidth
+      max = rootElement.scrollWidth - rootElement.clientWidth
       break
     case "y":
-      max = scrollRoot.scrollHeight - scrollRoot.clientHeight
+      max = rootElement.scrollHeight - rootElement.clientHeight
       break
   }
 
@@ -43,16 +45,12 @@ export const calculateEnd = (
       if (axis === "y") ideal += targetBounds.top - rootBounds.top - root.clientTop
     }
 
-    ideal += offset
+    // For `rtl`, invert the `offset`.
+    ideal += isRtl ? -offset : offset
   }
 
   // Clamp the `ideal` scroll position to the `root`s real scroll range.
-  // Determine text direction only if `axis === "x"` because no languages read "bottom to top".
-  if (axis === "x" && resolveDirection(root) === "rtl") {
-    return clamp(ideal, -max, 0)
-  }
-
-  return clamp(ideal, 0, max)
+  return isRtl ? clamp(ideal, -max, 0) : clamp(ideal, 0, max)
 }
 
 export const calculateStart = (axis: JumpAxis, root: JumpRoot): number => {

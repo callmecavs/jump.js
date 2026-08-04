@@ -1,4 +1,4 @@
-import type { JumpDirection, JumpDuration, JumpResolvedTarget, JumpRoot, JumpTarget } from "./types"
+import type { JumpAxis, JumpDirection, JumpDuration, JumpResolvedTarget, JumpRoot, JumpTarget } from "./types"
 import { isElement, isWindow } from "./guards"
 
 export const resolveAccessibility = (a11y: boolean, target: JumpResolvedTarget) => {
@@ -7,10 +7,17 @@ export const resolveAccessibility = (a11y: boolean, target: JumpResolvedTarget) 
   return a11y
 }
 
-export const resolveDirection = (root: JumpRoot): JumpDirection => {
-  const scrollRoot = isWindow(root) ? root.document.documentElement : root
-  const scrollView = scrollRoot.ownerDocument.defaultView
-  return scrollView?.getComputedStyle(scrollRoot).direction === "rtl" ? "rtl" : "ltr"
+export const resolveDirection = (axis: JumpAxis, root: JumpRoot): JumpDirection => {
+  // For vertical scrolls, the direction isn't relevant.
+  if (axis === "y") return
+
+  const rootElement = isWindow(root) ? root.document.documentElement : root
+  const rootView = rootElement.ownerDocument.defaultView
+
+  // If `direction` can't be computed, assume "ltr".
+  if (!rootView) return "ltr"
+
+  return rootView.getComputedStyle(rootElement).direction === "rtl" ? "rtl" : "ltr"
 }
 
 export const resolveDuration = (distance: number, duration: JumpDuration) => {
