@@ -462,7 +462,7 @@ From `v1.x` to `v2.x`:
 3. Review custom [`easing`](#easing) functions. They should accept a single argument (the linear progress, ranging from `0` to `1`), and return the eased progress.
 4. Review numeric [`target`](#target)s with an [`offset`](#offset). This combination of [`options`](#options) was bugged, and has since been fixed. The [`offset`](#offset) is now ignored when the [`target`](#target) is a number, as was previously documented.
 5. Review [`a11y`](#a11y)-enabled scrolls. A bug that resulted in existing `tabindex` attributes being overridden has since been fixed.
-6. Ensure your proejct is compatible with the updated [Browser Support](#browser-support).
+6. Ensure your project is compatible with the updated [Browser Support](#browser-support).
 
 ## Browser Support
 
