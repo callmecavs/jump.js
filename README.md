@@ -399,6 +399,8 @@ No, but it was designed such that you can implement this externally. Refer to th
 
 <summary>Does Jump handle dynamic content (<code>loading="lazy"</code> images, "infinite scroll", etc.)?</summary>
 
+<br />
+
 Jump calculates the start position, end position, and [`root`](#root)'s scroll range when called. It **does not** recalculate any of them as it scrolls. Dynamic content that changes the [`target`](#target)'s position, or the [`root`](#root)'s scroll range, may result in the scroll stopping at the wrong position.
 
 For lazy-loaded images, reserve the necessary layout space with `width` / `height` attributes, or CSS `aspect-ratio`. Framework-specific image components, such as Next.js's [`Image`](https://nextjs.org/docs/app/api-reference/components/image#width-and-height), should handle this for you.
