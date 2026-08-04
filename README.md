@@ -361,7 +361,7 @@ jump(100, { duration: (distance: number) => -1 * distance })
 
 <br />
 
-No, but it was designed such that you can implement this externally. Refer to the example implementation: [here](/examples/jump-promise.ts).
+No, but it was designed such that you can implement this externally. Refer to the example: [`jump-promise.ts`](./examples/jump-promise.ts).
 
 </details>
 
@@ -371,7 +371,7 @@ No, but it was designed such that you can implement this externally. Refer to th
 
 <br />
 
-No, but it was designed such that you can implement this externally. Refer to the example implementation: [here](/examples/jump-idle.ts).
+No, but it was designed such that you can implement this externally. Refer to the example: [`jump-idle.ts`](./examples/jump-idle.ts).
 
 </details>
 
@@ -381,7 +381,7 @@ No, but it was designed such that you can implement this externally. Refer to th
 
 <br />
 
-No, but it was designed such that you can implement this externally. Refer to the example implementation: [here](/examples/jump-promise.ts).
+No, but it was designed such that you can implement this externally. Refer to the example: [`cancel-on-user-input.ts`](./examples/cancel-on-user-input.ts).
 
 </details>
 
@@ -391,7 +391,7 @@ No, but it was designed such that you can implement this externally. Refer to th
 
 <br />
 
-No, but it was designed such that you can implement this externally. Refer to the example implementation: [here](/examples/prefers-reduced-motion.ts).
+No, but it was designed such that you can implement this externally. Refer to the example: [`prefers-reduced-motion.ts`](./examples/prefers-reduced-motion.ts).
 
 </details>
 
