@@ -6,8 +6,9 @@ export const clamp = (number: number, min: number, max: number): number => {
   return number
 }
 
+// https://github.com/d3/d3-ease/blob/main/src/quad.js
 export const easeInOutQuad: JumpEasing = p => {
-  return p < 0.5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2
+  return ((p *= 2) <= 1 ? p * p : --p * (2 - p) + 1) / 2
 }
 
 export const noop = () => {}
