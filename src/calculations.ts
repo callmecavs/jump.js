@@ -24,15 +24,18 @@ export const calculateEnd = (
   }
 
   // Calculate the `root`'s ideal scroll position.
+  // When `axis === "x"`, calculations follow the root's logical direction.
+  // Positive numbers move towards the logical end (LTR: right, RTL: left).
+  // Negative numbers move towards the logical start (LTR: left, RTL: right).
   let ideal = start
 
   if (typeof target === "number") {
-    // When `target` is a number, ignore `offset`.
-    ideal += target
+    // If `target` is numeric, ignore `offset`.
+    ideal += rtl ? -target : target
   } else {
     const targetBounds = target.getBoundingClientRect()
 
-    if (axis === "x") ideal += targetBounds.left
+    if (axis === "x") ideal += rtl ? targetBounds.right - rootElement.clientWidth : targetBounds.left
     if (axis === "y") ideal += targetBounds.top
 
     if (!isWindow(root)) {
@@ -42,7 +45,7 @@ export const calculateEnd = (
       if (axis === "y") ideal -= rootBounds.top + rootElement.clientTop
     }
 
-    ideal += offset
+    ideal += rtl ? -offset : offset
   }
 
   // Clamp the `ideal` scroll position to the `root`'s scroll range.
