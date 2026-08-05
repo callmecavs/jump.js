@@ -82,6 +82,23 @@ const cancel = jump(".target", options)
 type Jump = (target: JumpTarget, options?: JumpOptions) => JumpCancel
 ```
 
+Jump adheres to the following "logical direction" conventions:
+
+| [`axis`](#axis) | Text direction      | Element [`target`](#target) alignment | Positive value direction | Negative value direction |
+| :-------------- | :------------------ | :------------------------------------ | :----------------------- | :----------------------- |
+| `y`             | Any                 | Top Edge                              | Down                     | Up                       |
+| `x`             | LTR (left to right) | Left Edge                             | Right                    | Left                     |
+| `x`             | RTL (right to left) | Right Edge                            | Left                     | Right                    |
+
+For horizontal scrolls, Jump automatically responds to the [`root`](#root)'s computed CSS [`direction`](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/direction).
+
+These conventions are particularly relevant to:
+
+- [`target`](#target)
+- [`axis`](#axis)
+- [`duration`](#duration) functions
+- [`offset`](#offset)
+
 ### target
 
 ```ts
@@ -110,13 +127,6 @@ jump(document.querySelector(".target"))
 // pass in a CSS selector string
 jump(".target")
 ```
-
-If the [`target`](#target) resolves to an element, Jump will attempt to scroll until its edge is aligned with the corresponding edge of the [`root`](#root). The scroll [`axis`](#axis) determines that edge:
-
-- `axis === "y"`: top edge
-- `axis === "x"`: left edge
-
-Use the [`offset`](#offset) option to adjust the intended alignment.
 
 ### options
 
@@ -168,7 +178,10 @@ Focus may have a visual impact. Remember to check your `:focus` / `:focus-*` sty
 type JumpAxis = "x" | "y"
 ```
 
-Used to change the direction that the [`root`](#root) scrolls:
+The axis along which the [`root`](#root) scrolls:
+
+- `x`: horizontal
+- `y`: vertical (default)
 
 ```ts
 // scroll along the "x" axis (horizontal)
@@ -223,7 +236,7 @@ jump(".target", { duration: 1000 })
 
 To scroll for an amount of time relative to the scroll distance, pass in a function:
 
-- It will receive the signed scroll distance as a number (`px`), and
+- It will receive the logically signed scroll distance as a number (`px`), and
 - It should return the scroll duration as a number (`ms`)
 
 ```ts
@@ -272,7 +285,7 @@ jump(".target", { offset: 50 })
 It's ignored if the [`target`](#target) is a number:
 
 ```ts
-// scroll down 150px (offset ignored)
+// scroll down 150px (ignored)
 jump(150, { offset: -150 })
 ```
 
