@@ -41,7 +41,6 @@ const jump: Jump = (rawTarget, options = {}) => {
   } = options
 
   const view = resolveView(rawRoot)
-
   const root = resolveRoot(rawRoot, view)
   const rootElement = resolveRootElement(root)
   const target = resolveTarget(root, rawTarget)
@@ -50,9 +49,10 @@ const jump: Jump = (rawTarget, options = {}) => {
   const rtl = resolveRtl(axis, rootElement, view)
   const end = calculateEnd(axis, offset, root, rootElement, rtl, start, target)
 
-  const a11y = resolveAccessibility(rawA11y, target)
   const distance = end - start
   const duration = resolveDuration(distance, rawDuration)
+
+  const a11y = resolveAccessibility(rawA11y, target)
 
   // Flag `instant` jumps. A small tolerance is included when checking `distance` because browsers behave
   // inconsistently when handling fractional `scrollTo` coordinates.
@@ -67,7 +67,7 @@ const jump: Jump = (rawTarget, options = {}) => {
     if (start !== end) scroll(axis, end, root)
 
     if (a11y && hasFocusMethod(target)) {
-      // Add a temporary `tabindex` unless the element already has a `tabindex`, or is natively interactive.
+      // Add a temporary `tabindex` unless the element already has a `tabindex` or is natively interactive.
       const needsIndex = !target.hasAttribute("tabindex") && target.tabIndex < 0
 
       if (needsIndex) target.setAttribute("tabindex", "-1")
@@ -85,8 +85,8 @@ const jump: Jump = (rawTarget, options = {}) => {
       }
     }
 
-    // If the `callback` exists, run it in the frame after the final `scrollTo` call.
-    // Prevent it from being `cancel`led by dropping the `frameId`.
+    // Run the `callback` in the frame after scroll completion.
+    // Don't store this frame ID, because the `callback` isn't intended to be canceled.
     if (callback) view.requestAnimationFrame(() => callback())
   }
 
@@ -118,7 +118,7 @@ const jump: Jump = (rawTarget, options = {}) => {
     return noop
   }
 
-  // Kick off the `rAF` loop, and return the `cancel` function.
+  // Kick off the `rAF` loop and return the `cancel` function.
   frameId = view.requestAnimationFrame(loop)
   return () => view.cancelAnimationFrame(frameId)
 }

@@ -11,7 +11,7 @@ export const calculateEnd = (
   start: number,
   target: JumpResolvedTarget,
 ): number => {
-  // Calculate the `root`s maximum scroll position.
+  // Calculate the `root`'s maximum scroll distance.
   let max: number
 
   switch (axis) {
@@ -23,7 +23,7 @@ export const calculateEnd = (
       break
   }
 
-  // Calculate the `root`s ideal scroll position.
+  // Calculate the `root`'s ideal scroll position.
   let ideal = start
 
   if (typeof target === "number") {
@@ -46,7 +46,7 @@ export const calculateEnd = (
     ideal += rtl ? -offset : offset
   }
 
-  // Clamp the `ideal` scroll position to the `root`s scroll range.
+  // Clamp the `ideal` scroll position to the `root`'s scroll range.
   // For `rtl`, invert the scroll range.
   return rtl ? clamp(ideal, -max, 0) : clamp(ideal, 0, max)
 }
