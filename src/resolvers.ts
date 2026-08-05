@@ -6,8 +6,8 @@ export const resolveAccessibility = (rawA11y: boolean, target: JumpResolvedTarge
   return typeof target === "number" ? false : rawA11y
 }
 
-export const resolveDuration = (distance: number, rawDuration: JumpDuration) => {
-  const duration = typeof rawDuration === "function" ? rawDuration(distance) : rawDuration
+export const resolveDuration = (distance: number, rawDuration: JumpDuration, rtl: boolean) => {
+  const duration = typeof rawDuration === "function" ? rawDuration(rtl ? -distance : distance) : rawDuration
 
   // Catch invalid `duration`s. This can't be included in the validator because
   // `duration` functions require the scroll `distance` to be calculated first.

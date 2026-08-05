@@ -50,7 +50,7 @@ const jump: Jump = (rawTarget, options = {}) => {
   const end = calculateEnd(axis, offset, root, rootElement, rtl, start, target)
 
   const distance = end - start
-  const duration = resolveDuration(distance, rawDuration)
+  const duration = resolveDuration(distance, rawDuration, rtl)
 
   const a11y = resolveAccessibility(rawA11y, target)
 
