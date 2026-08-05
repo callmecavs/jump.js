@@ -1,7 +1,14 @@
 import type { Jump } from "./types"
 import { calculateEnd, calculateStart } from "./calculations"
-import { hasFocusMethod, isWindow } from "./guards"
-import { resolveAccessibility, resolveDirection, resolveDuration, resolveRoot, resolveTarget } from "./resolvers"
+import { hasFocusMethod } from "./guards"
+import {
+  resolveAccessibility,
+  resolveDirection,
+  resolveDuration,
+  resolveRoot,
+  resolveTarget,
+  resolveView,
+} from "./resolvers"
 import { easeInOutQuad, noop, scroll } from "./utilities"
 import { validateOptions, validateTarget } from "./validators"
 
@@ -32,9 +39,10 @@ const jump: Jump = (rawTarget, options = {}) => {
     root: rawRoot = window,
   } = options
 
-  const root = resolveRoot(rawRoot)
+  const view = resolveView(rawRoot)
+
+  const root = resolveRoot(rawRoot, view)
   const target = resolveTarget(root, rawTarget)
-  const view = isWindow(root) ? root : root.ownerDocument.defaultView || window
 
   const start = calculateStart(axis, root)
   const direction = resolveDirection(axis, root)

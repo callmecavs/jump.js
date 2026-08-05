@@ -32,11 +32,11 @@ export const resolveDuration = (distance: number, duration: JumpDuration) => {
   return resolved
 }
 
-export const resolveRoot = (root: JumpRoot): JumpRoot => {
-  // If the `root` is the `documentElement`, use the `window` instead.
-  // Like elements, it has a stationary bounding box.
+export const resolveRoot = (root: JumpRoot, view: Window): JumpRoot => {
+  // Catch the `root` being the `documentElement`. Use its `Window` instead
+  // because, like `Element`s, it has a stationary bounding box.
   if (isElement(root) && root === root.ownerDocument.documentElement) {
-    return root.ownerDocument.defaultView || root
+    return view
   }
 
   return root
@@ -66,4 +66,12 @@ export const resolveTarget = (root: JumpRoot, target: JumpTarget): JumpResolvedT
   if (!element.isConnected) throw new Error(`"target": element is not connected to a document.`)
 
   return element
+}
+
+export const resolveView = (root: JumpRoot): Window => {
+  const view = isWindow(root) ? root : root.ownerDocument.defaultView
+
+  if (!view) throw new Error(`"root": element's document is not connected to a browsing context.`)
+
+  return view
 }
