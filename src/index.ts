@@ -13,7 +13,7 @@ import {
 import { easeInOutQuad, noop, scroll } from "./utilities"
 import { validateOptions, validateTarget } from "./validators"
 
-// Export the types. `JumpResolvedTarget` are intentionally omitted (internal only).
+// Export the types. `JumpResolvedTarget` is intentionally omitted.
 export type {
   Jump,
   JumpAxis,
