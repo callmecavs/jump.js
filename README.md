@@ -206,7 +206,7 @@ window.setTimeout(cancel, duration / 2)
 
 Note that:
 
-1. It runs **in the frame after** the scroll completes, and after the `focus` call (when [`a11y`](#a11y) is enabled).
+1. It runs **in the animation frame after** scroll completion and any focus call triggered by [`a11y`](#a11y).
 2. If the scroll completes, calling the [`cancel`](#cancel) function will not prevent the [`callback`](#callback) from running.
 
 #### duration
