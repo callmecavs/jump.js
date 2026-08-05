@@ -1,18 +1,16 @@
-import type { JumpAxis, JumpDirection, JumpResolvedTarget, JumpRoot } from "./types"
+import type { JumpAxis, JumpResolvedTarget, JumpRoot } from "./types"
 import { isWindow } from "./guards"
 import { clamp } from "./utilities"
 
 export const calculateEnd = (
   axis: JumpAxis,
-  direction: JumpDirection,
   offset: number,
   root: JumpRoot,
   rootElement: Element,
+  rtl: boolean,
   start: number,
   target: JumpResolvedTarget,
 ): number => {
-  const isRtl = direction === "rtl"
-
   // Calculate the `root`s maximum scroll position.
   let max: number
 
@@ -45,11 +43,12 @@ export const calculateEnd = (
     }
 
     // For `rtl`, invert the `offset`.
-    ideal += isRtl ? -offset : offset
+    ideal += rtl ? -offset : offset
   }
 
-  // Clamp the `ideal` scroll position to the `root`s real scroll range.
-  return isRtl ? clamp(ideal, -max, 0) : clamp(ideal, 0, max)
+  // Clamp the `ideal` scroll position to the `root`s scroll range.
+  // For `rtl`, invert the scroll range.
+  return rtl ? clamp(ideal, -max, 0) : clamp(ideal, 0, max)
 }
 
 export const calculateStart = (axis: JumpAxis, root: JumpRoot): number => {

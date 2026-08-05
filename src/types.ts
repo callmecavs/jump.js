@@ -2,7 +2,6 @@ export type Jump = (target: JumpTarget, options?: JumpOptions) => JumpCancel
 export type JumpAxis = "x" | "y"
 export type JumpCallback = () => void
 export type JumpCancel = () => void
-export type JumpDirection = "ltr" | "rtl" | undefined // internal only
 export type JumpDuration = number | ((distance: number) => number)
 export type JumpEasing = (progress: number) => number
 export type JumpResolvedTarget = Element | number // internal only
