@@ -34,7 +34,10 @@
     "./package.json": "./package.json"
   },
   "files": [
-    "dist"
+    "AGENTS.md",
+    "CLAUDE.md",
+    "dist",
+    "recipes"
   ],
   "homepage": "https://github.com/callmecavs/jump.js#readme",
   "keywords": [
