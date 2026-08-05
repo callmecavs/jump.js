@@ -6,16 +6,16 @@ export const resolveAccessibility = (a11y: boolean, target: JumpResolvedTarget) 
   return typeof target === "number" ? false : a11y
 }
 
-export const resolveDuration = (distance: number, duration: JumpDuration) => {
-  const resolved = typeof duration === "function" ? duration(distance) : duration
+export const resolveDuration = (distance: number, rawDuration: JumpDuration) => {
+  const duration = typeof rawDuration === "function" ? rawDuration(distance) : rawDuration
 
   // Catch invalid `duration`s. This can't be included in the validator because
   // `duration` functions require the scroll `distance` to be calculated first.
-  if (!Number.isFinite(resolved) || resolved < 0) {
+  if (!Number.isFinite(duration) || duration < 0) {
     throw new Error(`"duration": expected a finite, non-negative number.`)
   }
 
-  return resolved
+  return duration
 }
 
 export const resolveRoot = (root: JumpRoot, view: Window): JumpRoot => {
