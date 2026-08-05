@@ -1,9 +1,9 @@
 import type { JumpAxis, JumpDuration, JumpResolvedTarget, JumpRoot, JumpTarget } from "./types"
 import { isElement, isWindow } from "./guards"
 
-export const resolveAccessibility = (a11y: boolean, target: JumpResolvedTarget) => {
+export const resolveAccessibility = (rawA11y: boolean, target: JumpResolvedTarget) => {
   // Disable `a11y` handling for numeric `target`s.
-  return typeof target === "number" ? false : a11y
+  return typeof target === "number" ? false : rawA11y
 }
 
 export const resolveDuration = (distance: number, rawDuration: JumpDuration) => {
@@ -18,14 +18,14 @@ export const resolveDuration = (distance: number, rawDuration: JumpDuration) => 
   return duration
 }
 
-export const resolveRoot = (root: JumpRoot, view: Window): JumpRoot => {
+export const resolveRoot = (rawRoot: JumpRoot, view: Window): JumpRoot => {
   // If `root` is the `documentElement`, use its `Window` instead. This simplifies the
   // calculations because `target` bounds are viewport-relative.
-  if (isElement(root) && root === root.ownerDocument.documentElement) {
+  if (isElement(rawRoot) && rawRoot === rawRoot.ownerDocument.documentElement) {
     return view
   }
 
-  return root
+  return rawRoot
 }
 
 export const resolveRootElement = (root: JumpRoot): Element => {
@@ -37,34 +37,34 @@ export const resolveRtl = (axis: JumpAxis, rootElement: Element, view: Window): 
   return axis === "x" && view.getComputedStyle(rootElement).direction === "rtl"
 }
 
-export const resolveTarget = (root: JumpRoot, target: JumpTarget): JumpResolvedTarget => {
-  if (typeof target === "number") return target
+export const resolveTarget = (rawTarget: JumpTarget, root: JumpRoot): JumpResolvedTarget => {
+  if (typeof rawTarget === "number") return rawTarget
 
-  let element: Element | null
+  let target: Element | null
 
-  if (isElement(target)) {
-    element = target
+  if (isElement(rawTarget)) {
+    target = rawTarget
   } else {
     try {
       const scope = isWindow(root) ? root.document : root
-      element = scope.querySelector(target)
+      target = scope.querySelector(rawTarget)
     } catch {
       throw new Error(`"target": CSS selector is invalid.`)
     }
 
-    if (element === null) throw new Error(`"target": CSS selector did not match an element.`)
+    if (target === null) throw new Error(`"target": CSS selector did not match an element.`)
   }
 
-  const isContained = isWindow(root) ? root.document === element.ownerDocument : root.contains(element)
+  const isContained = isWindow(root) ? root.document === target.ownerDocument : root.contains(target)
 
   if (!isContained) throw new Error(`"target": element is not contained by "root".`)
-  if (!element.isConnected) throw new Error(`"target": element is not connected to a document.`)
+  if (!target.isConnected) throw new Error(`"target": element is not connected to a document.`)
 
-  return element
+  return target
 }
 
-export const resolveView = (root: JumpRoot): Window => {
-  const view = isWindow(root) ? root : root.ownerDocument.defaultView
+export const resolveView = (rawRoot: JumpRoot): Window => {
+  const view = isWindow(rawRoot) ? rawRoot : rawRoot.ownerDocument.defaultView
 
   if (!view) throw new Error(`"root": element's document is not connected to a browsing context.`)
 

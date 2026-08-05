@@ -43,7 +43,7 @@ const jump: Jump = (rawTarget, options = {}) => {
   const view = resolveView(rawRoot)
   const root = resolveRoot(rawRoot, view)
   const rootElement = resolveRootElement(root)
-  const target = resolveTarget(root, rawTarget)
+  const target = resolveTarget(rawTarget, root)
 
   const start = calculateStart(axis, root)
   const rtl = resolveRtl(axis, rootElement, view)

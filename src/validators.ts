@@ -56,11 +56,11 @@ export const validateOptions = (options: unknown) => {
   validateRoot(root)
 }
 
-export const validateTarget = (target: unknown) => {
-  if (isElement(target) || typeof target === "string") return
+export const validateTarget = (rawTarget: unknown) => {
+  if (isElement(rawTarget) || typeof rawTarget === "string") return
 
-  if (typeof target === "number") {
-    if (!Number.isFinite(target)) throw new TypeError(`"target": expected a finite number.`)
+  if (typeof rawTarget === "number") {
+    if (!Number.isFinite(rawTarget)) throw new TypeError(`"target": expected a finite number.`)
     return
   }
 
