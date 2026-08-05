@@ -42,8 +42,7 @@ export const calculateEnd = (
       if (axis === "y") ideal -= rootBounds.top + rootElement.clientTop
     }
 
-    // For `rtl`, invert the `offset`.
-    ideal += rtl ? -offset : offset
+    ideal += offset
   }
 
   // Clamp the `ideal` scroll position to the `root`'s scroll range.
