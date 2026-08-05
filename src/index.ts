@@ -6,6 +6,7 @@ import {
   resolveDirection,
   resolveDuration,
   resolveRoot,
+  resolveRootElement,
   resolveTarget,
   resolveView,
 } from "./resolvers"
@@ -42,11 +43,12 @@ const jump: Jump = (rawTarget, options = {}) => {
   const view = resolveView(rawRoot)
 
   const root = resolveRoot(rawRoot, view)
+  const rootElement = resolveRootElement(root)
   const target = resolveTarget(root, rawTarget)
 
   const start = calculateStart(axis, root)
-  const direction = resolveDirection(axis, root, view)
-  const end = calculateEnd(axis, direction, offset, root, start, target)
+  const direction = resolveDirection(axis, rootElement, view)
+  const end = calculateEnd(axis, direction, offset, root, rootElement, start, target)
 
   const a11y = resolveAccessibility(rawA11y, target)
   const distance = end - start

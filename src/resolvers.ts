@@ -3,15 +3,12 @@ import { isElement, isWindow } from "./guards"
 
 export const resolveAccessibility = (a11y: boolean, target: JumpResolvedTarget) => {
   // Catch number `target`s.
-  if (typeof target === "number") return false
-  return a11y
+  return typeof target === "number" ? false : a11y
 }
 
-export const resolveDirection = (axis: JumpAxis, root: JumpRoot, view: Window): JumpDirection => {
-  // For vertical scrolls, the direction isn't relevant.
+export const resolveDirection = (axis: JumpAxis, rootElement: Element, view: Window): JumpDirection => {
+  // For vertical scrolls, the direction is irrelevant. No need to compute it.
   if (axis === "y") return
-
-  const rootElement = isWindow(root) ? root.document.documentElement : root
 
   return view.getComputedStyle(rootElement).direction === "rtl" ? "rtl" : "ltr"
 }
@@ -36,6 +33,10 @@ export const resolveRoot = (root: JumpRoot, view: Window): JumpRoot => {
   }
 
   return root
+}
+
+export const resolveRootElement = (root: JumpRoot): Element => {
+  return isWindow(root) ? root.document.documentElement : root
 }
 
 export const resolveTarget = (root: JumpRoot, target: JumpTarget): JumpResolvedTarget => {

@@ -7,6 +7,7 @@ export const calculateEnd = (
   direction: JumpDirection,
   offset: number,
   root: JumpRoot,
+  rootElement: Element,
   start: number,
   target: JumpResolvedTarget,
 ): number => {
@@ -14,8 +15,6 @@ export const calculateEnd = (
 
   // Calculate the `root`s maximum scroll position.
   let max: number
-
-  const rootElement = isWindow(root) ? root.document.documentElement : root
 
   switch (axis) {
     case "x":
@@ -30,19 +29,19 @@ export const calculateEnd = (
   let ideal = start
 
   if (typeof target === "number") {
-    // Ignore `offset` when `target` is a number.
+    // When `target` is a number, ignore `offset`.
     ideal += target
   } else {
     const targetBounds = target.getBoundingClientRect()
 
-    if (isWindow(root)) {
-      if (axis === "x") ideal += targetBounds.left
-      if (axis === "y") ideal += targetBounds.top
-    } else {
-      const rootBounds = root.getBoundingClientRect()
+    if (axis === "x") ideal += targetBounds.left
+    if (axis === "y") ideal += targetBounds.top
 
-      if (axis === "x") ideal += targetBounds.left - rootBounds.left - root.clientLeft
-      if (axis === "y") ideal += targetBounds.top - rootBounds.top - root.clientTop
+    if (!isWindow(root)) {
+      const rootBounds = rootElement.getBoundingClientRect()
+
+      if (axis === "x") ideal -= rootBounds.left + rootElement.clientLeft
+      if (axis === "y") ideal -= rootBounds.top + rootElement.clientTop
     }
 
     // For `rtl`, invert the `offset`.
