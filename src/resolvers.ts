@@ -12,7 +12,7 @@ export const resolveDirection = (axis: JumpAxis, root: JumpRoot): JumpDirection 
   if (axis === "y") return
 
   const rootElement = isWindow(root) ? root.document.documentElement : root
-  const rootView = rootElement.ownerDocument.defaultView
+  const rootView = isWindow(root) ? root : root.ownerDocument.defaultView
 
   // If `direction` can't be computed, assume "ltr".
   if (!rootView) return "ltr"
