@@ -1,6 +1,6 @@
 import type { Jump } from "./types"
 import { calculateEnd, calculateStart } from "./calculations"
-import { hasFocusMethod } from "./guards"
+import { hasFocusMethod, isWindow } from "./guards"
 import { resolveAccessibility, resolveDirection, resolveDuration, resolveRoot, resolveTarget } from "./resolvers"
 import { easeInOutQuad, noop, scroll } from "./utilities"
 import { validateOptions, validateTarget } from "./validators"
@@ -34,6 +34,7 @@ const jump: Jump = (rawTarget, options = {}) => {
 
   const root = resolveRoot(rawRoot)
   const target = resolveTarget(root, rawTarget)
+  const view = isWindow(root) ? root : root.ownerDocument.defaultView || window
 
   const start = calculateStart(axis, root)
   const direction = resolveDirection(axis, root)
@@ -77,7 +78,7 @@ const jump: Jump = (rawTarget, options = {}) => {
 
     // If the `callback` exists, run it in the frame after the final `scrollTo` call.
     // Prevent it from being `cancel`led by dropping the `frameId`.
-    if (callback) window.requestAnimationFrame(() => callback())
+    if (callback) view.requestAnimationFrame(() => callback())
   }
 
   const loop = (currentTime: DOMHighResTimeStamp) => {
@@ -99,7 +100,7 @@ const jump: Jump = (rawTarget, options = {}) => {
       scroll(axis, next, root)
     }
 
-    frameId = window.requestAnimationFrame(loop)
+    frameId = view.requestAnimationFrame(loop)
   }
 
   // If the jump is `instant`, `complete` it immediately. There's no `loop` to `cancel` here.
@@ -109,8 +110,8 @@ const jump: Jump = (rawTarget, options = {}) => {
   }
 
   // Kick off the `rAF` loop, and return the `cancel` function.
-  frameId = window.requestAnimationFrame(loop)
-  return () => window.cancelAnimationFrame(frameId)
+  frameId = view.requestAnimationFrame(loop)
+  return () => view.cancelAnimationFrame(frameId)
 }
 
 export default jump
