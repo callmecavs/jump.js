@@ -64,7 +64,7 @@ It accepts two arguments:
 
 It returns:
 
-1. A function that, when called, will [`cancel`](#cancel) the in-progress scroll.
+1. A function that [`cancel`](#cancel)s the in-progress scroll.
 
 ```ts
 import jump from "jump.js"
@@ -90,9 +90,9 @@ Jump adheres to the following "logical direction" conventions:
 | `x`             | LTR (left to right) | Left Edge                             | Right                    | Left                     |
 | `x`             | RTL (right to left) | Right Edge                            | Left                     | Right                    |
 
-For horizontal scrolls, Jump automatically responds to the [`root`](#root)'s computed CSS [`direction`](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/direction).
+For horizontal scrolls, Jump responds to the [`root`](#root)'s computed CSS [`direction`](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/direction).
 
-These conventions are particularly relevant to:
+These conventions are especially relevant to:
 
 - [`target`](#target)
 - [`axis`](#axis)
@@ -105,7 +105,7 @@ These conventions are particularly relevant to:
 type JumpTarget = Element | number | string
 ```
 
-Scroll a fixed number of pixels by passing a number:
+Scroll a static number of pixels by passing in a number:
 
 ```ts
 // scroll down 100px
@@ -115,7 +115,7 @@ jump(100)
 jump(-100)
 ```
 
-Scroll to an element by passing either:
+Scroll to an element by passing in either:
 
 - an element, or
 - a CSS selector string
@@ -164,13 +164,16 @@ const defaults: JumpOptions = {
 boolean
 ```
 
-If enabled and the [`target`](#target) resolves to an element, the [`target`](#target) will be focused when the scroll completes:
+If enabled and the [`target`](#target) resolves to an element, Jump will attempt to focus it when the scroll completes:
 
 ```ts
 jump(".target", { a11y: true })
 ```
 
-Focus may have a visual impact. Remember to check your `:focus` / `:focus-*` styles.
+Note that:
+
+- If needed, Jump will temporarily add `tabindex="-1"`.
+- Focus can affect the element's appearance. Remember to check your `:focus` and `:focus-*` styles.
 
 #### axis
 
@@ -194,7 +197,7 @@ jump(".target", { axis: "x" })
 type JumpCallback = () => void
 ```
 
-A function called after the scroll has completed:
+A function called after the scroll completes:
 
 ```ts
 const callback = () => console.log("Jump completed.")
@@ -202,7 +205,7 @@ const callback = () => console.log("Jump completed.")
 jump(".target", { callback })
 ```
 
-It doesn't run if the scroll is canceled:
+It won't run if the scroll is canceled:
 
 ```ts
 const callback = () => console.log("Jump completed.")
@@ -219,8 +222,8 @@ window.setTimeout(cancel, duration / 2)
 
 Note that:
 
-1. It runs **in the animation frame after** scroll completion and any focus call triggered by [`a11y`](#a11y).
-2. If the scroll completes, calling the [`cancel`](#cancel) function will not prevent the [`callback`](#callback) from running.
+- It runs **in the animation frame after** scroll completion and any focus call triggered by [`a11y`](#a11y).
+- If the scroll completes, calling the [`cancel`](#cancel) function will not prevent the [`callback`](#callback) from running.
 
 #### duration
 
@@ -234,10 +237,10 @@ To scroll for a fixed amount of time, pass in a number (`ms`):
 jump(".target", { duration: 1000 })
 ```
 
-To scroll for an amount of time relative to the scroll distance, pass in a function:
+To scroll for an amount of time relative to the scroll distance, pass in a function that:
 
-- It will receive the logically signed scroll distance as a number (`px`), and
-- It should return the scroll duration as a number (`ms`)
+1. Accepts the logically signed scroll distance as a number (`px`), and
+2. Returns the scroll duration as a number (`ms`).
 
 ```ts
 // scroll rate: 1px / ms
@@ -246,7 +249,12 @@ const duration = (distance: number) => Math.abs(distance)
 jump(".target", { duration })
 ```
 
-Jump scrolls instantly, without starting a `requestAnimationFrame` loop, when the resolved [`duration`](#duration) is `0` or the absolute scroll distance is less than `1px`. Instant scrolls complete normally, with no change to [`a11y`](#a11y) or [`callback`](#callback) behavior.
+Jump scrolls instantly, without starting a `requestAnimationFrame` loop, when:
+
+1. The resolved [`duration`](#duration) is `0`, or
+2. The absolute scroll distance is less than `1px`.
+
+This does not affect [`a11y`](#a11y) or [`callback`](#callback) behavior.
 
 #### easing
 
@@ -311,8 +319,8 @@ jump(100, { root: container })
 
 Note that:
 
-1. Jump clamps every scroll to the [`root`](#root)'s actual scroll range.
-2. Jump resolves [`target`](#target) CSS selector strings via `querySelector` scoped to the [`root`](#root).
+- Jump clamps every scroll to the [`root`](#root)'s actual scroll range.
+- Jump resolves [`target`](#target) CSS selector strings via `querySelector` scoped to the [`root`](#root).
 
 ### cancel
 
