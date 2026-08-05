@@ -280,17 +280,17 @@ jump(".target", { easing })
 number
 ```
 
-It adjusts the scroll by a number of `px`:
+Adjusts the scroll by a number of `px`:
 
 ```ts
-// scroll stops 100px before the target reaches the relevant edge
+// stop 100px before the `target` reaches the relevant edge
 jump(".target", { offset: -100 })
 
-// scroll stops 50px after the target reaches the relevant edge
+// stop 50px after the `target` reaches the relevant edge
 jump(".target", { offset: 50 })
 ```
 
-It's ignored if the [`target`](#target) is a number:
+Ignored if the [`target`](#target) is a number:
 
 ```ts
 // scroll down 150px (ignored)
@@ -299,8 +299,8 @@ jump(150, { offset: -150 })
 
 It's useful for:
 
-- Aligning the [`target`](#target) within the [`root`](#root)
-- Accommodating `sticky` / `fixed` elements
+- Positioning the [`target`](#target) relative to the [`root`](#root).
+- Accommodating `sticky` / `fixed` elements.
 
 #### root
 
@@ -308,7 +308,7 @@ It's useful for:
 type JumpRoot = Window | Element
 ```
 
-The `window` or element that is scrolled.
+The `window` or element that is scrolled:
 
 ```ts
 const container = document.querySelector(".container")
@@ -328,7 +328,7 @@ Note that:
 type JumpCancel = () => void
 ```
 
-A function that stops the in-progress scroll.
+A function that stops the in-progress scroll:
 
 ```ts
 // start scroll
