@@ -73,7 +73,7 @@ const jump: Jump = (rawTarget, options = {}) => {
       target.focus({ preventScroll: true })
 
       if (needsIndex) {
-        // Avoid using `document.activeElement` to preserve Shadow DOM and <iframe> compatibility.
+        // Prefer `matches` because it's realm-agnostic.
         const receivedFocus = target.matches(":focus")
 
         // If `focus` worked, keep the `tabindex` until `blur`. Removing it will also remove `focus` in some browsers.
