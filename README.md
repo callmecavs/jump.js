@@ -370,16 +370,16 @@ jump("#no-match")
 2. The `target` is not contained by the `root`:
 
 ```html
-<div id="root">
+<div class="root">
   <!-- ... -->
 </div>
 
-<div id="target">Target</div>
+<div class="target">Target</div>
 ```
 
 ```ts
-const root = document.getElementById("root")
-const target = document.getElementById("target")
+const root = document.querySelector(".root")
+const target = document.querySelector(".target")
 
 // Error: "target": element is not contained by "root".
 jump(target, { root })
@@ -450,7 +450,7 @@ No, but it was designed such that you can implement this externally. Refer to th
 
 <br />
 
-Jump calculates the start position, end position, and [`root`](#root)'s scroll range when called. It **does not** recalculate any of them as it scrolls. Dynamic content that changes the [`target`](#target)'s position, or the [`root`](#root)'s scroll range, may result in the scroll stopping at the wrong position.
+Jump calculates the start position, end position, and [`root`](#root)'s scroll range when called. It **does not** recalculate them as it scrolls. Dynamic content that changes the [`target`](#target)'s position, or the [`root`](#root)'s scroll range, may result in the scroll stopping at the wrong position.
 
 For lazy-loaded images, reserve the necessary layout space with `width` / `height` attributes, or CSS `aspect-ratio`. Framework-specific image components, such as Next.js's [`Image`](https://nextjs.org/docs/app/api-reference/components/image#width-and-height), should handle this for you.
 
