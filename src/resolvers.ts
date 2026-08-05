@@ -7,17 +7,13 @@ export const resolveAccessibility = (a11y: boolean, target: JumpResolvedTarget) 
   return a11y
 }
 
-export const resolveDirection = (axis: JumpAxis, root: JumpRoot): JumpDirection => {
+export const resolveDirection = (axis: JumpAxis, root: JumpRoot, view: Window): JumpDirection => {
   // For vertical scrolls, the direction isn't relevant.
   if (axis === "y") return
 
   const rootElement = isWindow(root) ? root.document.documentElement : root
-  const rootView = isWindow(root) ? root : root.ownerDocument.defaultView
 
-  // If `direction` can't be computed, assume "ltr".
-  if (!rootView) return "ltr"
-
-  return rootView.getComputedStyle(rootElement).direction === "rtl" ? "rtl" : "ltr"
+  return view.getComputedStyle(rootElement).direction === "rtl" ? "rtl" : "ltr"
 }
 
 export const resolveDuration = (distance: number, duration: JumpDuration) => {

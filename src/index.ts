@@ -45,7 +45,7 @@ const jump: Jump = (rawTarget, options = {}) => {
   const target = resolveTarget(root, rawTarget)
 
   const start = calculateStart(axis, root)
-  const direction = resolveDirection(axis, root)
+  const direction = resolveDirection(axis, root, view)
   const end = calculateEnd(axis, direction, offset, root, start, target)
 
   const a11y = resolveAccessibility(rawA11y, target)
