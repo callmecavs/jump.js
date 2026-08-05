@@ -516,15 +516,15 @@ From `v1.x` to `v2.x`:
 
 Jump natively supports the following browsers:
 
-| Browser      | Version | Limiting Feature                                                                                                                     |
-| :----------- | :------ | :----------------------------------------------------------------------------------------------------------------------------------- |
-| Chrome       | 66+     | [`catch` (optional binding)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/try...catch#catch_binding) |
-| Edge         | 79+     | [`catch` (optional binding)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/try...catch#catch_binding) |
-| Firefox      | 68+     | [`preventScroll` (focus option)](https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/focus#preventscroll)                   |
-| Opera        | 53+     | [`catch` (optional binding)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/try...catch#catch_binding) |
-| Safari       | 15+     | [`preventScroll` (focus option)](https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/focus#preventscroll)                   |
-| Safari (iOS) | 15.5+   | [`preventScroll` (focus option)](https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/focus#preventscroll)                   |
+| Browser      | Version | Limiting Feature                                                                                                                                                                         |
+| :----------- | :------ | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Chrome       | 86+     | [`scrollLeft`](https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollLeft) / [`scrollX`](https://developer.mozilla.org/en-US/docs/Web/API/Window/scrollX) (negative RTL values) |
+| Edge         | 86+     | [`scrollLeft`](https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollLeft) / [`scrollX`](https://developer.mozilla.org/en-US/docs/Web/API/Window/scrollX) (negative RTL values) |
+| Firefox      | 68+     | [`preventScroll` (focus option)](https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/focus#preventscroll)                                                                       |
+| Opera        | 72+     | [`scrollLeft`](https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollLeft) / [`scrollX`](https://developer.mozilla.org/en-US/docs/Web/API/Window/scrollX) (negative RTL values) |
+| Safari       | 15+     | [`preventScroll` (focus option)](https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/focus#preventscroll)                                                                       |
+| Safari (iOS) | 15.5+   | [`preventScroll` (focus option)](https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/focus#preventscroll)                                                                       |
 
 ## License
 
-[MIT](https://opensource.org/licenses/MIT). © 2026 Michael Cavalea
+[MIT](https://opensource.org/licenses/MIT). © 2026 Michael "Cavs" Cavalea
