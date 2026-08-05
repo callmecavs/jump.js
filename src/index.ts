@@ -79,10 +79,9 @@ const jump: Jump = (rawTarget, options = {}) => {
         const receivedFocus = target.matches(":focus")
 
         // If `focus` worked, keep the `tabindex` until `blur`. Removing it will also remove `focus` in some browsers.
-        if (receivedFocus) target.addEventListener("blur", () => target.removeAttribute("tabindex"), { once: true })
-
         // If `focus` failed, remove the `tabindex` immediately.
-        if (!receivedFocus) target.removeAttribute("tabindex")
+        if (receivedFocus) target.addEventListener("blur", () => target.removeAttribute("tabindex"), { once: true })
+        else target.removeAttribute("tabindex")
       }
     }
 
