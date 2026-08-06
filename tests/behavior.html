@@ -120,6 +120,14 @@
         top: calc(var(--sandbox-height) * 2);
       }
 
+      .rtl-target-element {
+        right: var(--sandbox-width);
+      }
+
+      .rtl-target-string {
+        right: calc(var(--sandbox-width) * 2);
+      }
+
       .focus-button {
         display: block;
         border: 1px solid red;
@@ -161,6 +169,13 @@
     <div class="spacer medium"></div>
 
     <div class="page-target page-target-y page-target-string" data-window-y-target-string></div>
+
+    <div class="sandbox" data-rtl dir="rtl">
+      <div class="sandbox-content sandbox-content-x">
+        <div class="sandbox-target rtl-target-x rtl-target-element" data-rtl-element></div>
+        <div class="sandbox-target rtl-target-x rtl-target-string" data-rtl-string></div>
+      </div>
+    </div>
 
     <div class="spacer large"></div>
 
