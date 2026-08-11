@@ -741,7 +741,7 @@ test.describe("error", () => {
       await page.evaluate(() => {
         try {
           // @ts-expect-error Runtime validation check.
-          window.fixtures.jump(".target", null)
+          window.fixtures.jump(100, null)
         } catch (error) {
           return error instanceof TypeError
         }
@@ -756,7 +756,7 @@ test.describe("error", () => {
       await page.evaluate(() => {
         try {
           // @ts-expect-error Runtime validation check.
-          window.fixtures.jump(".target", { a11y: "true" })
+          window.fixtures.jump(100, { a11y: "true" })
         } catch (error) {
           return error instanceof TypeError
         }
@@ -771,7 +771,7 @@ test.describe("error", () => {
       await page.evaluate(() => {
         try {
           // @ts-expect-error Runtime validation check.
-          window.fixtures.jump(".target", { axis: "z" })
+          window.fixtures.jump(100, { axis: "z" })
         } catch (error) {
           return error instanceof TypeError
         }
@@ -786,7 +786,7 @@ test.describe("error", () => {
       await page.evaluate(() => {
         try {
           // @ts-expect-error Runtime validation check.
-          window.fixtures.jump(".target", { callback: true })
+          window.fixtures.jump(100, { callback: true })
         } catch (error) {
           return error instanceof TypeError
         }
@@ -801,7 +801,7 @@ test.describe("error", () => {
       await page.evaluate(() => {
         try {
           // @ts-expect-error Runtime validation check.
-          window.fixtures.jump(".target", { duration: "1000" })
+          window.fixtures.jump(100, { duration: "1000" })
         } catch (error) {
           return error instanceof TypeError
         }
@@ -815,7 +815,7 @@ test.describe("error", () => {
     expect(
       await page.evaluate(() => {
         try {
-          window.fixtures.jump(".target", { duration: -1000 })
+          window.fixtures.jump(100, { duration: -1000 })
         } catch (error) {
           return error instanceof Error && error.constructor === Error
         }
@@ -829,7 +829,7 @@ test.describe("error", () => {
     expect(
       await page.evaluate(() => {
         try {
-          window.fixtures.jump(".target", { duration: distance => -1 * distance })
+          window.fixtures.jump(100, { duration: distance => -1 * distance })
         } catch (error) {
           return error instanceof Error && error.constructor === Error
         }
@@ -844,7 +844,7 @@ test.describe("error", () => {
       await page.evaluate(() => {
         try {
           // @ts-expect-error Runtime validation check.
-          window.fixtures.jump(".target", { easing: true })
+          window.fixtures.jump(100, { easing: true })
         } catch (error) {
           return error instanceof TypeError
         }
@@ -859,7 +859,7 @@ test.describe("error", () => {
       await page.evaluate(() => {
         try {
           // @ts-expect-error Runtime validation check.
-          window.fixtures.jump(".target", { offset: "100" })
+          window.fixtures.jump(100, { offset: "100" })
         } catch (error) {
           return error instanceof TypeError
         }
@@ -873,7 +873,7 @@ test.describe("error", () => {
     expect(
       await page.evaluate(() => {
         try {
-          window.fixtures.jump(".target", { offset: NaN })
+          window.fixtures.jump(100, { offset: NaN })
         } catch (error) {
           return error instanceof TypeError
         }
@@ -888,7 +888,7 @@ test.describe("error", () => {
       await page.evaluate(() => {
         try {
           // @ts-expect-error Runtime validation check.
-          window.fixtures.jump(".target", { root: true })
+          window.fixtures.jump(100, { root: true })
         } catch (error) {
           return error instanceof TypeError
         }
