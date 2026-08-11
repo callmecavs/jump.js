@@ -714,7 +714,7 @@ test.describe("error", () => {
         try {
           window.fixtures.jump("1337")
         } catch (error) {
-          return error instanceof Error
+          return error instanceof Error && error.constructor === Error
         }
 
         return false
@@ -728,7 +728,7 @@ test.describe("error", () => {
         try {
           window.fixtures.jump(".no-match")
         } catch (error) {
-          return error instanceof Error
+          return error instanceof Error && error.constructor === Error
         }
 
         return false
@@ -817,7 +817,7 @@ test.describe("error", () => {
         try {
           window.fixtures.jump(".target", { duration: -1000 })
         } catch (error) {
-          return error instanceof Error
+          return error instanceof Error && error.constructor === Error
         }
 
         return false
@@ -831,7 +831,7 @@ test.describe("error", () => {
         try {
           window.fixtures.jump(".target", { duration: distance => -1 * distance })
         } catch (error) {
-          return error instanceof Error
+          return error instanceof Error && error.constructor === Error
         }
 
         return false
