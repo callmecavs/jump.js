@@ -505,12 +505,24 @@ If you're already using `ScrollSmoother`, use its [`scrollTo`](<https://gsap.com
 
 From `v1.x` to `v2.x`:
 
-1. Ensure your project can consume ESM-only packages. CommonJS and UMD formats are no longer exported, or supported.
-2. Ensure your project doesn't depend on `@types/jump.js`. Use the exported types instead.
-3. Review custom [`easing`](#easing) functions. They should accept a single argument (the linear progress, ranging from `0` to `1`), and return the eased progress.
-4. Review numeric [`target`](#target)s with an [`offset`](#offset). This combination of [`options`](#options) was bugged, and has since been fixed. The [`offset`](#offset) is now ignored when the [`target`](#target) is a number, as was previously documented.
-5. Review [`a11y`](#a11y)-enabled scrolls. A bug that resulted in existing `tabindex` attributes being overridden has since been fixed.
-6. Ensure your project is compatible with the updated [Browser Support](#browser-support).
+1. Ensure your build process is compatible with ESM-only packages. The following are no longer supported:
+   - AMD
+   - CommonJS
+   - Browser global variable (`window.Jump`)
+   - Imports from `"jump.js/dist"`
+2. Remove `@types/jump.js` from your dependencies, and import types directly from `"jump.js"`.
+3. Update code and types that expect Jump to return `void`, as it now returns a [`cancel`](#cancel) function.
+4. Update custom [`easing`](#easing) functions such that they accept a single argument (progress, ranging from `0` to `1`) and return the eased progress.
+5. Update calls to Jump that pass invalid arguments. Arguments are now validated synchronously, see [Error Handling](#error-handling).
+6. Update [`duration`](#duration) functions. The `distance` they recieve is now clamped, and logically signed.
+7. Update timing assumptions:
+   - Jumps with a `duration` of `0`, or an absolute scroll distance of `< 1px`, complete instantly.
+   - The [`callback`](#callback) runs in the frame after the final scroll and [`a11y`](#a11y) focus.
+8. Update code impacted by squashed bugs:
+   - Numeric [`target`](#target) numbers now properly ignore [`offset`](#offset)
+   - [`a11y`](#a11y) now preserves existing `tabindex` attributes
+   - Jump now overrides CSS `scroll-behavior`, and preserves the position of the non-scrolling axis
+9. Review the updated [Browser Support](#browser-support).
 
 ## Browser Support
 
