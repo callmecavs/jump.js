@@ -516,7 +516,7 @@ From `v1.x` to `v2.x`:
 5. Update custom [`easing`](#easing) functions. They should now accept linear progress (`0` to `1`) and return eased progress.
 6. Update [`duration`](#duration) functions. The `distance` they receive is now clamped and logically signed.
 7. Update timing-related code:
-   - Jumps with a `duration` of `0` or an absolute scroll distance less than `1px` now scroll instantly.
+   - Scrolls with a `duration` of `0` or an absolute distance less than `1px` are now instant.
    - The [`callback`](#callback) now runs in the frame after the final scroll and [`a11y`](#a11y)-triggered focus.
 8. Review code impacted by bug fixes:
    - Numeric [`target`](#target) values now ignore [`offset`](#offset).
