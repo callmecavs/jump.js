@@ -510,18 +510,18 @@ From `v1.x` to `v2.x`:
    - CommonJS
    - Browser global variable (`window.Jump`)
    - Imports from `jump.js/dist`
-2. Remove `@types/jump.js` from your dependencies, and import types directly from `jump.js`.
-3. Update code and types that expect Jump to return `void`, as it now returns a [`cancel`](#cancel) function.
-4. Check for runtime errors. Jump now validates arguments (see [Error Handling](#error-handling)).
-5. Update custom [`easing`](#easing) functions. They should now accept the linear progress (`0` to `1`) and return the eased progress.
+2. Import types directly from `jump.js` and remove `@types/jump.js` from your dependencies.
+3. Update code that expects Jump to return `void`, as it now returns a [`cancel`](#cancel) function.
+4. Check for runtime errors, as Jump now validates arguments (see [Error Handling](#error-handling)).
+5. Update custom [`easing`](#easing) functions. They should now accept linear progress (`0` to `1`) and return eased progress.
 6. Update [`duration`](#duration) functions. The `distance` they receive is now clamped and logically signed.
 7. Update timing-related code:
-   - Jumps with a `duration` of `0`, or an absolute scroll distance of `< 1px`, now scroll instantly.
-   - The [`callback`](#callback) now runs in the frame after the final scroll and [`a11y`](#a11y) focus.
-8. Update code impacted by squashed bugs:
-   - Numeric [`target`](#target)s now properly ignore the [`offset`](#offset)
-   - [`a11y`](#a11y) now preserves existing `tabindex` attributes
-   - Jump now overrides CSS `scroll-behavior`, and preserves the position of the non-scrolling axis
+   - Jumps with a `duration` of `0` or an absolute scroll distance less than `1px` now scroll instantly.
+   - The [`callback`](#callback) now runs in the frame after the final scroll and [`a11y`](#a11y)-triggered focus.
+8. Review code impacted by bug fixes:
+   - Numeric [`target`](#target) values now ignore [`offset`](#offset).
+   - [`a11y`](#a11y) now preserves existing `tabindex` attributes.
+   - Jump now overrides CSS `scroll-behavior` and preserves the position of the non-scrolling axis.
 9. Review the updated [Browser Support](#browser-support).
 
 ## Browser Support
@@ -536,6 +536,8 @@ Jump natively supports the following browsers:
 | Opera        | 72+     | [`scrollLeft`](https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollLeft) / [`scrollX`](https://developer.mozilla.org/en-US/docs/Web/API/Window/scrollX) (negative RTL values) |
 | Safari       | 15+     | [`preventScroll` (focus option)](https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/focus#preventscroll)                                                                       |
 | Safari (iOS) | 15.5+   | [`preventScroll` (focus option)](https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/focus#preventscroll)                                                                       |
+
+Press "F" to pay respects to Internet Explorer.
 
 ## License
 
