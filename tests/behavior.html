@@ -270,16 +270,8 @@
         captureWindowScrollToArgs,
         getLatestWindowScrollToArgs: () => latestWindowScrollToArgs,
 
-        getElement: selector => {
-          const match = document.querySelector(selector)
-          if (match === null) throw new Error("`getElement` failed: `selector` didn't match.")
-          if (!(match instanceof HTMLElement)) throw new Error("`getElement` failed: match isn't an `HTMLElement`.")
-          return match
-        },
-
-        getElementX: element => element.getBoundingClientRect().left + window.scrollX,
-        getElementY: element => element.getBoundingClientRect().top + window.scrollY,
-
+        getElement: selector => document.querySelector(selector),
+        getElementBounds: element => element.getBoundingClientRect(),
         getElementScrollXMax: element => element.scrollWidth - element.clientWidth,
         getElementScrollYMax: element => element.scrollHeight - element.clientHeight,
 

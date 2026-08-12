@@ -24,9 +24,7 @@ declare global {
       getLatestWindowScrollToArgs: () => ScrollToArgs | undefined
 
       getElement: (selector: string) => HTMLElement
-      getElementX: (element: HTMLElement) => number
-      getElementY: (element: HTMLElement) => number
-
+      getElementBounds: (element: HTMLElement) => DOMRect
       getElementScrollXMax: (element: HTMLElement) => number
       getElementScrollYMax: (element: HTMLElement) => number
 
@@ -70,19 +68,13 @@ test.describe("root: window", () => {
     })
 
     test("target: element", async ({ page }) => {
-      const { actual, expected } = await page.evaluate(() => {
-        const target = window.fixtures.getElement("[data-window-x-target-element]")
-
-        window.fixtures.captureWindowScrollToArgs()
-        window.fixtures.jumpInstant(target, { axis: "x" })
-
-        return {
-          actual: window.fixtures.getLatestWindowScrollToArgs(),
-          expected: window.fixtures.getElementX(target),
-        }
-      })
-
-      expect(actual).toEqual([{ behavior: "instant", left: expected }])
+      expect(
+        await page.evaluate(() => {
+          const target = window.fixtures.getElement("[data-window-x-target-element]")
+          window.fixtures.jumpInstant(target, { axis: "x" })
+          return window.fixtures.getElementBounds(target).left
+        }),
+      ).toEqual(0)
     })
 
     test("is clamped (start)", async ({ page }) => {
@@ -113,6 +105,7 @@ test.describe("root: window", () => {
       expect(actual).toEqual([{ behavior: "instant", left: expected }])
     })
 
+    // TODO: pull out `y`
     test("doesn't mutate other axis", async ({ page }) => {
       const { actual, expected } = await page.evaluate(() => {
         const target = window.fixtures.getElement("[data-window-x-target-element]")
@@ -163,50 +156,36 @@ test.describe("root: window", () => {
     })
 
     test("target: element", async ({ page }) => {
-      const { actual, expected } = await page.evaluate(() => {
-        const target = window.fixtures.getElement("[data-window-y-target-element]")
-
-        window.fixtures.captureWindowScrollToArgs()
-        window.fixtures.jumpInstant(target)
-
-        return {
-          actual: window.fixtures.getLatestWindowScrollToArgs(),
-          expected: window.fixtures.getElementY(target),
-        }
-      })
-
-      expect(actual).toEqual([{ behavior: "instant", top: expected }])
+      expect(
+        await page.evaluate(() => {
+          const target = window.fixtures.getElement("[data-window-y-target-element]")
+          window.fixtures.jumpInstant(target)
+          return window.fixtures.getElementBounds(target).top
+        }),
+      ).toEqual(0)
     })
 
     test("target: element with offset", async ({ page }) => {
-      const { actual, expected } = await page.evaluate(() => {
-        const offset = 50
-        const target = window.fixtures.getElement("[data-window-y-target-element]")
+      const offset = 50
 
-        window.fixtures.captureWindowScrollToArgs()
-        window.fixtures.jumpInstant(target, { offset })
-
-        return {
-          actual: window.fixtures.getLatestWindowScrollToArgs(),
-          expected: window.fixtures.getElementY(target) + offset,
-        }
-      })
-
-      expect(actual).toEqual([{ behavior: "instant", top: expected }])
+      expect(
+        await page.evaluate(offset => {
+          const target = window.fixtures.getElement("[data-window-y-target-element]")
+          window.fixtures.jumpInstant(target, { offset })
+          return window.fixtures.getElementBounds(target).top
+        }, offset),
+      ).toEqual(-offset)
     })
 
     test("target: string", async ({ page }) => {
-      const { actual, expected } = await page.evaluate(() => {
-        window.fixtures.captureWindowScrollToArgs()
-        window.fixtures.jumpInstant("[data-window-y-target-string]")
+      const selector = "[data-window-y-target-string]"
 
-        return {
-          actual: window.fixtures.getLatestWindowScrollToArgs(),
-          expected: window.fixtures.getElementY(window.fixtures.getElement("[data-window-y-target-string]")),
-        }
-      })
-
-      expect(actual).toEqual([{ behavior: "instant", top: expected }])
+      expect(
+        await page.evaluate(selector => {
+          window.fixtures.jumpInstant(selector)
+          return window.fixtures.getElementBounds(window.fixtures.getElement(selector)).top
+        }, selector),
+      ).toEqual(0)
     })
 
     test("is clamped (start)", async ({ page }) => {
@@ -237,6 +216,7 @@ test.describe("root: window", () => {
       expect(actual).toEqual([{ behavior: "instant", top: expected }])
     })
 
+    // TODO: pull out `x`
     test("doesn't mutate other axis", async ({ page }) => {
       const { actual, expected } = await page.evaluate(() => {
         const target = window.fixtures.getElement("[data-window-y-target-element]")
@@ -254,6 +234,7 @@ test.describe("root: window", () => {
       expect(actual).toEqual(expected)
     })
 
+    // TODO: pull out `distance`
     test("instant: duration", async ({ page }) => {
       expect(
         await page.evaluate(() => {
@@ -382,6 +363,7 @@ test.describe("root: element", () => {
       expect(actual).toEqual([{ behavior: "instant", left: expected }])
     })
 
+    // TODO: pull out `y`
     test("doesn't mutate other axis", async ({ page }) => {
       const { actual, expected } = await page.evaluate(() => {
         const root = window.fixtures.getElement("[data-root]")
@@ -470,6 +452,7 @@ test.describe("root: element", () => {
       expect(actual).toEqual([{ behavior: "instant", top: expected }])
     })
 
+    // TODO: pull out `x`
     test("doesn't mutate other axis", async ({ page }) => {
       const { actual, expected } = await page.evaluate(() => {
         const root = window.fixtures.getElement("[data-root]")
@@ -556,14 +539,14 @@ test.describe("a11y", () => {
     })
 
     test("focus doesn't change scroll position", async ({ page }) => {
+      const offset = 500
+
       expect(
-        await page.evaluate(() => {
-          // Scroll past the target so that it ends up offscreen. Makes it easier to see regressions.
-          const offset = 500
-
+        await page.evaluate(offset => {
           const target = window.fixtures.getElement("[data-focus]")
-          const expected = window.fixtures.getElementY(target) + offset
+          const expected = window.fixtures.getElementBounds(target).top + offset
 
+          // Scroll past the target so that it ends up offscreen. Makes it easier to see regressions.
           window.fixtures.jumpInstant(target, { a11y: true, offset })
 
           return {
@@ -573,7 +556,7 @@ test.describe("a11y", () => {
             // `scrollTo` calls here, because browsers might not use it when `focus` is called.
             didScroll: Math.abs(window.scrollY - expected) >= 1,
           }
-        }),
+        }, offset),
       ).toEqual({
         didFocus: true,
         didScroll: false,
