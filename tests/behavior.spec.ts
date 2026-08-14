@@ -539,30 +539,25 @@ test.describe("a11y", () => {
     })
 
     test("focus doesn't change scroll position", async ({ page }) => {
-      const offset = 500
-
       expect(
-        await page.evaluate(offset => {
+        await page.evaluate(() => {
+          const offset = 500
           const target = window.fixtures.getElement("[data-focus]")
-          const expected = window.fixtures.getElementBounds(target).top + offset
 
-          // Scroll past the target so that it ends up offscreen. Makes it easier to see regressions.
           window.fixtures.jumpInstant(target, { a11y: true, offset })
 
           return {
-            didFocus: target === document.activeElement,
-
-            // Small tolerance in case the browser ignores fractional scroll values. Can't check captured
-            // `scrollTo` calls here, because browsers might not use it when `focus` is called.
-            didScroll: Math.abs(window.scrollY - expected) >= 1,
+            wasFocused: target === document.activeElement,
+            wasScrolled: window.fixtures.getElementBounds(target).top !== -offset,
           }
-        }, offset),
+        }),
       ).toEqual({
-        didFocus: true,
-        didScroll: false,
+        wasFocused: true,
+        wasScrolled: false,
       })
     })
 
+    // TODO: pull out `expected`
     test("preserves pre-existing tabindex", async ({ page }) => {
       expect(
         await page.evaluate(() => {
