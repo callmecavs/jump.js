@@ -224,7 +224,6 @@ test.describe("root: window", () => {
       ).toEqual(x)
     })
 
-    // TODO: pull out `distance`
     test("instant: duration", async ({ page }) => {
       expect(
         await page.evaluate(() => {
