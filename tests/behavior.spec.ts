@@ -306,19 +306,19 @@ test.describe("root: element", () => {
     })
 
     test("target: element", async ({ page }) => {
-      const { actual, expected } = await page.evaluate(() => {
-        const root = window.fixtures.getElement("[data-root]")
-        const target = window.fixtures.getElement("[data-root-x-element]")
+      expect(
+        await page.evaluate(() => {
+          const root = window.fixtures.getElement("[data-root]")
+          const target = window.fixtures.getElement("[data-root-x-element]")
 
-        window.fixtures.jumpInstant(target, { axis: "x", root })
+          window.fixtures.jumpInstant(target, { axis: "x", root })
 
-        return {
-          actual: root.scrollLeft,
-          expected: target.offsetLeft,
-        }
-      })
+          const rootLeft = window.fixtures.getElementBounds(root).left + root.clientLeft
+          const targetLeft = window.fixtures.getElementBounds(target).left
 
-      expect(actual).toEqual(expected)
+          return Math.abs(rootLeft - targetLeft)
+        }),
+      ).toBeLessThan(1)
     })
 
     test("is clamped (start)", async ({ page }) => {
@@ -390,19 +390,19 @@ test.describe("root: element", () => {
     })
 
     test("target: element", async ({ page }) => {
-      const { actual, expected } = await page.evaluate(() => {
-        const root = window.fixtures.getElement("[data-root]")
-        const target = window.fixtures.getElement("[data-root-y-element]")
+      expect(
+        await page.evaluate(() => {
+          const root = window.fixtures.getElement("[data-root]")
+          const target = window.fixtures.getElement("[data-root-y-element]")
 
-        window.fixtures.jumpInstant(target, { root })
+          window.fixtures.jumpInstant(target, { root })
 
-        return {
-          actual: root.scrollTop,
-          expected: target.offsetTop,
-        }
-      })
+          const rootTop = window.fixtures.getElementBounds(root).top + root.clientTop
+          const targetTop = window.fixtures.getElementBounds(target).top
 
-      expect(actual).toEqual(expected)
+          return Math.abs(rootTop - targetTop)
+        }),
+      ).toBeLessThan(1)
     })
 
     test("is clamped (start)", async ({ page }) => {
