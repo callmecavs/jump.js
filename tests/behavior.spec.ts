@@ -105,22 +105,17 @@ test.describe("root: window", () => {
       expect(actual).toEqual([{ behavior: "instant", left: expected }])
     })
 
-    // TODO: pull out `y`
     test("doesn't mutate other axis", async ({ page }) => {
-      const { actual, expected } = await page.evaluate(() => {
-        const target = window.fixtures.getElement("[data-window-x-target-element]")
-        const y = 24
+      const y = 25
 
-        window.scrollTo({ top: y })
-        window.fixtures.jumpInstant(target, { axis: "x" })
-
-        return {
-          actual: window.scrollY,
-          expected: y,
-        }
-      })
-
-      expect(actual).toEqual(expected)
+      expect(
+        await page.evaluate(y => {
+          const target = window.fixtures.getElement("[data-window-x-target-element]")
+          window.scrollTo({ top: y })
+          window.fixtures.jumpInstant(target, { axis: "x" })
+          return window.scrollY
+        }, y),
+      ).toEqual(y)
     })
   })
 
@@ -216,22 +211,17 @@ test.describe("root: window", () => {
       expect(actual).toEqual([{ behavior: "instant", top: expected }])
     })
 
-    // TODO: pull out `x`
     test("doesn't mutate other axis", async ({ page }) => {
-      const { actual, expected } = await page.evaluate(() => {
-        const target = window.fixtures.getElement("[data-window-y-target-element]")
-        const x = 24
+      const x = 25
 
-        window.scrollTo({ left: x })
-        window.fixtures.jumpInstant(target)
-
-        return {
-          actual: window.scrollX,
-          expected: x,
-        }
-      })
-
-      expect(actual).toEqual(expected)
+      expect(
+        await page.evaluate(x => {
+          const target = window.fixtures.getElement("[data-window-y-target-element]")
+          window.scrollTo({ left: x })
+          window.fixtures.jumpInstant(target)
+          return window.scrollX
+        }, x),
+      ).toEqual(x)
     })
 
     // TODO: pull out `distance`
@@ -363,23 +353,18 @@ test.describe("root: element", () => {
       expect(actual).toEqual([{ behavior: "instant", left: expected }])
     })
 
-    // TODO: pull out `y`
     test("doesn't mutate other axis", async ({ page }) => {
-      const { actual, expected } = await page.evaluate(() => {
-        const root = window.fixtures.getElement("[data-root]")
-        const target = window.fixtures.getElement("[data-root-x-element]")
-        const y = 24
+      const y = 25
 
-        root.scrollTo({ top: y })
-        window.fixtures.jumpInstant(target, { axis: "x", root })
-
-        return {
-          actual: root.scrollTop,
-          expected: y,
-        }
-      })
-
-      expect(actual).toEqual(expected)
+      expect(
+        await page.evaluate(y => {
+          const root = window.fixtures.getElement("[data-root]")
+          const target = window.fixtures.getElement("[data-root-x-element]")
+          root.scrollTo({ top: y })
+          window.fixtures.jumpInstant(target, { axis: "x", root })
+          return root.scrollTop
+        }, y),
+      ).toEqual(y)
     })
   })
 
@@ -452,23 +437,18 @@ test.describe("root: element", () => {
       expect(actual).toEqual([{ behavior: "instant", top: expected }])
     })
 
-    // TODO: pull out `x`
     test("doesn't mutate other axis", async ({ page }) => {
-      const { actual, expected } = await page.evaluate(() => {
-        const root = window.fixtures.getElement("[data-root]")
-        const target = window.fixtures.getElement("[data-root-y-element]")
-        const x = 24
+      const x = 25
 
-        root.scrollTo({ left: x })
-        window.fixtures.jumpInstant(target, { root })
-
-        return {
-          actual: root.scrollLeft,
-          expected: x,
-        }
-      })
-
-      expect(actual).toEqual(expected)
+      expect(
+        await page.evaluate(x => {
+          const root = window.fixtures.getElement("[data-root]")
+          const target = window.fixtures.getElement("[data-root-y-element]")
+          root.scrollTo({ left: x })
+          window.fixtures.jumpInstant(target, { root })
+          return root.scrollLeft
+        }, x),
+      ).toEqual(x)
     })
   })
 })
@@ -515,12 +495,10 @@ test.describe("a11y", () => {
     test("target: number doesn't change focus", async ({ page }) => {
       expect(
         await page.evaluate(() => {
+          const root = window.fixtures.getElement("[data-focus]")
           const sentinel = window.fixtures.getElement("[data-focus-button]")
           sentinel.focus({ preventScroll: true })
-
-          const root = window.fixtures.getElement("[data-focus]")
           window.fixtures.jumpInstant(100, { a11y: true, root })
-
           return sentinel === document.activeElement
         }),
       ).toEqual(true)
@@ -557,21 +535,21 @@ test.describe("a11y", () => {
       })
     })
 
-    // TODO: pull out `expected`
     test("preserves pre-existing tabindex", async ({ page }) => {
+      const tabindex = "10"
+
       expect(
-        await page.evaluate(() => {
-          const expected = 10
+        await page.evaluate(tabindex => {
           const root = window.fixtures.getElement("[data-focus]")
           const sentinel = window.fixtures.getElement("[data-focus-button]")
 
-          sentinel.setAttribute("tabindex", `${expected}`)
+          sentinel.setAttribute("tabindex", tabindex)
           window.fixtures.jumpInstant(sentinel, { a11y: true, root })
           sentinel.blur()
 
-          return sentinel.hasAttribute("tabindex") && Number(sentinel.getAttribute("tabindex")) === expected
-        }),
-      ).toEqual(true)
+          return sentinel.getAttribute("tabindex")
+        }, tabindex),
+      ).toEqual(tabindex)
     })
 
     test("temporary tabindex is added and removed", async ({ page }) => {
