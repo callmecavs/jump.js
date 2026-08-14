@@ -535,20 +535,29 @@ test.describe("a11y", () => {
     })
 
     test("preserves pre-existing tabindex", async ({ page }) => {
-      const tabindex = "10"
+      const initial = "10"
 
       expect(
-        await page.evaluate(tabindex => {
+        await page.evaluate(initial => {
           const root = window.fixtures.getElement("[data-focus]")
           const sentinel = window.fixtures.getElement("[data-focus-button]")
 
-          sentinel.setAttribute("tabindex", tabindex)
+          sentinel.setAttribute("tabindex", initial)
           window.fixtures.jumpInstant(sentinel, { a11y: true, root })
-          sentinel.blur()
 
-          return sentinel.getAttribute("tabindex")
-        }, tabindex),
-      ).toEqual(tabindex)
+          const beforeBlur = sentinel.getAttribute("tabindex")
+          sentinel.blur()
+          const afterBlur = sentinel.getAttribute("tabindex")
+
+          return {
+            beforeBlur,
+            afterBlur,
+          }
+        }, initial),
+      ).toEqual({
+        beforeBlur: initial,
+        afterBlur: initial,
+      })
     })
 
     test("temporary tabindex is added and removed", async ({ page }) => {
