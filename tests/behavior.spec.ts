@@ -225,22 +225,21 @@ test.describe("root: window", () => {
     })
 
     test("instant: duration", async ({ page }) => {
-      expect(
-        await page.evaluate(() => {
-          const distance = 100
+      const distance = 100
 
+      expect(
+        await page.evaluate(distance => {
           window.fixtures.captureRequestAnimationFrameArgs()
-          window.fixtures.captureWindowScrollToArgs()
           window.fixtures.jump(distance, { duration: 0 })
 
           return {
             argsFrame: window.fixtures.getLatestRequestAnimationFrameArgs(),
-            argsScroll: window.fixtures.getLatestWindowScrollToArgs(),
+            scrollY: window.scrollY,
           }
-        }),
+        }, distance),
       ).toEqual({
         argsFrame: undefined,
-        argsScroll: [{ behavior: "instant", top: 100 }],
+        scrollY: distance,
       })
     })
 
