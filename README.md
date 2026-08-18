@@ -460,6 +460,28 @@ Other forms of dynamic content will likely require implementation-specific handl
 
 <details>
 
+<summary>Does Jump support <code>iframe</code>s?</summary>
+
+<br />
+
+Yes. Jump works as expected when called from within an `iframe`.
+
+If you're calling Jump from the parent document, the `iframe` must be **same-origin**. Pass the `iframe`'s `window`, or a scroll container inside it, as the [`root`](#root):
+
+```ts
+const iframe = document.querySelector("iframe")
+
+jump(".target", { root: iframe.contentWindow })
+```
+
+Jump does not cross document boundaries: element [`target`](#target)s must be contained by the [`root`](#root), and string [`target`](#target)s are resolved within it.
+
+Passing the `iframe` element itself as the [`root`](#root) **will not** scroll its content.
+
+</details>
+
+<details>
+
 <summary>Is Jump compatible with CSS scroll snap?</summary>
 
 <br />
@@ -473,7 +495,7 @@ No, but scroll snap behavior can be mimicked with Jump and custom code:
 | `scroll-padding`          | `offset` option                                 |
 | `scroll-margin`           | `offset` option                                 |
 | `scroll-behavior: auto`   | `duration` option                               |
-| `scroll-behavior: smooth` | `duration` and `easing` options                 |
+| `scroll-behavior: smooth` | `duration` option, `easing` option              |
 
 </details>
 
