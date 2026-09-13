@@ -29,8 +29,6 @@ const jump = (target: JumpTarget, options: JumpOptions = {}): JumpResult => {
     const cancel = scroll(target, { ...options, callback: mergedCallback })
 
     const mergedCancel = () => {
-      if (stale) return
-
       cancel()
       reset()
     }
